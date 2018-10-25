@@ -1,0 +1,86 @@
+<?php
+namespace App\Test\TestCase\Model\Table;
+
+use App\Model\Table\SyllabusesTable;
+use Cake\ORM\TableRegistry;
+use Cake\TestSuite\TestCase;
+
+/**
+ * App\Model\Table\SyllabusesTable Test Case
+ */
+class SyllabusesTableTest extends TestCase
+{
+
+    /**
+     * Test subject
+     *
+     * @var \App\Model\Table\SyllabusesTable
+     */
+    public $Syllabuses;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'app.syllabuses',
+        'app.master_classes',
+        'app.master_sections',
+        'app.master_subjects'
+    ];
+
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $config = TableRegistry::getTableLocator()->exists('Syllabuses') ? [] : ['className' => SyllabusesTable::class];
+        $this->Syllabuses = TableRegistry::getTableLocator()->get('Syllabuses', $config);
+    }
+
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        unset($this->Syllabuses);
+
+        parent::tearDown();
+    }
+
+    /**
+     * Test initialize method
+     *
+     * @return void
+     */
+    public function testInitialize()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test validationDefault method
+     *
+     * @return void
+     */
+    public function testValidationDefault()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     */
+    public function testBuildRules()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+}
