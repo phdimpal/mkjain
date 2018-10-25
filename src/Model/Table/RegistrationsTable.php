@@ -56,12 +56,14 @@ class RegistrationsTable extends Table
             'foreignKey' => 'master_medium_id',
             'joinType' => 'INNER'
         ]);
-         $this->belongsTo('Syllabuses');
-		 $this->belongsTo('GalleryMedias');
+		 $this->belongsTo('Syllabuses');
+		 $this->belongsTo('GalleryMedias'); 
 		 $this->belongsTo('Leaves');
 		 $this->belongsTo('Galleries');
 		 $this->belongsTo('News');
 		 $this->belongsTo('Videoes');
+		 $this->belongsTo('ComplainTypes');
+		 $this->belongsTo('ClassSectionMappings');
     }
 
     /**
