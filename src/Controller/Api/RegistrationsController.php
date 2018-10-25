@@ -218,4 +218,14 @@ public function login(){
 		
 	}
 	
+	public function compalainttype(){
+		
+		 $ComplainTypes=$this->Registrations->ComplainTypes->find()->toArray();
+		 $MasterClasses=$this->Registrations->MasterClasses->find()->contain(['ClassSectionMappings'=>['MasterSections']])->toArray();
+		
+		 $success = true;
+		 $message = 'Data Found';
+		 $this->set(['success' => $success,'message'=>$message,'ComplainTypes'=>$ComplainTypes,'MasterClasses'=>$MasterClasses,'_serialize' => ['success','message','ComplainTypes','MasterClasses']]);	
+	}
+	
 }
