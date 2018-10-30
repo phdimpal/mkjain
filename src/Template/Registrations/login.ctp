@@ -5,14 +5,15 @@
   <!-- /.login-logo -->
   <div class="login-box-body">
     <p class="login-box-msg">Sign in</p>
-
-    <form action="#" method="post">
+ <?= $this->Flash->render() ?>
+   <?= $this->Form->create() ?>
       <div class="form-group has-feedback">
-        <input type="email" class="form-control" placeholder="Email">
+        <?= $this->Form->input('username',['class'=>'form-control','placeholder'=>'UserName','label'=>false,'required']) ?>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="Password">
+        
+		<?= $this->Form->input('password',['class'=>'form-control','placeholder'=>'Password','label'=>false,'required']) ?>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
@@ -21,11 +22,12 @@
         </div>
         <!-- /.col -->
         <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+         
+		  <?= $this->Form->button(__('Sign In'),['class'=>'btn btn-primary btn-block btn-flat']); ?>
         </div>
         <!-- /.col -->
       </div>
-    </form>
+   <?= $this->Form->end() ?>
 
     
    

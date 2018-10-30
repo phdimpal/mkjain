@@ -1,7 +1,15 @@
 <?php
 namespace App\Controller;
-
+use Cake\View\View;
+use Cake\View\ViewBuilder;
+use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
+use Cake\Validation\Validation;
+use Cake\Routing\Router;
+use Cake\Mailer\Email;
+use Cake\Event\Event;
 
 /**
  * Registrations Controller
@@ -18,14 +26,41 @@ class RegistrationsController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
+	 
+	 public function initialize()
+	{
+		parent::initialize();
+		$this->Auth->allow(['logout','login']);
+		
+	}
+	 
 	public function login(){
 		$this->viewBuilder()->layout('login_layout');
+		if ($this->request->is('post')) {
+			
+			$user = $this->Auth->identify();
+			if($user){
+				$this->Auth->setUser($user);
+				return $this->redirect(['action' => 'index']);
+				
+			}
+			$this->Flash->error('Your username or password is incorrect.');
+			
+		}
 	} 
+	
+	public function logout()
+	{
+		
+		$this->Flash->success('You are now logged out.');
+		return $this->redirect($this->Auth->logout());
+	}
 	
     public function index()
     {
+		$this->viewBuilder()->layout('index_layout');
         $this->paginate = [
-            'contain' => ['MasterRoles', 'MasterClasses', 'MasterSections', 'MasterMedia']
+            'contain' => ['MasterRoles', 'MasterClasses', 'MasterSections', 'MasterMediums']
         ];
         $registrations = $this->paginate($this->Registrations);
 
@@ -55,6 +90,7 @@ class RegistrationsController extends AppController
      */
     public function add()
     {
+		$this->viewBuilder()->layout('index_layout');
         $registration = $this->Registrations->newEntity();
         if ($this->request->is('post')) {
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
@@ -68,8 +104,8 @@ class RegistrationsController extends AppController
         $masterRoles = $this->Registrations->MasterRoles->find('list', ['limit' => 200]);
         $masterClasses = $this->Registrations->MasterClasses->find('list', ['limit' => 200]);
         $masterSections = $this->Registrations->MasterSections->find('list', ['limit' => 200]);
-        $masterMedia = $this->Registrations->MasterMedia->find('list', ['limit' => 200]);
-        $this->set(compact('registration', 'masterRoles', 'masterClasses', 'masterSections', 'masterMedia'));
+        $masterMedia = $this->Registrations->MasterMediums->find('list', ['limit' => 200]);
+        $this->set(compact('registration', 'masterRoles', 'masterClasses', 'masterSections', 'MasterMediums'));
     }
 
     /**

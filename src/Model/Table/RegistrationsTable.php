@@ -71,6 +71,7 @@ class RegistrationsTable extends Table
 		 $this->belongsTo('MasterYears'); 
 		 $this->belongsTo('Attendances');
 		 $this->belongsTo('AcademicCalenders');
+        $this->belongsTo('MasterMediums');
     }
 
     /**
