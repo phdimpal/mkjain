@@ -559,7 +559,10 @@ public function fecthAttendenceView(){
 		
 	}
 	
+<<<<<<< HEAD
 	
+=======
+>>>>>>> b133df2eb7812728bb0a7b686c89f18962879da4
 	public function compalainttype(){
 		
 		 $ComplainTypes=$this->Registrations->ComplainTypes->find()->toArray();
@@ -570,6 +573,7 @@ public function fecthAttendenceView(){
 		 $this->set(['success' => $success,'message'=>$message,'ComplainTypes'=>$ComplainTypes,'MasterClasses'=>$MasterClasses,'_serialize' => ['success','message','ComplainTypes','MasterClasses']]);	
 	}
 	
+<<<<<<< HEAD
 	
 	public function complaint(){
 		
@@ -761,4 +765,6 @@ public function fecthAttendenceView(){
 		
 	}
 	
+=======
+>>>>>>> b133df2eb7812728bb0a7b686c89f18962879da4
 }

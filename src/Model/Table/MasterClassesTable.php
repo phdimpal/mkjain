@@ -43,6 +43,9 @@ class MasterClassesTable extends Table
         ]);
         $this->hasMany('Syllabuses', [
             'foreignKey' => 'master_class_id'
+        ]); 
+		$this->hasMany('ClassSectionMappings', [
+            'foreignKey' => 'master_class_id'
         ]);
         
         $this->hasMany('ClassSectionMappings', [

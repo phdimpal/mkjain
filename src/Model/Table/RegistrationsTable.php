@@ -64,11 +64,14 @@ class RegistrationsTable extends Table
 		 $this->belongsTo('Videoes');
 		 $this->belongsTo('ComplainTypes');
 		 $this->belongsTo('ClassSectionMappings');
+<<<<<<< HEAD
 		 $this->belongsTo('Complains');
 		 $this->belongsTo('Achievements');
 		 $this->belongsTo('Notifications');
 		  $this->belongsTo('Assignments');
 		 $this->belongsTo('MasterYears');
+=======
+>>>>>>> b133df2eb7812728bb0a7b686c89f18962879da4
     }
 
     /**
