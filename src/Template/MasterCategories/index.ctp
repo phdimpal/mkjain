@@ -44,8 +44,8 @@
 							<thead>
 								<tr>
 									<th>S.No</th>
-									<th class="text-center">Category Name</th>
-									<th class="text-center">Action</th>
+									<th>Category Name</th>
+									<th>Action</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -57,6 +57,8 @@
 	</div>	
 </section>
 	<input type="hidden" class="saveCategoryData" value="<?php echo $this->Url->build(['controller'=>'MasterCategories','action'=>'saveCategory']) ?>">
+	<input type="hidden" class="getCategoryData" value="<?php echo $this->Url->build(['controller'=>'MasterCategories','action'=>'getCategory']) ?>">
+	<input type="hidden" class="deleteCategoryData" value="<?php echo $this->Url->build(['controller'=>'MasterCategories','action'=>'delete']) ?>">
 	<?php echo $this->html->css('/plugins/datatables/dataTables.bootstrap.css', ['block' => 'PAGE_LEVEL_PLUGINS_CSS']); ?> 
 	<?php echo $this->html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
 	<?php echo $this->html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
@@ -81,28 +83,62 @@
 			var saveCategoryData = $('.saveCategoryData').val();
 			$('#cateForm').on('submit', function (e) {
 				e.preventDefault();
-				$.ajax({
-					type: 'post',
-					url: saveCategoryData,
-					dataType : 'json',
-					data: $('#cateForm').serialize(),
-					success: function (result) {
-						if(result.status == true){
-							$('.show-success').html(result.success).show();
-							$('.show-danger').html(result.success).hide();
-						}else{
-							$('.show-success').html(result.success).hide();
-							$('.show-danger').html(result.success).show();
-						}		
-					}
-				});
-
+				var saveData = $('#cateForm').serialize();
+				if(saveData != ''){
+					$.ajax({
+						type: 'post',
+						url: saveCategoryData,
+						dataType : 'json',
+						data: $('#cateForm').serialize(),
+						success: function (result) {
+							if(result.status == true){
+								$('.show-success').html(result.success).show();
+								$('.show-danger').html(result.success).hide();
+							}else if(result.status == false){
+								$('.show-success').html(result.success).hide();
+								$('.show-danger').html(result.success).show();
+							}		
+						}
+					});
+				}
 			});
 			//////
+			var getCategoryData = $('.getCategoryData').val();
+			var deleteCategoryData = $('.deleteCategoryData').val();
 			$('#catedata').DataTable({
-				
+			'ajax':{
+				'url':getCategoryData
+			},
+			'paging': true,
+			'lengthChange':true,
+			'searching':true,
+			'processing': false,
+			'columnDefs': [{
+				'targets': 2,
+				'orderable':false,
+				'searchable':false,
+				'data': 'null',
+				'defaultContent': '<a onclick=deleteCategory(this) >Delete</a>&nbsp;&nbsp;<a onclick=editCategory(this) >Edit</a>'
+				}
+			],
+			'columns':[
+				{'data': 'null'},
+				{'data': 'category_name'}
+			],
+			'fnRowCallback' : function(nRow, aData, iDisplayIndex){
+                $('td:first', nRow).html(iDisplayIndex +1);
+               return nRow;
+            },
 			});
 			
 		});
+		
+		function deleteCategory(id){
+			
+		}
+
+		function editCategory(id){
+			
+		}
 	";
 	echo $this->html->scriptBlock($js, ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>

@@ -29,6 +29,11 @@ class MasterCategoriesController extends AppController
 		}
 		 
 	}
+	
+	public function getCategory(){
+		$masterCategory = $this->MasterCategories->find()->toArray();
+		 echo json_encode(['data'=>$masterCategory]);exit;
+	}
 
     /**
      * View method

@@ -12,6 +12,7 @@
 			'/plugins/jvectormap/jquery-jvectormap-1.2.2.css',
 			'/dist/css/AdminLTE.min.css',
 			'/dist/css/skins/_all-skins.min.css'
+			'/plugins/datepicker/datepicker3.css'
 	]);?>
  
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
