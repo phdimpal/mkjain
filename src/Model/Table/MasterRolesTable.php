@@ -34,7 +34,7 @@ class MasterRolesTable extends Table
         parent::initialize($config);
 
         $this->setTable('master_roles');
-        $this->setDisplayField('id');
+        $this->setDisplayField('role_name');
         $this->setPrimaryKey('id');
 
         $this->hasMany('Registrations', [

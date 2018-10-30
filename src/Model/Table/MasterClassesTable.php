@@ -35,7 +35,7 @@ class MasterClassesTable extends Table
         parent::initialize($config);
 
         $this->setTable('master_classes');
-        $this->setDisplayField('id');
+        $this->setDisplayField('class_name');
         $this->setPrimaryKey('id');
 
         $this->hasMany('Registrations', [
