@@ -86,7 +86,7 @@ class RegistrationsTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-       /* $validator
+       $validator
             ->scalar('roll_no')
             ->maxLength('roll_no', 150)
             ->requirePresence('roll_no', 'create')
@@ -144,8 +144,23 @@ class RegistrationsTable extends Table
             ->scalar('address')
             ->requirePresence('address', 'create')
             ->notEmpty('address');
+			
+		$validator
+		->scalar('master_class_id')
+		->requirePresence('master_class_id', 'create')
+		->notEmpty('master_class_id');
+		
+		$validator
+		->scalar('master_section_id')
+		->requirePresence('master_section_id', 'create')
+		->notEmpty('master_section_id');
+		
+		$validator
+		->scalar('master_role_id')
+		->requirePresence('master_role_id', 'create')
+		->notEmpty('master_role_id');
 
-        $validator
+       /*  $validator
             ->requirePresence('is_deleted', 'create')
             ->notEmpty('is_deleted');
 
@@ -173,7 +188,7 @@ class RegistrationsTable extends Table
             ->scalar('profile_pic')
             ->maxLength('profile_pic', 500)
             ->requirePresence('profile_pic', 'create')
-            ->notEmpty('profile_pic');*/
+            ->notEmpty('profile_pic'); */
 
         return $validator;
     }

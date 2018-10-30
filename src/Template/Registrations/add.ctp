@@ -1,34 +1,3 @@
-<!--<div class="registrations form large-9 medium-8 columns content">
-    <?= $this->Form->create($registration) ?>
-    <fieldset>
-        <legend><?= __('Add Registration') ?></legend>
-        <?php
-            echo $this->Form->control('master_role_id', ['options' => $masterRoles]);
-            echo $this->Form->control('roll_no');
-            echo $this->Form->control('name');
-            echo $this->Form->control('dob');
-            echo $this->Form->control('father_name');
-            echo $this->Form->control('mother_name');
-            echo $this->Form->control('father_mobile_no');
-            echo $this->Form->control('mother_mobile_no');
-            echo $this->Form->control('student_mobile_no');
-            echo $this->Form->control('teacher_mobile_no');
-            echo $this->Form->control('address');
-            echo $this->Form->control('master_class_id', ['options' => $masterClasses]);
-            echo $this->Form->control('master_section_id', ['options' => $masterSections]);
-            echo $this->Form->control('master_medium_id');
-            echo $this->Form->control('is_deleted');
-            echo $this->Form->control('created_on');
-            echo $this->Form->control('updated_on');
-            echo $this->Form->control('created_by');
-            echo $this->Form->control('edited_by');
-            echo $this->Form->control('profile_pic');
-        ?>
-    </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
-</div>-->
-
 <style>
 .pad{
 	padding-right: 0px;
@@ -38,7 +7,6 @@ padding-left: 0px;
 {
 	margin-bottom: 0px;
 }
-
 </style>
 <div class="col-md-12">
 <?php echo $this->Form->create($registration, ['type' => 'file','id'=>'registratiomForm']); ?>
@@ -125,14 +93,14 @@ padding-left: 0px;
 									<div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label">Date of birth </label>
-												<?php echo $this->Form->input('dob', ['label' => false,'placeholder'=>'','class'=>'form-control']); ?>
+												<?php echo $this->Form->input('dob', ['label' => false,'placeholder'=>'','class'=>'form-control datepicker']); ?>
 										</div>
 									</div>
 									
 									<div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label">Father Mobile no. </label>
-												<?php echo $this->Form->input('father_name', ['label' => false,'placeholder'=>'Father Mobile','class'=>'form-control']); ?>
+												<?php echo $this->Form->input('father_mobile_no', ['label' => false,'placeholder'=>'Father Mobile','class'=>'form-control','oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'maxlength'=>10]); ?>
 										</div>
 									</div>
 									
@@ -143,7 +111,7 @@ padding-left: 0px;
 								  <div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label">Mother Mobile no. </label>
-										<?php echo $this->Form->input('mother_mobile_no', ['label' => false,'placeholder'=>'Mother Mobile','class'=>'form-control']); ?>
+										<?php echo $this->Form->input('mother_mobile_no', ['label' => false,'placeholder'=>'Mother Mobile','class'=>'form-control','oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'maxlength'=>10]); ?>
 										</div>
 									</div>
 								   
@@ -152,14 +120,14 @@ padding-left: 0px;
 									<div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label">Student Mobile no. </label>
-												<?php echo $this->Form->input('student_mobile_no', ['label' => false,'placeholder'=>'Student Mobile','class'=>'form-control']); ?>
+												<?php echo $this->Form->input('student_mobile_no', ['label' => false,'placeholder'=>'Student Mobile','class'=>'form-control','oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'maxlength'=>10]); ?>
 										</div>
 									</div>
 									
 									<div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label">Teacher Mobile no. </label>
-												<?php echo $this->Form->input('teacher_mobile_no', ['label' => false,'placeholder'=>'Teacher Mobile','class'=>'form-control']); ?>
+												<?php echo $this->Form->input('teacher_mobile_no', ['label' => false,'placeholder'=>'Teacher Mobile','class'=>'form-control','oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'maxlength'=>10]); ?>
 										</div>
 									</div>
 									
@@ -173,8 +141,14 @@ padding-left: 0px;
 										<?php echo $this->Form->input('address', ['label' => false,'placeholder'=>'Address','class'=>'form-control','type'=>'textarea','style'=>'resize:none;','rows'=>'2']); ?>
 										</div>
 									</div>
+								   <div class="col-md-4">
+										<div class="form-group">
+											<label class="control-label">Image </label>
+											<?= $this->Form->file('profile_pic') ?>
+										</div>
+									</div>
 								  
-							</div>
+						</div>
 						
 					</div>
 			</div>
@@ -188,3 +162,18 @@ padding-left: 0px;
 			</div>
 			<?php echo $this->Form->end(); ?>
 			</div>
+		<?php echo $this->html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+		<?php echo $this->html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+		<?php  $js="
+			$(document).ready(function(){ alert();
+				$('#registratiomForm').validate({
+					rules:{
+						
+					},
+					messages:{
+						
+					}
+				});
+			});
+		";
+		echo $this->html->scriptBlock($js, ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
