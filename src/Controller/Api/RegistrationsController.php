@@ -559,10 +559,7 @@ public function fecthAttendenceView(){
 		
 	}
 	
-<<<<<<< HEAD
 	
-=======
->>>>>>> b133df2eb7812728bb0a7b686c89f18962879da4
 	public function compalainttype(){
 		
 		 $ComplainTypes=$this->Registrations->ComplainTypes->find()->toArray();
@@ -573,7 +570,6 @@ public function fecthAttendenceView(){
 		 $this->set(['success' => $success,'message'=>$message,'ComplainTypes'=>$ComplainTypes,'MasterClasses'=>$MasterClasses,'_serialize' => ['success','message','ComplainTypes','MasterClasses']]);	
 	}
 	
-<<<<<<< HEAD
 	
 	public function complaint(){
 		
@@ -765,6 +761,69 @@ public function fecthAttendenceView(){
 		
 	}
 	
-=======
->>>>>>> b133df2eb7812728bb0a7b686c89f18962879da4
+	public function attendanceview(){
+		
+		$registration_id = @$this->request->query['registration_id'];
+		$attendance_date = @$this->request->query['attendance_date']; 
+		
+		if(!empty($registration_id) and !empty($attendance_date)){
+			
+			for($i=1;$i<=12;$i++){
+			
+			 $first_date= date('Y-'.$i.'-01', strtotime($attendance_date));
+			 $last_date= date('Y-'.$i.'-t', strtotime($first_date));
+			 $last_date_day=explode('-',$last_date);
+			
+			 $AcademicCalendercount=$this->Registrations->AcademicCalenders->find()->where(['calender_date >='=>$first_date,'calender_date <='=>$last_date,'master_category_id'=>2])->count();
+			
+			$Attendances=$this->Registrations->Attendances->find()->where(['attendance_date >='=>$first_date,'attendance_date <='=>$last_date])
+			->contain(['AttendanceRows'])
+			->innerJoinWith('AttendanceRows',function ($query) use($registration_id) {
+				
+				return $query->where(['AttendanceRows.student_id' => $registration_id]);
+				
+			})->toArray();
+			
+			
+			$total_present=0;$total_absent=0;$total_leave=0;$attendance_mark='';$total_working=0;
+			$result=[];
+			 foreach($Attendances as $data){
+				
+				$A_date=$data->attendance_date;
+				$attendance_mark=$data->attendance_rows[0]->attendance_mark;
+				if($attendance_mark==1){
+					
+					++$total_present;
+					$attendance_mark='Present';
+				}elseif($attendance_mark==2){
+					
+					++$total_absent;
+					$attendance_mark='Absent';
+				}elseif($attendance_mark==3){
+					
+					++$total_leave;
+					$attendance_mark='Leave';
+				}
+				$result[]=['attendance_date'=>$A_date,'attendance_mark'=>$attendance_mark];
+				
+			} 
+				$total_working=$last_date_day[2]-$AcademicCalendercount;
+				$new_data[]=['month'=>$i,'total_present'=>$total_present,'total_absent'=>$total_absent,'total_leave'=>$total_leave,'total_holiday'=>$AcademicCalendercount,'total_working'=>$total_working,'result'=>@$result];
+			
+			} 
+			
+			 $success = true;
+		     $message = 'Found data';
+			
+		}else{
+			
+			 $success = false;
+		     $message = 'empty id or attendance_date';
+			
+		}
+			
+		$this->set(['success' => $success,'message'=>$message,'Attendances'=>$new_data,'_serialize' => ['success','message','Attendances']]);
+	}
+	
+	
 }
