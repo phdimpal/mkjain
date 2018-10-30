@@ -18,6 +18,10 @@ class RegistrationsController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
+	public function login(){
+		$this->viewBuilder()->layout('login_layout');
+	} 
+	
     public function index()
     {
         $this->paginate = [
