@@ -1,6 +1,6 @@
-<div class="registrations index large-9 medium-8 columns content">
+<div class="">
     <h3><?= __('Registrations') ?></h3>
-    <table cellpadding="0" cellspacing="0" class="table table-condensed table-striped">
+    <table  class="table table-condensed table-striped">
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
