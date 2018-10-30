@@ -58,6 +58,7 @@ class RegistrationsController extends AppController
 	
     public function index()
     {
+		$this->viewBuilder()->layout('index_layout');
         $this->paginate = [
             'contain' => ['MasterRoles', 'MasterClasses', 'MasterSections', 'MasterMediums']
         ];
@@ -89,6 +90,7 @@ class RegistrationsController extends AppController
      */
     public function add()
     {
+		$this->viewBuilder()->layout('index_layout');
         $registration = $this->Registrations->newEntity();
         if ($this->request->is('post')) {
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
@@ -102,8 +104,8 @@ class RegistrationsController extends AppController
         $masterRoles = $this->Registrations->MasterRoles->find('list', ['limit' => 200]);
         $masterClasses = $this->Registrations->MasterClasses->find('list', ['limit' => 200]);
         $masterSections = $this->Registrations->MasterSections->find('list', ['limit' => 200]);
-        $masterMedia = $this->Registrations->MasterMedia->find('list', ['limit' => 200]);
-        $this->set(compact('registration', 'masterRoles', 'masterClasses', 'masterSections', 'masterMedia'));
+        $masterMedia = $this->Registrations->MasterMediums->find('list', ['limit' => 200]);
+        $this->set(compact('registration', 'masterRoles', 'masterClasses', 'masterSections', 'MasterMediums'));
     }
 
     /**
