@@ -825,5 +825,28 @@ public function fecthAttendenceView(){
 		$this->set(['success' => $success,'message'=>$message,'Attendances'=>$new_data,'_serialize' => ['success','message','Attendances']]);
 	}
 	
+	public function leaveview(){
+	    
+	    $registration_id = @$this->request->query['registration_id'];
+	    $Leaves=[];
+	    if(!empty($registration_id)){
+	       $Leaves= $this->Registrations->Leaves->find()->where(['Leaves.registration_id'=>$registration_id])->contain(['Registrations']);
+	       if($Leaves->toArray()){
+	            $success = true;
+				$message = 'Data Found';
+	       }else{
+	          	$success = false;
+				$message = 'No data Found'; 
+	       }
+	       
+	        
+	    }else{
+	        	$success = false;
+				$message = 'empty registration id';
+	    }
+	    
+	     $this->set(['success' => $success,'message'=>$message,'Leaves'=>$Leaves,'_serialize' => ['success','message','Leaves']]);
+	}
+	
 	
 }
