@@ -37,7 +37,7 @@ padding-left: 0px;
 												?>
 										</div>
 									</div>
-									 <div class="col-md-4">
+									 <div class="col-md-4" id="section">
 										<div class="form-group">
 											 <label class="">Section</label>
 											<?php 
@@ -169,7 +169,18 @@ padding-left: 0px;
 		<?php  $js=" 
 			
 			$(document).ready(function(){ 
-			
+				$(document).on('change', '.class_change', function(){   
+					 var state_id= $(this).val();
+					var url='".$this->Url->build(['controller'=>'Registrations','action'=>'classsection'])."';
+					url=url+'/'+state_id;
+					$.ajax({ 
+						url:url,
+						type:'GET',
+						}).done(function(response){  alert(response);
+						$('#section').html(response);
+					}); 
+				});
+				
 				$('#registratiomForm').validate({
 					rules:{
 						
