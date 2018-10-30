@@ -9,6 +9,6 @@
 					'/plugins/slimScroll/jquery.slimscroll.min.js',
 					'/plugins/chartjs/Chart.min.js',
 					'/dist/js/pages/dashboard2.js',
-					'/dist/js/demo.js'
+					'/dist/js/demo.js',
 					'/plugins/datepicker/bootstrap-datepicker.js'
 	]);?>

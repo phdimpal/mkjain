@@ -112,7 +112,6 @@
 			'paging': true,
 			'lengthChange':true,
 			'searching':true,
-			'processing': false,
 			'columnDefs': [{
 				'targets': 2,
 				'orderable':false,
