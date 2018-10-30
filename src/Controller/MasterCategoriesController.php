@@ -3,27 +3,19 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 
-/**
- * MasterCategories Controller
- *
- * @property \App\Model\Table\MasterCategoriesTable $MasterCategories
- *
- * @method \App\Model\Entity\MasterCategory[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
- */
 class MasterCategoriesController extends AppController
 {
 
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|void
-     */
-    public function index()
+    public function index($id = null)
     {
-        $masterCategories = $this->paginate($this->MasterCategories);
-
-        $this->set(compact('masterCategories'));
+		$this->viewBuilder()->layout('index_layout');	
+		$masterCategories = $this->paginate($this->MasterCategories);
+		$this->set(compact('masterCategories'));
     }
+	
+	public function saveCategory(){
+		
+	}
 
     /**
      * View method
@@ -46,6 +38,8 @@ class MasterCategoriesController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
+	 
+	 
     public function add()
     {
         $masterCategory = $this->MasterCategories->newEntity();
