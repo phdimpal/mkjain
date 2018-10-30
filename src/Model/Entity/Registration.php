@@ -69,6 +69,7 @@ class Registration extends Entity
         'master_role' => true,
         'master_class' => true,
         'master_section' => true,
-        'master_media' => true
+        'master_media' => true,
+        'device_token'=>true
     ];
 }

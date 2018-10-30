@@ -37,7 +37,7 @@ class AchievementsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('Students', [
+        $this->belongsTo('Registrations', [
             'foreignKey' => 'student_id',
             'joinType' => 'INNER'
         ]);

@@ -40,6 +40,8 @@ class Notification extends Entity
         'updated_on' => true,
         'created_by' => true,
         'edited_by' => true,
-        'is_deleted' => true
+        'is_deleted' => true,
+        'registration_id'=>true,
+        'master_role_id'=>true
     ];
 }

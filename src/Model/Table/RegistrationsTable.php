@@ -52,16 +52,23 @@ class RegistrationsTable extends Table
             'foreignKey' => 'master_section_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('MasterMedia', [
+        $this->belongsTo('MasterMediums', [
             'foreignKey' => 'master_medium_id',
             'joinType' => 'INNER'
         ]);
-         $this->belongsTo('Syllabuses');
-		 $this->belongsTo('GalleryMedias');
+		 $this->belongsTo('Syllabuses');
+		 $this->belongsTo('GalleryMedias'); 
 		 $this->belongsTo('Leaves');
 		 $this->belongsTo('Galleries');
 		 $this->belongsTo('News');
 		 $this->belongsTo('Videoes');
+		 $this->belongsTo('ComplainTypes');
+		 $this->belongsTo('ClassSectionMappings');
+		 $this->belongsTo('Complains');
+		 $this->belongsTo('Achievements');
+		 $this->belongsTo('Notifications');
+		  $this->belongsTo('Assignments');
+		 $this->belongsTo('MasterYears');
     }
 
     /**
@@ -76,7 +83,7 @@ class RegistrationsTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+       /* $validator
             ->scalar('roll_no')
             ->maxLength('roll_no', 150)
             ->requirePresence('roll_no', 'create')
@@ -163,7 +170,7 @@ class RegistrationsTable extends Table
             ->scalar('profile_pic')
             ->maxLength('profile_pic', 500)
             ->requirePresence('profile_pic', 'create')
-            ->notEmpty('profile_pic');
+            ->notEmpty('profile_pic');*/
 
         return $validator;
     }
@@ -180,7 +187,7 @@ class RegistrationsTable extends Table
         $rules->add($rules->existsIn(['master_role_id'], 'MasterRoles'));
         $rules->add($rules->existsIn(['master_class_id'], 'MasterClasses'));
         $rules->add($rules->existsIn(['master_section_id'], 'MasterSections'));
-        $rules->add($rules->existsIn(['master_medium_id'], 'MasterMedia'));
+        $rules->add($rules->existsIn(['master_medium_id'], 'MasterMediums'));
 
         return $rules;
     }

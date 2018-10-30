@@ -46,7 +46,7 @@ class AssignmentsTable extends Table
             'foreignKey' => 'master_role_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Students', [
+        $this->belongsTo('Registrations', [
             'foreignKey' => 'student_id',
             'joinType' => 'INNER'
         ]);
@@ -66,6 +66,10 @@ class AssignmentsTable extends Table
             'foreignKey' => 'registration_id',
             'joinType' => 'INNER'
         ]);
+        $this->hasMany('AssignmentRows', [
+            'foreignKey' => 'assignment_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -80,7 +84,7 @@ class AssignmentsTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+       /*  $validator
             ->scalar('assignment_type')
             ->maxLength('assignment_type', 25)
             ->requirePresence('assignment_type', 'create')
@@ -129,7 +133,7 @@ class AssignmentsTable extends Table
 
         $validator
             ->requirePresence('is_deleted', 'create')
-            ->notEmpty('is_deleted');
+            ->notEmpty('is_deleted'); */
 
         return $validator;
     }
@@ -144,7 +148,7 @@ class AssignmentsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['master_role_id'], 'MasterRoles'));
-        $rules->add($rules->existsIn(['student_id'], 'Students'));
+        $rules->add($rules->existsIn(['student_id'], 'Registrations'));
         $rules->add($rules->existsIn(['master_class_id'], 'MasterClasses'));
         $rules->add($rules->existsIn(['master_section_id'], 'MasterSections'));
         $rules->add($rules->existsIn(['master_subject_id'], 'MasterSubjects'));

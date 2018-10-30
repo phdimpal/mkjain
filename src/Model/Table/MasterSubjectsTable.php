@@ -40,6 +40,10 @@ class MasterSubjectsTable extends Table
         $this->hasMany('Syllabuses', [
             'foreignKey' => 'master_subject_id'
         ]);
+        
+         $this->belongsTo('MasterSections', [
+            'foreignKey' => 'master_subject_id'
+        ]);
     }
 
     /**

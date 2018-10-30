@@ -74,7 +74,7 @@ class AttendancesTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+       /* $validator
             ->date('attendance_date')
             ->requirePresence('attendance_date', 'create')
             ->notEmpty('attendance_date');
@@ -101,7 +101,7 @@ class AttendancesTable extends Table
 
         $validator
             ->requirePresence('is_deleted', 'create')
-            ->notEmpty('is_deleted');
+            ->notEmpty('is_deleted');*/
 
         return $validator;
     }

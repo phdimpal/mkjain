@@ -80,7 +80,7 @@ class ComplainsTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+      /*   $validator
             ->scalar('name')
             ->maxLength('name', 100)
             ->requirePresence('name', 'create')
@@ -114,7 +114,7 @@ class ComplainsTable extends Table
         $validator
             ->integer('created_by')
             ->requirePresence('created_by', 'create')
-            ->notEmpty('created_by');
+            ->notEmpty('created_by'); */
 
         return $validator;
     }
@@ -128,12 +128,12 @@ class ComplainsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['complain_type_id'], 'ComplainTypes'));
+       /*  $rules->add($rules->existsIn(['complain_type_id'], 'ComplainTypes'));
         $rules->add($rules->existsIn(['email_id'], 'Emails'));
         $rules->add($rules->existsIn(['master_class_id'], 'MasterClasses'));
         $rules->add($rules->existsIn(['master_section_id'], 'MasterSections'));
         $rules->add($rules->existsIn(['master_role_id'], 'MasterRoles'));
-        $rules->add($rules->existsIn(['registration_id'], 'Registrations'));
+        $rules->add($rules->existsIn(['registration_id'], 'Registrations')); */
 
         return $rules;
     }

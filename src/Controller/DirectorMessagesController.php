@@ -20,6 +20,7 @@ class DirectorMessagesController extends AppController
      */
     public function index()
     {
+		$this->viewBuilder()->layout('index_layout');
         $directorMessages = $this->paginate($this->DirectorMessages);
 
         $this->set(compact('directorMessages'));

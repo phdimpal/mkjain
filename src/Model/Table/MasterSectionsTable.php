@@ -41,6 +41,9 @@ class MasterSectionsTable extends Table
         $this->hasMany('Registrations', [
             'foreignKey' => 'master_section_id'
         ]);
+         $this->hasMany('MasterSubjects', [
+            'foreignKey' => 'master_subject_id'
+        ]);
         $this->hasMany('Syllabuses', [
             'foreignKey' => 'master_section_id'
         ]);
