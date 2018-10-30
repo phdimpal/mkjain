@@ -33,7 +33,7 @@ padding-left: 0px;
 										<div class="form-group">
 											<label class="control-label">Class </label>
 												<?php
-													echo $this->Form->input('master_class_id', ['empty'=> '--Select--','data-placeholder'=>'Select class','label' => false,'class'=>'form-control select2','options'=>$masterClasses,'style'=>'width:100%;']);
+													echo $this->Form->input('master_class_id', ['empty'=> '--Select--','data-placeholder'=>'Select class','label' => false,'class'=>'form-control select2 class_change','options'=>$masterClasses,'style'=>'width:100%;']);
 												?>
 										</div>
 									</div>
@@ -93,7 +93,7 @@ padding-left: 0px;
 									<div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label">Date of birth </label>
-												<?php echo $this->Form->input('dob', ['label' => false,'placeholder'=>'','class'=>'form-control datepicker']); ?>
+												<?php echo $this->Form->input('dob', ['label' => false,'placeholder'=>'','class'=>'form-control','id'=>'datepicker','data-date-format'=>'dd-mm-yyyy']); ?>
 										</div>
 									</div>
 									
@@ -162,10 +162,14 @@ padding-left: 0px;
 			</div>
 			<?php echo $this->Form->end(); ?>
 			</div>
+			
 		<?php echo $this->html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
 		<?php echo $this->html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
-		<?php  $js="
-			$(document).ready(function(){ alert();
+		
+		<?php  $js=" 
+			
+			$(document).ready(function(){ 
+			
 				$('#registratiomForm').validate({
 					rules:{
 						
@@ -177,3 +181,4 @@ padding-left: 0px;
 			});
 		";
 		echo $this->html->scriptBlock($js, ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+		

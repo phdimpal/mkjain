@@ -12,3 +12,10 @@
 					'/dist/js/demo.js',
 					'/plugins/datepicker/bootstrap-datepicker.js'
 	]);?>
+<script>
+ 
+	$('#datepicker').datepicker({
+		autoclose: true
+	});
+
+</script>
