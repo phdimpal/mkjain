@@ -3,105 +3,73 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 
-/**
- * MasterSections Controller
- *
- * @property \App\Model\Table\MasterSectionsTable $MasterSections
- *
- * @method \App\Model\Entity\MasterSection[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
- */
 class MasterSectionsController extends AppController
 {
 
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|void
-     */
-    public function index()
-    {
-        $masterSections = $this->paginate($this->MasterSections);
-
-        $this->set(compact('masterSections'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Master Section id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $masterSection = $this->MasterSections->get($id, [
-            'contain' => ['Registrations', 'Syllabuses']
-        ]);
-
-        $this->set('masterSection', $masterSection);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $masterSection = $this->MasterSections->newEntity();
-        if ($this->request->is('post')) {
-            $masterSection = $this->MasterSections->patchEntity($masterSection, $this->request->getData());
-            if ($this->MasterSections->save($masterSection)) {
-                $this->Flash->success(__('The master section has been saved.'));
+    public function index($id=null)
+    {	
+		$this->viewBuilder()->layout('index_layout');
+		$master_role_id=$this->Auth->User('master_role_id');
+		
+        $masterSections = $this->paginate($this->MasterSections->find()->where(['flag'=>0]));
+		$message='';
+		if(empty($id)){
+			$mastersection = $this->MasterSections->newEntity();
+			$message = 'The master section has been saved.';
+		}else{
+			$mastersection = $this->MasterSections->get($id);
+			$message = 'The master section has been updated.';
+		}
+		
+        if ($this->request->is(['post','put','patch'])) {
+            $mastersection = $this->MasterSections->patchEntity($mastersection, $this->request->getData());
+			
+            if ($this->MasterSections->save($mastersection)) {
+                $this->Flash->success(__($message));
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The master section could not be saved. Please, try again.'));
         }
-        $this->set(compact('masterSection'));
+		
+        $this->set(compact('masterSections','mastersection'));
+        
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Master Section id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $masterSection = $this->MasterSections->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $masterSection = $this->MasterSections->patchEntity($masterSection, $this->request->getData());
-            if ($this->MasterSections->save($masterSection)) {
-                $this->Flash->success(__('The master section has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The master section could not be saved. Please, try again.'));
-        }
-        $this->set(compact('masterSection'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Master Section id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
+   public function checkSectionNames(){
+		$section_name = $this->request->data('section_name');
+		$section_id = $this->request->data('id');
+		
+		$MasterSectionsexists = $this->MasterSections->exists(['section_name' => $section_name]);
+		$MasterSectionsNameexists = $this->MasterSections->exists(['section_name' => $section_name,'id'=>$section_id]);
+		
+		if(!empty($section_name)){
+			if(!empty($section_id)){
+				if(!$MasterSectionsNameexists){
+					echo 'false';
+				}else{
+					echo 'true';
+				}
+			}else{
+				if($MasterSectionsexists){
+					echo 'false';
+				}else{
+					echo 'true';
+				}
+			}
+		}
+		exit;
+	}
+	
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $masterSection = $this->MasterSections->get($id);
-        if ($this->MasterSections->delete($masterSection)) {
-            $this->Flash->success(__('The master section has been deleted.'));
-        } else {
-            $this->Flash->error(__('The master section could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
+       $query2 = $this->MasterSections->query();
+						$query2->update()
+							->set(['flag' =>1])
+							->where(['id' => $id])
+							->execute();
+							
+		$this->Flash->error(__('The master section has been deleted.'));
+		return $this->redirect(['action' => 'index']);
     }
 }

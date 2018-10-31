@@ -440,7 +440,8 @@ public function fecthAttendenceView(){
 			$editable=true;
 		}
 		$fetchAttendancesDatas=[];
-	$AttendancesDatas = $this->Attendances->find()->where(['master_class_id'=>$master_class_id,'master_section_id'=>$master_section_id,'attendance_date'=>$attendance_date])->contain(['AttendanceRows'=>['Registrations']]);	foreach($AttendancesDatas as $attendancesdata){
+	$AttendancesDatas = $this->Attendances->find()->where(['master_class_id'=>$master_class_id,'master_section_id'=>$master_section_id])->contain(['AttendanceRows'=>['Registrations']]);	
+	foreach($AttendancesDatas as $attendancesdata){
 			foreach($attendancesdata->attendance_rows as $attendance_row){
 				$fetchAttendancesDatas[]=['student_id'=>$attendance_row->student_id,'marks'=>$attendance_row->attendance_mark,'editable'=>$editable,'student_name'=>$attendance_row->registration->name];
 			}

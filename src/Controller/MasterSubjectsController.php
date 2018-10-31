@@ -3,105 +3,72 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 
-/**
- * MasterSubjects Controller
- *
- * @property \App\Model\Table\MasterSubjectsTable $MasterSubjects
- *
- * @method \App\Model\Entity\MasterSubject[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
- */
 class MasterSubjectsController extends AppController
 {
 
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|void
-     */
-    public function index()
+    public function index($id=null)
     {
-        $masterSubjects = $this->paginate($this->MasterSubjects);
-
-        $this->set(compact('masterSubjects'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Master Subject id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $masterSubject = $this->MasterSubjects->get($id, [
-            'contain' => ['Syllabuses']
-        ]);
-
-        $this->set('masterSubject', $masterSubject);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $masterSubject = $this->MasterSubjects->newEntity();
-        if ($this->request->is('post')) {
-            $masterSubject = $this->MasterSubjects->patchEntity($masterSubject, $this->request->getData());
-            if ($this->MasterSubjects->save($masterSubject)) {
-                $this->Flash->success(__('The master subject has been saved.'));
+		$this->viewBuilder()->layout('index_layout');
+		$master_role_id=$this->Auth->User('master_role_id');
+		
+        $MasterSubjects = $this->paginate($this->MasterSubjects->find()->where(['flag'=>0]));
+		$message='';
+		if(empty($id)){
+			$mastersubject = $this->MasterSubjects->newEntity();
+			$message = 'The master subject has been saved.';
+		}else{
+			$mastersubject = $this->MasterSubjects->get($id);
+			$message = 'The master subject has been updated.';
+		}
+		
+        if ($this->request->is(['post','put','patch'])) {
+            $mastersubject = $this->MasterSubjects->patchEntity($mastersubject, $this->request->getData());
+			
+            if ($this->MasterSubjects->save($mastersubject)) {
+                $this->Flash->success(__($message));
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The master subject could not be saved. Please, try again.'));
         }
-        $this->set(compact('masterSubject'));
+		
+        $this->set(compact('MasterSubjects','mastersubject'));
+       
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Master Subject id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $masterSubject = $this->MasterSubjects->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $masterSubject = $this->MasterSubjects->patchEntity($masterSubject, $this->request->getData());
-            if ($this->MasterSubjects->save($masterSubject)) {
-                $this->Flash->success(__('The master subject has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The master subject could not be saved. Please, try again.'));
-        }
-        $this->set(compact('masterSubject'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Master Subject id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
+   public function checkSubjectsNames(){
+		$subject_name = $this->request->data('subject_name');
+		$subject_id = $this->request->data('id');
+		
+		$MasterSubjectsexists = $this->MasterSubjects->exists(['subject_name' => $subject_name]);
+		$MasterSubjectsNameexists = $this->MasterSubjects->exists(['subject_name' => $subject_name,'id'=>$subject_id]);
+		
+		if(!empty($subject_name)){
+			if(!empty($subject_id)){
+				if(!$MasterSubjectsNameexists){
+					echo 'false';
+				}else{
+					echo 'true';
+				}
+			}else{
+				if($MasterSubjectsexists){
+					echo 'false';
+				}else{
+					echo 'true';
+				}
+			}
+		}
+		exit;
+	}
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $masterSubject = $this->MasterSubjects->get($id);
-        if ($this->MasterSubjects->delete($masterSubject)) {
-            $this->Flash->success(__('The master subject has been deleted.'));
-        } else {
-            $this->Flash->error(__('The master subject could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
+        $query2 = $this->MasterSubjects->query();
+						$query2->update()
+							->set(['flag' =>1])
+							->where(['id' => $id])
+							->execute();
+							
+		$this->Flash->error(__('The master subject has been deleted.'));
+		return $this->redirect(['action' => 'index']);
     }
 }

@@ -25,6 +25,7 @@ class MasterCategory extends Entity
      */
     protected $_accessible = [
         'category_name' => true,
-        'academic_calenders' => true
+        'academic_calenders' => true,
+        'flag' => true
     ];
 }

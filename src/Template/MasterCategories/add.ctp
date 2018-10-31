@@ -1,25 +1,142 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\MasterCategory $masterCategory
- */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Master Categories'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Academic Calenders'), ['controller' => 'AcademicCalenders', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Academic Calender'), ['controller' => 'AcademicCalenders', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="masterCategories form large-9 medium-8 columns content">
-    <?= $this->Form->create($masterCategory) ?>
-    <fieldset>
-        <legend><?= __('Add Master Category') ?></legend>
-        <?php
-            echo $this->Form->control('category_name');
-        ?>
-    </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
-</div>
+	
+	<section class="content-header">
+		<h1>Category </h1>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+			<li class="active">Category</li>
+		</ol>
+		
+	</section>
+	
+	 <section class="content">
+	 
+		<div class="row">
+		
+			<div class="col-md-6">
+				<div class="box box-danger">
+					<div class="box-header ui-sortable-handle" style="cursor: move;">
+						<h3 class="box-title">Category</h3>
+						<!-- tools box -->
+						<div class="pull-right box-tools">
+						</div>
+						<!-- /. tools -->
+					</div>
+					<form action="" method="post" id="cateForm">
+						<div class="box-body">
+								<div class="form-group">
+								  <input type="text" class="form-control" name="category_name" id="category_name" placeholder="Category Name" required> 
+								</div>
+						</div>
+						<div class="box-footer clearfix">
+						  <button type="submit" class="pull-right btn btn-danger" id="sendEmail">Save
+							<i class="fa fa-arrow-circle-right"></i></button>
+						</div>
+					</form>	
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="box box-danger">
+					<div class="box-header">
+					  <h3 class="box-title">Category</h3>
+					</div>
+					 <div class="box-body">
+						<table id="catedata" class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th>S.No</th>
+									<th>Category Name</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>	
+				</div>	
+			</div>
+		</div>
+	</div>	
+</section>
+	<input type="hidden" class="saveCategoryData" value="<?php echo $this->Url->build(['controller'=>'MasterCategories','action'=>'saveCategory']) ?>">
+	<input type="hidden" class="getCategoryData" value="<?php echo $this->Url->build(['controller'=>'MasterCategories','action'=>'getCategory']) ?>">
+	<input type="hidden" class="deleteCategoryData" value="<?php echo $this->Url->build(['controller'=>'MasterCategories','action'=>'delete']) ?>">
+	<?php echo $this->html->css('/plugins/datatables/dataTables.bootstrap.css', ['block' => 'PAGE_LEVEL_PLUGINS_CSS']); ?> 
+	<?php echo $this->html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->html->script('/plugins/datatables/jquery.dataTables.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->html->script('/plugins/datatables/dataTables.bootstrap.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php  $js="
+		$(document).ready(function(){
+			
+			$('#cateForm').validate({
+				rules:{
+					category_name:{
+						required:true
+					}
+				},
+				messages:{
+					category_name:{
+						required: 'Category Name is required'
+					}
+				}
+			});
+			
+			//////
+			var getCategoryData = $('.getCategoryData').val();
+			var deleteCategoryData = $('.deleteCategoryData').val();
+			var table= $('#catedata').DataTable({
+			'ajax':{
+				'url':getCategoryData
+			},
+			'paging': true,
+			'lengthChange':true,
+			'searching':true,
+			'columnDefs': [{
+				'targets': 2,
+				'orderable':false,
+				'searchable':false,
+				'data': 'null',
+				'defaultContent': '<a onclick=deleteCategory(this) >Delete</a>&nbsp;&nbsp;<a onclick=editCategory(this) >Edit</a>'
+				}
+			],
+			'columns':[
+				
+				{'data': 'category_name'}
+			],
+			'fnRowCallback' : function(nRow, aData, iDisplayIndex){
+                $('td:first', nRow).html(iDisplayIndex +1);
+               return nRow;
+            },
+			});
+			
+		});
+			var saveCategoryData = $('.saveCategoryData').val();
+			$('#cateForm').on('submit', function (e) {
+				e.preventDefault();
+				
+					$.ajax({
+						type: 'post',
+						url: saveCategoryData,
+						dataType : 'json',
+						data: $(this).serialize(),
+						success: function (result) {
+							if(result.status == true){
+								$('.show-success').html(result.success).show();
+								$('.show-danger').html(result.success).hide();
+								 table.reload();
+							}		
+						}
+					});
+				
+			});
+			//////
+			
+		
+		function deleteCategory(id){
+			
+		}
+
+		function editCategory(id){
+			
+		}
+	";
+	echo $this->html->scriptBlock($js, ['block' => 'scriptBottom']); ?>

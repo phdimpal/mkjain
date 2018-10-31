@@ -3,34 +3,30 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 
-/**
- * MasterClasses Controller
- *
- * @property \App\Model\Table\MasterClassesTable $MasterClasses
- *
- * @method \App\Model\Entity\MasterClass[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
- */
+
 class MasterClassesController extends AppController
 {
 
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|void
-     */
-    public function index()
+    public function index($id = null)
     {
 		$this->viewBuilder()->layout('index_layout');
 		$master_role_id=$this->Auth->User('master_role_id');
 		
-        $masterClasses = $this->paginate($this->MasterClasses);
+        $masterClasses = $this->paginate($this->MasterClasses->find()->where(['flag'=>0]));
+		$message='';
+		if(empty($id)){
+			$masterClass = $this->MasterClasses->newEntity();
+			$message = 'The master class has been saved.';
+		}else{
+			$masterClass = $this->MasterClasses->get($id);
+			$message = 'The master class has been updated.';
+		}
 		
-		$masterClass = $this->MasterClasses->newEntity();
-        if ($this->request->is('post')) {
+        if ($this->request->is(['post','put','patch'])) {
             $masterClass = $this->MasterClasses->patchEntity($masterClass, $this->request->getData());
 			
             if ($this->MasterClasses->save($masterClass)) {
-                $this->Flash->success(__('The master class has been saved.'));
+                $this->Flash->success(__($message));
 
                 return $this->redirect(['action' => 'index']);
             }
@@ -47,91 +43,34 @@ class MasterClassesController extends AppController
 		$MasterClassesexists = $this->MasterClasses->exists(['class_name' => $class_name]);
 		$MasterClassesNameexists = $this->MasterClasses->exists(['class_name' => $class_name,'id'=>$class_id]);
 		
-		if($MasterClassesexists){
-			echo true;
-		}else{
-			echo false;
+		if(!empty($class_name)){
+			if(!empty($class_id)){
+				if(!$MasterClassesNameexists){
+					echo 'false';
+				}else{
+					echo 'true';
+				}
+			}else{
+				if($MasterClassesexists){
+					echo 'false';
+				}else{
+					echo 'true';
+				}
+			}
 		}
 		exit;
 	}
 
-    /**
-     * View method
-     *
-     * @param string|null $id Master Class id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $masterClass = $this->MasterClasses->get($id, [
-            'contain' => ['Registrations', 'Syllabuses']
-        ]);
-
-        $this->set('masterClass', $masterClass);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $masterClass = $this->MasterClasses->newEntity();
-        if ($this->request->is('post')) {
-            $masterClass = $this->MasterClasses->patchEntity($masterClass, $this->request->getData());
-            if ($this->MasterClasses->save($masterClass)) {
-                $this->Flash->success(__('The master class has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The master class could not be saved. Please, try again.'));
-        }
-        $this->set(compact('masterClass'));
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Master Class id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $masterClass = $this->MasterClasses->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $masterClass = $this->MasterClasses->patchEntity($masterClass, $this->request->getData());
-            if ($this->MasterClasses->save($masterClass)) {
-                $this->Flash->success(__('The master class has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The master class could not be saved. Please, try again.'));
-        }
-        $this->set(compact('masterClass'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Master Class id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $masterClass = $this->MasterClasses->get($id);
-        if ($this->MasterClasses->delete($masterClass)) {
-            $this->Flash->success(__('The master class has been deleted.'));
-        } else {
-            $this->Flash->error(__('The master class could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
+		$query2 = $this->MasterClasses->query();
+						$query2->update()
+							->set(['flag' =>1])
+							->where(['id' => $id])
+							->execute();
+							
+		$this->Flash->error(__('The master class has been deleted.'));
+		return $this->redirect(['action' => 'index']);
+		
     }
 }

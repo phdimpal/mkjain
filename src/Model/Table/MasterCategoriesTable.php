@@ -54,11 +54,11 @@ class MasterCategoriesTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+       /*  $validator
             ->scalar('category_name')
             ->maxLength('category_name', 200)
             ->requirePresence('category_name', 'create')
-            ->notEmpty('category_name');
+            ->notEmpty('category_name'); */
 
         return $validator;
     }

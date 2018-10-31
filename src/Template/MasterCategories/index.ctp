@@ -1,9 +1,8 @@
-	
-	<section class="content-header">
-		<h1>Category </h1>
+<section class="content-header">
+		<h1>Master Category </h1>
 		<ol class="breadcrumb">
 			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Category</li>
+			<li class="active">Master Category</li>
 		</ol>
 		
 	</section>
@@ -17,38 +16,52 @@
 					<div class="box-header ui-sortable-handle" style="cursor: move;">
 						<h3 class="box-title">Category</h3>
 						<!-- tools box -->
-						<div class="pull-right box-tools">
-						</div>
+						
 						<!-- /. tools -->
 					</div>
-					<form action="" method="post" id="cateForm">
+					<?= $this->Form->create($mastercategory,['id'=>'classForm']) ?>
+					<input type="hidden" class="form-control" name="id" id="id" placeholder="Class Name" required value="<?php echo @$mastercategory->id?>"> 
 						<div class="box-body">
 								<div class="form-group">
-								  <input type="text" class="form-control" name="category_name" id="category_name" placeholder="Category Name" required> 
+								  <input type="text" class="form-control" name="category_name" id="category_name" placeholder="Category Name" required value="<?php echo @$mastercategory->category_name?>"> 
 								</div>
+								
 						</div>
 						<div class="box-footer clearfix">
 						  <button type="submit" class="pull-right btn btn-danger" id="sendEmail">Save
 							<i class="fa fa-arrow-circle-right"></i></button>
 						</div>
-					</form>	
+					<?= $this->Form->end() ?>
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="box box-danger">
 					<div class="box-header">
-					  <h3 class="box-title">Category</h3>
+					  <h3 class="box-title">Master Category</h3>
+					  <div class="pull-right box-tools">
+							<a href="<?php echo $this->url->build(['action'=>'index']) ?>"><button class="btn btn-sm bg-red"><i class="fa fa-plus"></i> Add</button></a>
+						</div>
 					</div>
 					 <div class="box-body">
-						<table id="catedata" class="table table-bordered table-striped">
+						<table id="classdata" class="table table-bordered table-striped">
 							<thead>
 								<tr>
 									<th>S.No</th>
-									<th>Category Name</th>
-									<th>Action</th>
+									<th class="text-center">Category Name</th>
+									<th class="text-center">Action</th>
 								</tr>
 							</thead>
 							<tbody>
+								<?php $i=1;foreach($MasterCategories as $mastercategorie){ ?>
+									<tr>
+										<td><?php echo $i++; ?></td>
+										<td class="text-center"><?php echo $mastercategorie->category_name; ?></td>
+										<td class="text-center">
+											<a href="<?php echo $this->url->build(['action'=>'index',$mastercategorie->id]); ?>"><button class="btn btn-sm bg-olive"><i class="fa fa-pencil"></i></button> </a><a data-original-title="Delete" onclick="return confirm('Are you sure you want to delete?')" href="<?php echo $this->url->build(['action'=>'delete',$mastercategorie->id]); ?>"><button class="btn btn-sm bg-red "><i class="fa fa-trash"></i></button> </a>
+										</td>
+									</tr>
+								<?php } ?>
+								
 							</tbody>
 						</table>	
 				</div>	
@@ -56,9 +69,7 @@
 		</div>
 	</div>	
 </section>
-	<input type="hidden" class="saveCategoryData" value="<?php echo $this->Url->build(['controller'=>'MasterCategories','action'=>'saveCategory']) ?>">
-	<input type="hidden" class="getCategoryData" value="<?php echo $this->Url->build(['controller'=>'MasterCategories','action'=>'getCategory']) ?>">
-	<input type="hidden" class="deleteCategoryData" value="<?php echo $this->Url->build(['controller'=>'MasterCategories','action'=>'delete']) ?>">
+ 	<input type="hidden" class="classValidate" value="<?php echo $this->Url->build(['controller'=>'MasterCategories','action'=>'checkMasterCategoriesNames']); ?>">
 	<?php echo $this->html->css('/plugins/datatables/dataTables.bootstrap.css', ['block' => 'PAGE_LEVEL_PLUGINS_CSS']); ?> 
 	<?php echo $this->html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
 	<?php echo $this->html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
@@ -66,77 +77,40 @@
 	<?php echo $this->html->script('/plugins/datatables/dataTables.bootstrap.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
 	<?php  $js="
 		$(document).ready(function(){
-			
-			$('#cateForm').validate({
+			$('#classdata').DataTable();
+			jQuery.validator.addMethod('alphabetsAndSpacesOnly', function (value, element) {
+			return this.optional(element) || /^[a-zA-Z\s]+$/.test(value); });
+
+			var classValidate = $('.classValidate').val();
+			$('#classForm').validate({
 				rules:{
 					category_name:{
-						required:true
+						required:true,
+						alphabetsAndSpacesOnly:true,
+						remote :{
+                        url:classValidate,
+                        type:'post',
+                        data:{
+								id: function()
+								{
+									return $('input[name=id]').val();
+								}
+							}
+						}
 					}
 				},
 				messages:{
 					category_name:{
-						required: 'Category Name is required'
+						required: 'Category Name is required',
+						alphabetsAndSpacesOnly:'Only Alphabets Allowed',
+						remote:'Category Name already exists'	
 					}
 				}
 			});
+			////
 			
-			//////
-			var getCategoryData = $('.getCategoryData').val();
-			var deleteCategoryData = $('.deleteCategoryData').val();
-			var table= $('#catedata').DataTable({
-			'ajax':{
-				'url':getCategoryData
-			},
-			'paging': true,
-			'lengthChange':true,
-			'searching':true,
-			'columnDefs': [{
-				'targets': 2,
-				'orderable':false,
-				'searchable':false,
-				'data': 'null',
-				'defaultContent': '<a onclick=deleteCategory(this) >Delete</a>&nbsp;&nbsp;<a onclick=editCategory(this) >Edit</a>'
-				}
-			],
-			'columns':[
-				
-				{'data': 'category_name'}
-			],
-			'fnRowCallback' : function(nRow, aData, iDisplayIndex){
-                $('td:first', nRow).html(iDisplayIndex +1);
-               return nRow;
-            },
-			});
-			
-		});
-			var saveCategoryData = $('.saveCategoryData').val();
-			$('#cateForm').on('submit', function (e) {
-				e.preventDefault();
-				
-					$.ajax({
-						type: 'post',
-						url: saveCategoryData,
-						dataType : 'json',
-						data: $(this).serialize(),
-						success: function (result) {
-							if(result.status == true){
-								$('.show-success').html(result.success).show();
-								$('.show-danger').html(result.success).hide();
-								 table.reload();
-							}		
-						}
-					});
-				
-			});
-			//////
-			
-		
-		function deleteCategory(id){
-			
-		}
-
-		function editCategory(id){
-			
-		}
-	";
-	echo $this->html->scriptBlock($js, ['block' => 'scriptBottom']); ?>
+		$('.alert').fadeOut(5000);
+	
+		});	
+		";
+	echo $this->html->scriptBlock($js, ['block' => 'scriptBottom']); ?>	

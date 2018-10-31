@@ -12,6 +12,10 @@
 		    z-index: 99999 !important;
 			position: absolute !important;
 		}	
+		.pagination>.active>a{
+			background-color: #dd4b39 !important;
+			border-color: #dd4b39 !important;
+		}
 	</style>
 </head>	
 <body class="fixed sidebar-mini skin-red-light">
@@ -22,15 +26,8 @@
 		
 		<div class="content-wrapper" style="min-height: 600px;">
 			<div class="row">
-				<div class="col-md-4 pull-right">
-					<div class="alert alert-success alert-dismissible show-success" style="display:none;">
-						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-							
-					</div>
-					<div class="alert alert-danger alert-dismissible show-danger" style="display:none;">
-						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-							
-					</div>
+				<div class="col-md-4 pull-right text-center">
+					<?= $this->Flash->render() ?>
 				</div>	  
 			</div>
 		<?php echo $this->fetch('content'); ?>

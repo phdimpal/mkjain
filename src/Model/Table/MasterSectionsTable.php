@@ -61,7 +61,7 @@ class MasterSectionsTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+        /* $validator
             ->scalar('section_name')
             ->maxLength('section_name', 50)
             ->requirePresence('section_name', 'create')
@@ -70,7 +70,7 @@ class MasterSectionsTable extends Table
         $validator
             ->integer('flag')
             ->requirePresence('flag', 'create')
-            ->notEmpty('flag');
+            ->notEmpty('flag'); */
 
         return $validator;
     }

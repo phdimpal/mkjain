@@ -58,7 +58,7 @@ class MasterSubjectsTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+        /* $validator
             ->scalar('subject_name')
             ->maxLength('subject_name', 50)
             ->requirePresence('subject_name', 'create')
@@ -67,7 +67,7 @@ class MasterSubjectsTable extends Table
         $validator
             ->integer('flag')
             ->requirePresence('flag', 'create')
-            ->notEmpty('flag');
+            ->notEmpty('flag'); */
 
         return $validator;
     }

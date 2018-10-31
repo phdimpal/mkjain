@@ -1,8 +1,8 @@
 <section class="content-header">
-		<h1>Master Section </h1>
+		<h1>Master Mapping </h1>
 		<ol class="breadcrumb">
 			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Master Section</li>
+			<li class="active">Master Mapping</li>
 		</ol>
 		
 	</section>
@@ -14,19 +14,17 @@
 			<div class="col-md-6">
 				<div class="box box-danger">
 					<div class="box-header ui-sortable-handle" style="cursor: move;">
-						<h3 class="box-title">Section</h3>
+						<h3 class="box-title">Mapping</h3>
 						<!-- tools box -->
-						<div class="pull-right box-tools">
-						</div>
+						
 						<!-- /. tools -->
 					</div>
-					<?= $this->Form->create($mastersection,['id'=>'classForm']) ?>
-					<input type="hidden" class="form-control" name="id" id="id" placeholder="Class Name" required value="<?php echo @$mastersection->id?>"> 
+					<?= $this->Form->create($classsectionmapping,['id'=>'classForm']) ?>
+					<input type="hidden" class="form-control" name="id" id="id" placeholder="Class Name" required value="<?php echo @$classsectionmapping->id?>"> 
 						<div class="box-body">
-								<div class="form-group">
-								  <input type="text" class="form-control" name="section_name" id="section_name" placeholder="Section Name" required value="<?php echo @$mastersection->section_name?>"> 
-								</div>
-								
+							<div class="form-group">
+								<?php echo $this->Form->input('master_class_id', ['empty' => "--Select--",'options'=>$master_class,'label' => false,'class' => 'form-control input-sm select2me']); ?> 
+							</div>
 						</div>
 						<div class="box-footer clearfix">
 						  <button type="submit" class="pull-right btn btn-danger" id="sendEmail">Save
@@ -38,7 +36,7 @@
 			<div class="col-md-6">
 				<div class="box box-danger">
 					<div class="box-header">
-					  <h3 class="box-title">Master Section</h3>
+					  <h3 class="box-title">Master Mapping</h3>
 					  <div class="pull-right box-tools">
 							<a href="<?php echo $this->url->build(['action'=>'index']) ?>"><button class="btn btn-sm bg-red"><i class="fa fa-plus"></i> Add</button></a>
 						</div>
@@ -48,17 +46,21 @@
 							<thead>
 								<tr>
 									<th>S.No</th>
-									<th class="text-center">Section Name</th>
+									<th class="text-center">Class </th>
+									<th class="text-center">Section </th>
+									<th class="text-center">Subject </th>
 									<th class="text-center">Action</th>
 								</tr>
 							</thead>
 							<tbody>
-								<?php $i=1;foreach($masterSections as $masterSection){ ?>
+								<?php $i=1;foreach($ClassSectionMappings as $ClassSectionMapping){ ?>
 									<tr>
 										<td><?php echo $i++; ?></td>
-										<td class="text-center"><?php echo $masterSection->section_name; ?></td>
+										<td class="text-center"><?php echo $mastersubject->master_class->class_name; ?></td>
+										<td class="text-center"><?php echo $mastersubject->master_section->section_name; ?></td>
+										<td class="text-center"><?php echo $mastersubject->master_subject->subject_name; ?></td>
 										<td class="text-center">
-											<a href="<?php echo $this->url->build(['action'=>'index',$masterSection->id]); ?>"><button class="btn btn-sm bg-olive"><i class="fa fa-pencil"></i></button> </a><a data-original-title="Delete" onclick="return confirm('Are you sure you want to delete?')" href="<?php echo $this->url->build(['action'=>'delete',$masterSection->id]); ?>"><button class="btn btn-sm bg-red "><i class="fa fa-trash"></i></button> </a>
+											<a href="<?php echo $this->url->build(['action'=>'index',$mastersubject->id]); ?>"><button class="btn btn-sm bg-olive"><i class="fa fa-pencil"></i></button> </a><a data-original-title="Delete" onclick="return confirm('Are you sure you want to delete?')" href="<?php echo $this->url->build(['action'=>'delete',$mastersubject->id]); ?>"><button class="btn btn-sm bg-red "><i class="fa fa-trash"></i></button> </a>
 										</td>
 									</tr>
 								<?php } ?>
@@ -70,7 +72,7 @@
 		</div>
 	</div>	
 </section>
- 	<input type="hidden" class="classValidate" value="<?php echo $this->Url->build(['controller'=>'MasterSections','action'=>'checkSectionNames']); ?>">
+ 	<input type="hidden" class="classValidate" value="<?php echo $this->Url->build(['controller'=>'MasterSubjects','action'=>'checkSubjectsNames']); ?>">
 	<?php echo $this->html->css('/plugins/datatables/dataTables.bootstrap.css', ['block' => 'PAGE_LEVEL_PLUGINS_CSS']); ?> 
 	<?php echo $this->html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
 	<?php echo $this->html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
@@ -85,7 +87,7 @@
 			var classValidate = $('.classValidate').val();
 			$('#classForm').validate({
 				rules:{
-					section_name:{
+					subject_name:{
 						required:true,
 						alphabetsAndSpacesOnly:true,
 						remote :{
@@ -101,10 +103,10 @@
 					}
 				},
 				messages:{
-					section_name:{
-						required: 'Section Name is required',
+					subject_name:{
+						required: 'Subject Name is required',
 						alphabetsAndSpacesOnly:'Only Alphabets Allowed',
-						remote:'Section Name already exists'	
+						remote:'Subject Name already exists'	
 					}
 				}
 			});

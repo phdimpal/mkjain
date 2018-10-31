@@ -52,7 +52,7 @@ class ClassSectionMappingsTable extends Table
             'foreignKey' => 'master_subject_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('MasterMedia', [
+        $this->belongsTo('MasterMediums', [
             'foreignKey' => 'master_medium_id',
             'joinType' => 'INNER'
         ]);
@@ -70,9 +70,9 @@ class ClassSectionMappingsTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+       /*  $validator
             ->requirePresence('is_deleted', 'create')
-            ->notEmpty('is_deleted');
+            ->notEmpty('is_deleted'); */
 
         return $validator;
     }
@@ -89,7 +89,7 @@ class ClassSectionMappingsTable extends Table
         $rules->add($rules->existsIn(['master_class_id'], 'MasterClasses'));
         $rules->add($rules->existsIn(['master_section_id'], 'MasterSections'));
         $rules->add($rules->existsIn(['master_subject_id'], 'MasterSubjects'));
-        $rules->add($rules->existsIn(['master_medium_id'], 'MasterMedia'));
+        $rules->add($rules->existsIn(['master_medium_id'], 'MasterMediums'));
 
         return $rules;
     }
