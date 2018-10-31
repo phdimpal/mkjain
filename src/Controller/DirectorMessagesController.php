@@ -1,7 +1,15 @@
 <?php
 namespace App\Controller;
-
+use Cake\View\View;
+use Cake\View\ViewBuilder;
+use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
+use Cake\Validation\Validation;
+use Cake\Routing\Router;
+use Cake\Mailer\Email;
+use Cake\Event\Event;
 
 /**
  * DirectorMessages Controller
@@ -71,15 +79,40 @@ class DirectorMessagesController extends AppController
      */
     public function edit($id = null)
     {
+		$this->viewBuilder()->layout('index_layout');
         $directorMessage = $this->DirectorMessages->get($id, [
             'contain' => []
         ]);
+		$old_image=$directorMessage->image;
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $directorMessage = $this->DirectorMessages->patchEntity($directorMessage, $this->request->getData());
+			
+			$profile_pic=$this->request->getData('profile_pic');
+			
+			if(!empty($profile_pic['tmp_name'])){
+				$extt=explode('/',$profile_pic['type']);
+				$ext=$extt[1];
+				$setNewFileName = rand(1, 100000);
+				$fullpath= WWW_ROOT."img".DS."director";
+				$statement_year = "/img/director/".$setNewFileName .'.'.$ext;
+				$res1 = is_dir($fullpath);
+				if($res1 != 1) {
+						new Folder($fullpath, true, 0777);
+					}
+				$this->request->data['image']=$statement_year;
+					
+			}else{
+				$this->request->data['image']=$old_image;
+			}
+				$directorMessage = $this->DirectorMessages->patchEntity($directorMessage, $this->request->getData());
             if ($this->DirectorMessages->save($directorMessage)) {
-                $this->Flash->success(__('The director message has been saved.'));
+				if(!empty($profile_pic['tmp_name'])){
+						unlink(WWW_ROOT .$old_image);
+						move_uploaded_file($profile_pic['tmp_name'],$fullpath.DS.$setNewFileName .'.'. $ext);
+					
+					}
+				$this->Flash->success(__('The director message has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'edit',$id]);
             }
             $this->Flash->error(__('The director message could not be saved. Please, try again.'));
         }

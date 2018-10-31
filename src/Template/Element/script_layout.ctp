@@ -10,13 +10,23 @@
 					'/plugins/chartjs/Chart.min.js',
 					'/dist/js/pages/dashboard2.js',
 					'/dist/js/demo.js',
-					'/plugins/datepicker/bootstrap-datepicker.js'
+					'/plugins/datepicker/bootstrap-datepicker.js',
+					'/plugins/editor.js'
 	]);?>
 <script>
  
 	$('#datepicker').datepicker({
 		autoclose: true
 	});
+<<<<<<< HEAD
 
 	
+=======
+	$(".txtEditor").Editor({
+		'source':true,
+		'togglescreen':false,
+		'rm_format':false,
+		'insert_img':false,
+		});
+>>>>>>> 8ca55cab5ffec1e847cfa839656ab952838f8b05
 </script>
