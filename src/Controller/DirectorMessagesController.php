@@ -71,6 +71,7 @@ class DirectorMessagesController extends AppController
      */
     public function edit($id = null)
     {
+		$this->viewBuilder()->layout('index_layout');
         $directorMessage = $this->DirectorMessages->get($id, [
             'contain' => []
         ]);
