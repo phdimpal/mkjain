@@ -34,7 +34,7 @@ class MasterSubjectsTable extends Table
         parent::initialize($config);
 
         $this->setTable('master_subjects');
-        $this->setDisplayField('id');
+        $this->setDisplayField('subject_name');
         $this->setPrimaryKey('id');
 
         $this->hasMany('Syllabuses', [

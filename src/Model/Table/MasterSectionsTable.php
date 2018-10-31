@@ -35,7 +35,7 @@ class MasterSectionsTable extends Table
         parent::initialize($config);
 
         $this->setTable('master_sections');
-        $this->setDisplayField('id');
+        $this->setDisplayField('section_name');
         $this->setPrimaryKey('id');
 
         $this->hasMany('Registrations', [

@@ -23,7 +23,18 @@
 					<input type="hidden" class="form-control" name="id" id="id" placeholder="Class Name" required value="<?php echo @$classsectionmapping->id?>"> 
 						<div class="box-body">
 							<div class="form-group">
-								<?php echo $this->Form->input('master_class_id', ['empty' => "--Select--",'options'=>$master_class,'label' => false,'class' => 'form-control input-sm select2me']); ?> 
+								<label>Classes</label>
+								<?php echo $this->Form->input('master_class_id', ['empty' => "--Select--",'options'=>$master_class,'label' => false,'class' => 'form-control  master_class_id','required','value'=>@$classsectionmapping->master_class_id]); ?> 
+								<label class="error" for="master-class-id"></label>
+							</div> 
+							<div class="form-group">
+								<label>Sections</label>
+								<?php echo $this->Form->input('master_section_id', ['empty' => "--Select--",'options'=>$master_sections,'label' => false,'class' => 'form-control  master_section_id','required','value'=>@$classsectionmapping->master_section_id]); ?> 
+								<label for="master-section-id" class="error"></label>
+							</div>
+							<div class="form-group">
+								<label>Subjects</label>
+								<?php echo $this->Form->input('master_subject_id', ['empty' => "--Select--",'options'=>$master_subjects,'label' => false,'class' => 'form-control input-sm master_subject_id','value'=>@$classsectionmapping->master_subject_id]); ?> 
 							</div>
 						</div>
 						<div class="box-footer clearfix">
@@ -56,11 +67,11 @@
 								<?php $i=1;foreach($ClassSectionMappings as $ClassSectionMapping){ ?>
 									<tr>
 										<td><?php echo $i++; ?></td>
-										<td class="text-center"><?php echo $mastersubject->master_class->class_name; ?></td>
-										<td class="text-center"><?php echo $mastersubject->master_section->section_name; ?></td>
-										<td class="text-center"><?php echo $mastersubject->master_subject->subject_name; ?></td>
+										<td class="text-center"><?php echo $ClassSectionMapping->master_class->class_name; ?></td>
+										<td class="text-center"><?php echo $ClassSectionMapping->master_section->section_name; ?></td>
+										<td class="text-center"><?php echo $ClassSectionMapping->master_subject->subject_name; ?></td>
 										<td class="text-center">
-											<a href="<?php echo $this->url->build(['action'=>'index',$mastersubject->id]); ?>"><button class="btn btn-sm bg-olive"><i class="fa fa-pencil"></i></button> </a><a data-original-title="Delete" onclick="return confirm('Are you sure you want to delete?')" href="<?php echo $this->url->build(['action'=>'delete',$mastersubject->id]); ?>"><button class="btn btn-sm bg-red "><i class="fa fa-trash"></i></button> </a>
+											<a href="<?php echo $this->url->build(['action'=>'index',$ClassSectionMapping->id]); ?>"><button class="btn btn-sm bg-olive"><i class="fa fa-pencil"></i></button> </a><a data-original-title="Delete" onclick="return confirm('Are you sure you want to delete?')" href="<?php echo $this->url->build(['action'=>'delete',$ClassSectionMapping->id]); ?>"><button class="btn btn-sm bg-red "><i class="fa fa-trash"></i></button> </a>
 										</td>
 									</tr>
 								<?php } ?>
@@ -78,8 +89,14 @@
 	<?php echo $this->html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
 	<?php echo $this->html->script('/plugins/datatables/jquery.dataTables.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
 	<?php echo $this->html->script('/plugins/datatables/dataTables.bootstrap.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	
+	<?php echo $this->html->script('/plugins/select2/select2.full.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	
 	<?php  $js="
 		$(document).ready(function(){
+			$('.master_class_id').select2();
+			$('.master_section_id').select2();
+			$('.master_subject_id').select2();
 			$('#classdata').DataTable();
 			jQuery.validator.addMethod('alphabetsAndSpacesOnly', function (value, element) {
 			return this.optional(element) || /^[a-zA-Z\s]+$/.test(value); });
@@ -87,27 +104,10 @@
 			var classValidate = $('.classValidate').val();
 			$('#classForm').validate({
 				rules:{
-					subject_name:{
-						required:true,
-						alphabetsAndSpacesOnly:true,
-						remote :{
-                        url:classValidate,
-                        type:'post',
-                        data:{
-								id: function()
-								{
-									return $('input[name=id]').val();
-								}
-							}
-						}
-					}
+					
 				},
 				messages:{
-					subject_name:{
-						required: 'Subject Name is required',
-						alphabetsAndSpacesOnly:'Only Alphabets Allowed',
-						remote:'Subject Name already exists'	
-					}
+					
 				}
 			});
 			////
