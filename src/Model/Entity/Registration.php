@@ -1,7 +1,8 @@
 <?php
 namespace App\Model\Entity;
-
+use Cake\Auth\DefaultPasswordHasher;
 use Cake\ORM\Entity;
+
 
 /**
  * Registration Entity
@@ -46,6 +47,7 @@ class Registration extends Entity
      * @var array
      */
     protected $_accessible = [
+		'*'=>true,
         'master_role_id' => true,
         'roll_no' => true,
         'name' => true,
@@ -72,4 +74,10 @@ class Registration extends Entity
         'master_media' => true,
         'device_token'=>true
     ];
+	
+	 protected function _setPassword($password)
+    {
+        $hasher = new DefaultPasswordHasher();
+        return $hasher->hash($password);
+    }
 }

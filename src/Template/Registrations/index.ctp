@@ -1,24 +1,6 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Registration[]|\Cake\Collection\CollectionInterface $registrations
- */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Registration'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Master Roles'), ['controller' => 'MasterRoles', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Master Role'), ['controller' => 'MasterRoles', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Master Classes'), ['controller' => 'MasterClasses', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Master Class'), ['controller' => 'MasterClasses', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Master Sections'), ['controller' => 'MasterSections', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Master Section'), ['controller' => 'MasterSections', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="registrations index large-9 medium-8 columns content">
+<div class="">
     <h3><?= __('Registrations') ?></h3>
-    <table cellpadding="0" cellspacing="0">
+    <table  class="table table-condensed table-striped">
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>

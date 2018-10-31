@@ -88,13 +88,48 @@ class RegistrationsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
+	 
+	public function classsection($id=null){
+
+		$ClassSectionMappings=$this->Registrations->ClassSectionMappings->find()->where(['ClassSectionMappings.master_class_id'=>$id])->contain(['MasterSections'])->toArray();
+		//pr($ClassSectionMappings); exit;
+		$this->set('ClassSectionMappings', $ClassSectionMappings);
+	}	
+	 
     public function add()
     {
 		$this->viewBuilder()->layout('index_layout');
         $registration = $this->Registrations->newEntity();
         if ($this->request->is('post')) {
+			
+			$profile_pic=$this->request->getData('profile_pic');
+			$dob=$this->request->getData('dob');
+			
+			$password= str_replace("-", "", $dob);
+			$this->request->data['password']=$password;
+			
+			if(!empty($profile_pic['tmp_name'])){
+				$extt=explode('/',$profile_pic['type']);
+				$ext=$extt[1];
+				$setNewFileName = rand(1, 100000);
+				$fullpath= WWW_ROOT."img".DS."profile";
+				$statement_year = "/img/profile/".$setNewFileName .'.'.$ext;
+				$res1 = is_dir($fullpath);
+				if($res1 != 1) {
+						new Folder($fullpath, true, 0777);
+					}
+				$this->request->data['profile_pic']	=$statement_year;
+					
+			}
+
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
             if ($this->Registrations->save($registration)) {
+				
+					if(!empty($profile_pic['tmp_name'])){
+							move_uploaded_file($profile_pic['tmp_name'],$fullpath.DS.$setNewFileName .'.'. $ext);
+						
+					}
+
                 $this->Flash->success(__('The registration has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
