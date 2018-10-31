@@ -20,6 +20,7 @@ class LeavesController extends AppController
      */
     public function index()
     {
+		$this->viewBuilder()->layout('index_layout');
         $this->paginate = [
             'contain' => ['Registrations']
         ];
@@ -97,14 +98,29 @@ class LeavesController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function approve($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $leave = $this->Leaves->get($id);
-        if ($this->Leaves->delete($leave)) {
-            $this->Flash->success(__('The leave has been deleted.'));
+		$leave->status='Approved';
+        if ($this->Leaves->save($leave)) {
+            $this->Flash->success(__('The leave has been approved.'));
         } else {
-            $this->Flash->error(__('The leave could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The leave could not be approved. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'index']);
+    } 
+	
+	public function reject($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $leave = $this->Leaves->get($id);
+		$leave->status='Rejected';
+        if ($this->Leaves->save($leave)) {
+            $this->Flash->success(__('The leave has been rejected.'));
+        } else {
+            $this->Flash->error(__('The leave could not be rejected. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);
