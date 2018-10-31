@@ -183,7 +183,7 @@ class RegistrationsController extends AppController
 			}else{
 				$this->request->data['profile_pic']	=$old_pic;
 			}
-
+			$this->request->data['edited_by']=$user_id;
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
             if ($this->Registrations->save($registration)) {
 				if(!empty($profile_pic['tmp_name'])){

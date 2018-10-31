@@ -30,7 +30,7 @@
 							<div class="col-md-12 pad">
 							
 
-								<textarea id="description" name="content" hidden="hidden"><?php  ?></textarea>
+								<textarea id="description" name="discription" hidden="hidden"><?php echo $directorMessage->discription; ?></textarea>
 								<div class="col-md-12 ">
 									<div class="box-body  pad">
 										<textarea class="txtEditor"></textarea>
@@ -52,4 +52,17 @@
 			</div>
 			<?php echo $this->Form->end(); ?>
 </div>
+<?php echo $this->html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+
+	<?php $js="$(document).ready(function(){
+		
+		$('.Editor-editor').html($('#description').text());
+
+		$('button:submit').click(function(e){ 
 			
+			$('#description').text($('.Editor-editor').html());
+		}); 
+	});
+	";	
+	
+	echo $this->html->scriptBlock($js, ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
