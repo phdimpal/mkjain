@@ -41,7 +41,7 @@ class RegistrationsController extends AppController
 			$user = $this->Auth->identify();
 			if($user){
 				$this->Auth->setUser($user);
-				return $this->redirect(['action' => 'index']);
+				return $this->redirect(['action' => 'dashboard']);
 				
 			}
 			$this->Flash->error('Your username or password is incorrect.');
@@ -143,6 +143,9 @@ class RegistrationsController extends AppController
         $this->set(compact('registration', 'masterRoles', 'masterClasses', 'masterSections', 'MasterMediums'));
     }
 
+	public function dashboard(){
+		$this->viewBuilder()->layout('index_layout');
+	}	
     /**
      * Edit method
      *
