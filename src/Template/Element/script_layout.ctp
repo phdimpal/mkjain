@@ -1,4 +1,5 @@
 	<?php echo $this->Html->script([
+					
 					'/plugins/jQuery/jquery-2.2.3.min.js',
 					'/bootstrap/js/bootstrap.min.js',
 					'/plugins/fastclick/fastclick.js',
@@ -18,15 +19,16 @@
 	$('#datepicker').datepicker({
 		autoclose: true
 	});
-<<<<<<< HEAD
+	
+	$('#calender_date').datepicker({
+		autoclose: true
+	});
 
 	
-=======
 	$(".txtEditor").Editor({
 		'source':true,
 		'togglescreen':false,
 		'rm_format':false,
 		'insert_img':false,
 		});
->>>>>>> 8ca55cab5ffec1e847cfa839656ab952838f8b05
 </script>

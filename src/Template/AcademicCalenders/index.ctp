@@ -1,57 +1,118 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\AcademicCalender[]|\Cake\Collection\CollectionInterface $academicCalenders
- */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Academic Calender'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Master Categories'), ['controller' => 'MasterCategories', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Master Category'), ['controller' => 'MasterCategories', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="academicCalenders index large-9 medium-8 columns content">
-    <h3><?= __('Academic Calenders') ?></h3>
-    <table cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('master_category_id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('title') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('calender_date') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created_on') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('updated_on') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($academicCalenders as $academicCalender): ?>
-            <tr>
-                <td><?= $this->Number->format($academicCalender->id) ?></td>
-                <td><?= $academicCalender->has('master_category') ? $this->Html->link($academicCalender->master_category->id, ['controller' => 'MasterCategories', 'action' => 'view', $academicCalender->master_category->id]) : '' ?></td>
-                <td><?= h($academicCalender->title) ?></td>
-                <td><?= h($academicCalender->calender_date) ?></td>
-                <td><?= h($academicCalender->created_on) ?></td>
-                <td><?= h($academicCalender->updated_on) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $academicCalender->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $academicCalender->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $academicCalender->id], ['confirm' => __('Are you sure you want to delete # {0}?', $academicCalender->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
-    </div>
-</div>
+<section class="content-header">
+		<h1>Academic Calender</h1>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+			<li class="active">Academic Calender</li>
+		</ol>
+		
+	</section>
+	
+	 <section class="content">
+	 
+		<div class="row">
+		
+			<div class="col-md-6">
+				<div class="box box-danger">
+					<div class="box-header ui-sortable-handle" style="cursor: move;">
+						<h3 class="box-title">Academic Calender</h3>
+						<!-- tools box -->
+						
+						<!-- /. tools -->
+					</div>
+					<?= $this->Form->create($academiccalender,['id'=>'classForm']) ?>
+					<input type="hidden" class="form-control" name="id" id="id" placeholder="Class Name" required value="<?php echo @$academiccalender->id?>"> 
+						<div class="box-body">
+								
+								<div class="form-group">
+									<label class="control-label">Category</label>
+									<?php echo $this->Form->input('master_category_id', ['empty' => "--Select--",'options'=>$mastercategories,'label' => false,'class' => 'form-control  master_category_id','required','value'=>@$classsectionmapping->mastercategories]); ?> 
+									<label class="error" for="master-category-id"></label>
+								</div>
+								<div class="form-group">
+									<label class="control-label">Title</label>
+								  <input type="text" class="form-control" name="title" id="title" placeholder="Title Name" required value="<?php echo @$academiccalender->title?>"> 
+								</div>
+								<div class="form-group">
+									<label class="control-label">Calender Date</label>
+									<input type="text" class="form-control" name="calender_date" id="calender_date" placeholder="Calender Date" required value="<?php echo @$academiccalender->calender_date?>"> 
+								</div>
+								
+						</div>
+						<div class="box-footer clearfix">
+						  <button type="submit" class="pull-right btn btn-danger" id="sendEmail">Save
+							<i class="fa fa-arrow-circle-right"></i></button>
+						</div>
+					<?= $this->Form->end() ?>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="box box-danger">
+					<div class="box-header">
+					  <h3 class="box-title">Academic Calender</h3>
+					  <div class="pull-right box-tools">
+							<a href="<?php echo $this->url->build(['action'=>'index']) ?>"><button class="btn btn-sm bg-red"><i class="fa fa-plus"></i> Add</button></a>
+						</div>
+					</div>
+					 <div class="box-body">
+						<table id="classdata" class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th>S.No</th>
+									<th class="text-center">Category Name</th>
+									<th class="text-center">Title</th>
+									<th class="text-center">Date</th>
+									<th class="text-center">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php $i=1;foreach($AcademicCalenders as $academiccalender){ ?>
+									<tr>
+										<td><?php echo $i++; ?></td>
+										<td class="text-center"><?php echo $academiccalender->master_category->category_name; ?></td>
+										<td class="text-center"><?php echo $academiccalender->title; ?></td>
+										<td class="text-center"><?php echo date('d-m-Y',strtotime($academiccalender->calender_date)); ?></td>
+										<td class="text-center">
+											<a href="<?php echo $this->url->build(['action'=>'index',$academiccalender->id]); ?>"><button class="btn btn-sm bg-olive"><i class="fa fa-pencil"></i></button> </a><a data-original-title="Delete" onclick="return confirm('Are you sure you want to delete?')" href="<?php echo $this->url->build(['action'=>'delete',$academiccalender->id]); ?>"><button class="btn btn-sm bg-red "><i class="fa fa-trash"></i></button> </a>
+										</td>
+									</tr>
+								<?php } ?>
+								
+							</tbody>
+						</table>	
+				</div>	
+			</div>
+		</div>
+	</div>	
+</section>
+ 	<input type="hidden" class="classValidate" value="<?php echo $this->Url->build(['controller'=>'MasterCategories','action'=>'checkMasterCategoriesNames']); ?>">
+	<?php echo $this->html->css('/plugins/datatables/dataTables.bootstrap.css', ['block' => 'PAGE_LEVEL_PLUGINS_CSS']); ?> 
+	<?php echo $this->html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->html->script('/plugins/datatables/jquery.dataTables.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->html->script('/plugins/datatables/dataTables.bootstrap.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->html->script('/plugins/select2/select2.full.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php  $js="
+		$(document).ready(function(){
+			$('#classdata').DataTable();
+			$('.master_category_id').select2();
+			
+			var classValidate = $('.classValidate').val();
+			$('#classForm').validate({
+				rules:{
+					title:{
+						required:true,
+					}
+				},
+				messages:{
+					title:{
+						required: 'title is required',
+					}
+				}
+			});
+			////
+			
+		$('.alert').fadeOut(5000);
+	
+		});	
+		";
+	echo $this->html->scriptBlock($js, ['block' => 'scriptBottom']); ?>	

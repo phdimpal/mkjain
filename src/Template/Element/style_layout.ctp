@@ -13,7 +13,7 @@
 			'/dist/css/AdminLTE.min.css',
 			'/dist/css/skins/_all-skins.min.css',
 			'/plugins/datepicker/datepicker3.css',
-			'/plugins/select2/select2.min.css'
+			'/plugins/select2/select2.min.css',
 			'/plugins/editor.css'
 	]);?>
 

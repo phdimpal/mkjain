@@ -55,7 +55,7 @@ class AcademicCalendersTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+        /* $validator
             ->scalar('title')
             ->maxLength('title', 200)
             ->requirePresence('title', 'create')
@@ -74,7 +74,7 @@ class AcademicCalendersTable extends Table
         $validator
             ->dateTime('updated_on')
             ->requirePresence('updated_on', 'create')
-            ->notEmpty('updated_on');
+            ->notEmpty('updated_on'); */
 
         return $validator;
     }

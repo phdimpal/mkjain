@@ -152,9 +152,9 @@ public function login(){
 				if(in_array($ext, $arr_ext))
 				{
 					if($master_role_id == 2){
-						move_uploaded_file($file['tmp_name'], WWW_ROOT . '/mkjainn/registration/teacher/' .$id.'-'.$setNewFileName.'.'.$ext);
+						move_uploaded_file($file['tmp_name'], WWW_ROOT . '/registration/teacher/' .$id.'-'.$setNewFileName.'.'.$ext);
 					}else if($master_role_id == 3){
-						move_uploaded_file($file['tmp_name'], WWW_ROOT . '/mkjainn/registration/student/'  .$id.'-'.$setNewFileName.'.'.$ext);
+						move_uploaded_file($file['tmp_name'], WWW_ROOT . '/registration/student/'  .$id.'-'.$setNewFileName.'.'.$ext);
 					}
 					
 					if ($this->request->is(['post','put'])) {
@@ -306,7 +306,7 @@ public function login(){
 			}
 	}
 	
-	public function getAcademicCalender(){
+public function getAcademicCalender(){
 		
 		$this->loadModel('AcademicCalenders');
 		
@@ -342,7 +342,7 @@ public function login(){
 				
 				$fff=array_unique($timestamp);
 				unset($timestamp);
-				$result=array();$d=array();
+				$result=array();$d=array();$db=array();
 				foreach($fff as $cal_ex11)
 				{
 					$dt=str_replace('-', '', $cal_ex11);
@@ -405,16 +405,124 @@ public function login(){
 				}
 			
 				unset($timestamp);
+				if(sizeof($d)>0){
+				    $db[]=$d;
+				}
+				
 				$result1[] = array('month_id' => $monthss, 'year'=>$ey,
-				'data' => $result,'eventData'=>$d);
+				'data' => $result,'eventData'=>$db);
 				unset($result);
 				unset($d);
+				unset($db);
 			}
 			
  			$yearArray[]=array('year'=> $x,'monthdata'=> $result1);
 			unset($result1);
 		}	
 	    
+		if($yearArray){
+	    	$success = true;
+	    	$message = 'Data Found';
+        }else{
+           	$success = false;
+			$message = 'No data Found'; 
+            $yearArray=[];
+        }
+		 $this->set(['success' => $success,'message'=>$message,'calenderDatas'=>$yearArray,'_serialize' => ['success','message','calenderDatas']]);	
+	}	
+	
+	public function getAcademicCalenderr(){
+		
+		$this->loadModel('AcademicCalenders');
+		
+		$currnt=date('Y');
+		$nextyear=$currnt+1;
+		$yearArray=array();
+		
+		$y=0;
+		for($x=$currnt;$x<=$nextyear; $x++)
+		{	
+			$y++;
+			for($c=1;$c<=12; $c++)
+			{
+				$first_date=date('Y-m-d', strtotime($x.'-'.$c.'-01'));
+			    $last_date=date('Y-m-t', strtotime($x.'-'.$c.'-01'));  
+				$monthss=	$c-1;	
+				$currentTime=strtotime($first_date);
+				$endTime=strtotime($last_date);
+				//---
+				$k=0;
+				$results = array();
+				while ($currentTime <= $endTime) {
+					if (date('N', $currentTime) < 8) {
+						$results[] = date('Y-m-d', $currentTime);
+					}
+					$currentTime = strtotime('+1 day', $currentTime);
+				}
+				unset($timestamp);
+				foreach($results as $value)
+				{
+					$timestamp[]=$value;
+				}
+				
+				$fff=array_unique($timestamp);
+				unset($timestamp);
+				$result=array();
+				foreach($fff as $cal_ex11)
+				{
+					$dt=str_replace('-', '', $cal_ex11);
+					$exact_trim=$dt;
+					$datetime =\DateTime::createFromFormat('Ymd', $exact_trim);
+					$ed=$datetime->format('d');
+					$edd=$datetime->format('D');
+					$em=$datetime->format('M');
+					$ey=$datetime->format('Y');
+
+					$AcademicCalenders = $this->AcademicCalenders->find()->contain(['MasterCategories'])->where(['calender_date'=>$cal_ex11]);
+					
+					$result_c=array();
+					if(sizeOf($AcademicCalenders)>0)
+					{
+						foreach($AcademicCalenders as $academiccalender)
+						{
+							$result_c[] = array(
+								'id' => $academiccalender->id,
+								'name' => $academiccalender->title,
+								'type' => $academiccalender->master_category->category_name,
+								'date' => date('d-m-Y',strtotime($academiccalender->calender_date)),
+							);
+						}
+					}
+					else
+					{
+						$fullday='';
+						if($edd=='Sun'){$fullday='Sunday';} 
+							$result_c[] = array(
+								'id' => 0,
+								'name' => '',
+								'type' => $fullday,
+								'date' => $cal_ex11,
+								'time' =>''
+							); 
+					}
+					$result[] =array('date' => $ed,
+						'day' => $edd,
+						'month' => $em,
+						'year' => $ey,
+						'event'=>$result_c);
+					unset($result_c);
+				}
+				
+				unset($timestamp);
+				$result1[] = array('month_id' => $monthss, 'year'=>$ey,
+				'data' => $result);
+				unset($result);
+			}
+			
+ 			$yearArray[]=array('year'=> $x,'monthdata'=> $result1);
+			unset($result1);
+		}	
+	     
 		if($yearArray){
 	    	$success = true;
 	    	$message = 'Data Found';
@@ -440,10 +548,9 @@ public function fecthAttendenceView(){
 			$editable=true;
 		}
 		$fetchAttendancesDatas=[];
-	$AttendancesDatas = $this->Attendances->find()->where(['master_class_id'=>$master_class_id,'master_section_id'=>$master_section_id])->contain(['AttendanceRows'=>['Registrations']]);	
-	foreach($AttendancesDatas as $attendancesdata){
+	$AttendancesDatas = $this->Attendances->find()->where(['master_class_id'=>$master_class_id,'master_section_id'=>$master_section_id])->contain(['AttendanceRows'=>['Registrations']]);	foreach($AttendancesDatas as $attendancesdata){
 			foreach($attendancesdata->attendance_rows as $attendance_row){
-				$fetchAttendancesDatas[]=['student_id'=>$attendance_row->student_id,'marks'=>$attendance_row->attendance_mark,'editable'=>$editable,'student_name'=>$attendance_row->registration->name];
+				$fetchAttendancesDatas[]=['student_id'=>$attendance_row->student_id,'marks'=>(int)$attendance_row->attendance_mark,'editable'=>$editable,'student_name'=>$attendance_row->registration->name];
 			}
 		}
 		
@@ -516,6 +623,28 @@ public function fecthAttendenceView(){
 			}
 	}
 	
+	public function leaveview(){
+	    
+	    $registration_id = @$this->request->query['registration_id'];
+	    $Leaves=[];
+	    if(!empty($registration_id)){
+	       $Leaves= $this->Registrations->Leaves->find()->where(['Leaves.registration_id'=>$registration_id])->contain(['Registrations']);
+	       if($Leaves->toArray()){
+	            $success = true;
+				$message = 'Data Found';
+	       }else{
+	          	$success = false;
+				$message = 'No data Found'; 
+	       }
+	       
+	        
+	    }else{
+	        	$success = false;
+				$message = 'empty registration id';
+	    }
+	    
+	     $this->set(['success' => $success,'message'=>$message,'Leaves'=>$Leaves,'_serialize' => ['success','message','Leaves']]);
+	}
 	
 	public function news(){
 		
@@ -674,6 +803,8 @@ public function fecthAttendenceView(){
 		 
 		$this->set(['success' => $success,'message'=>$message,'Notifications'=>$Notifications,'_serialize' => ['success','message','Notifications']]);	
 	}
+	
+	
 	
 	
 	public function assignment(){
@@ -841,29 +972,6 @@ public function fecthAttendenceView(){
 		}
 			
 		$this->set(['success' => $success,'message'=>$message,'Attendances'=>$new_data,'_serialize' => ['success','message','Attendances']]);
-	}
-	
-	public function leaveview(){
-	    
-	    $registration_id = @$this->request->query['registration_id'];
-	    $Leaves=[];
-	    if(!empty($registration_id)){
-	       $Leaves= $this->Registrations->Leaves->find()->where(['Leaves.registration_id'=>$registration_id])->contain(['Registrations']);
-	       if($Leaves->toArray()){
-	            $success = true;
-				$message = 'Data Found';
-	       }else{
-	          	$success = false;
-				$message = 'No data Found'; 
-	       }
-	       
-	        
-	    }else{
-	        	$success = false;
-				$message = 'empty registration id';
-	    }
-	    
-	     $this->set(['success' => $success,'message'=>$message,'Leaves'=>$Leaves,'_serialize' => ['success','message','Leaves']]);
 	}
 	
 	

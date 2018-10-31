@@ -34,7 +34,7 @@ class MasterCategoriesTable extends Table
         parent::initialize($config);
 
         $this->setTable('master_categories');
-        $this->setDisplayField('id');
+        $this->setDisplayField('category_name');
         $this->setPrimaryKey('id');
 
         $this->hasMany('AcademicCalenders', [
