@@ -49,8 +49,8 @@ class VideoesFixture extends TestFixture
                 'video_url' => 'Lorem ipsum dolor sit amet',
                 'created_by' => 1,
                 'edited_by' => 1,
-                'created_on' => 1540459852,
-                'updated_on' => 1540459852,
+                'created_on' => 1540989383,
+                'updated_on' => 1540989383,
                 'is_deleted' => 1
             ],
         ];
