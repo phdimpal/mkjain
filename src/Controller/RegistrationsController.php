@@ -62,7 +62,7 @@ class RegistrationsController extends AppController
         $this->paginate = [
             'contain' => ['MasterRoles', 'MasterClasses', 'MasterSections', 'MasterMediums']
         ];
-        $registrations = $this->paginate($this->Registrations);
+        $registrations = $this->paginate($this->Registrations->find()->where(['is_deleted'=>0]));
 
         $this->set(compact('registrations'));
     }
@@ -99,6 +99,7 @@ class RegistrationsController extends AppController
     public function add()
     {
 		$this->viewBuilder()->layout('index_layout');
+		$user_id=$this->Auth->User('id');
         $registration = $this->Registrations->newEntity();
         if ($this->request->is('post')) {
 			
@@ -107,6 +108,7 @@ class RegistrationsController extends AppController
 			
 			$password= str_replace("-", "", $dob);
 			$this->request->data['password']=$password;
+			$this->request->data['created_by']=$user_id;
 			
 			if(!empty($profile_pic['tmp_name'])){
 				$extt=explode('/',$profile_pic['type']);
@@ -155,12 +157,41 @@ class RegistrationsController extends AppController
      */
     public function edit($id = null)
     {
+		$this->viewBuilder()->layout('index_layout');
+		$user_id=$this->Auth->User('id');
         $registration = $this->Registrations->get($id, [
-            'contain' => []
+            'contain' => ['MasterRoles']
         ]);
+		$old_pic=$registration->profile_pic;
+		
         if ($this->request->is(['patch', 'post', 'put'])) {
+			
+			$profile_pic=$this->request->getData('profile_pic');
+			
+			if(!empty($profile_pic['tmp_name'])){
+				$extt=explode('/',$profile_pic['type']);
+				$ext=$extt[1];
+				$setNewFileName = rand(1, 100000);
+				$fullpath= WWW_ROOT."img".DS."profile";
+				$statement_year = "/img/profile/".$setNewFileName .'.'.$ext;
+				$res1 = is_dir($fullpath);
+				if($res1 != 1) {
+						new Folder($fullpath, true, 0777);
+					}
+				$this->request->data['profile_pic']	=$statement_year;
+					
+			}else{
+				$this->request->data['profile_pic']	=$old_pic;
+			}
+
             $registration = $this->Registrations->patchEntity($registration, $this->request->getData());
             if ($this->Registrations->save($registration)) {
+				if(!empty($profile_pic['tmp_name'])){
+						unlink(WWW_ROOT .$old_pic);
+						move_uploaded_file($profile_pic['tmp_name'],$fullpath.DS.$setNewFileName .'.'. $ext);
+					
+					}
+				
                 $this->Flash->success(__('The registration has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
@@ -170,8 +201,8 @@ class RegistrationsController extends AppController
         $masterRoles = $this->Registrations->MasterRoles->find('list', ['limit' => 200]);
         $masterClasses = $this->Registrations->MasterClasses->find('list', ['limit' => 200]);
         $masterSections = $this->Registrations->MasterSections->find('list', ['limit' => 200]);
-        $masterMedia = $this->Registrations->MasterMedia->find('list', ['limit' => 200]);
-        $this->set(compact('registration', 'masterRoles', 'masterClasses', 'masterSections', 'masterMedia'));
+        $MasterMediums = $this->Registrations->MasterMediums->find('list', ['limit' => 200]);
+        $this->set(compact('registration', 'masterRoles', 'masterClasses', 'masterSections', 'MasterMediums'));
     }
 
     /**
@@ -185,7 +216,8 @@ class RegistrationsController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $registration = $this->Registrations->get($id);
-        if ($this->Registrations->delete($registration)) {
+		$registration->is_deleted=1;
+        if ($this->Registrations->save($registration)) {
             $this->Flash->success(__('The registration has been deleted.'));
         } else {
             $this->Flash->error(__('The registration could not be deleted. Please, try again.'));
