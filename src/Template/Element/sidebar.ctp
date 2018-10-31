@@ -52,17 +52,17 @@
           </ul>
         </li>
 		<li class="active treeview">
-          <a href="#">
+          <a href="<?= $this->Url->build(['controller'=>'Complains','action'=>'index']) ?>"> 
             <i class="fa fa-dashboard"></i> <span>Complains</span>
           </a>
         </li>
 		<li class="active treeview">
-          <a href="#">
+          <a href="<?= $this->Url->build(['controller'=>'Leaves','action'=>'index']) ?>">
             <i class="fa fa-dashboard"></i> <span>Leaves</span>
           </a>
         </li>
 		<li class="active treeview">
-          <a href="#">
+          <a href="<?= $this->Url->build(['controller'=>'DirectorMessages','action'=>'edit',1]) ?>">
             <i class="fa fa-dashboard"></i> <span>Director Message</span>
           </a>
         </li>
