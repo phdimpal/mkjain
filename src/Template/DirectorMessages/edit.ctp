@@ -1,3 +1,9 @@
+<style>
+.content-wrapper{
+	min-height: 800px !important;
+}
+</style>
+
 <div class="col-md-12">
 <?php echo $this->Form->create($directorMessage, ['type' => 'file','id'=>'registratiomForm']); ?>
 		<div class="box box-primary">
@@ -22,22 +28,34 @@
 										</div>
 									</div>
 									
+									<div class="col-md-4">
+										<div class="form-group">
+											<label class="control-label"> </label>
+												<?php
+												if(!empty($directorMessage->image)){
+												echo $this->Html->image($directorMessage->image, ['style'=>'width:100px; height:100px;']);
+												}
+												?>
+										</div>
+									</div>
+									
 									
 									
 								 
 							</div>
 							
 							<div class="col-md-12 pad">
-							
+								<div class="col-md-12">
+									<label class="control-label"> Description</label>
+									<textarea id="description" name="discription" hidden="hidden"><?php echo $directorMessage->discription; ?></textarea>
+									<div class="col-md-12" style="margin-left: -22px;">
+										<div class="box-body  pad">
+											<textarea class="txtEditor"></textarea>
 
-								<textarea id="description" name="discription" hidden="hidden"><?php echo $directorMessage->discription; ?></textarea>
-								<div class="col-md-12 ">
-									<div class="box-body  pad">
-										<textarea class="txtEditor"></textarea>
-
+										</div>
 									</div>
-								</div>
-						   </div>
+							   </div>
+							</div>
 						
 					</div>
 			</div>
@@ -50,9 +68,9 @@
 			</div>
 			
 			</div>
-			<?php echo $this->Form->end(); ?>
+		<?php echo $this->Form->end(); ?>
 </div>
-<?php echo $this->html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+<?php echo $this->html->script('/plugins/jQuery/jquery-2.2.3.min.js', ['block' => 'scriptBottom']); ?>
 
 	<?php $js="$(document).ready(function(){
 		
@@ -62,7 +80,6 @@
 			
 			$('#description').text($('.Editor-editor').html());
 		}); 
-	});
-	";	
+	});";	
 	
-	echo $this->html->scriptBlock($js, ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+	echo $this->html->scriptBlock($js, ['block' => 'scriptBottom']); ?>
