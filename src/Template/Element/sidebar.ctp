@@ -51,7 +51,21 @@
             <li><a href="#"><i class="fa fa-circle-o"></i>View</a></li>
           </ul>
         </li>
-		
+		<li class="active treeview">
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>Complains</span>
+          </a>
+        </li>
+		<li class="active treeview">
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>Leaves</span>
+          </a>
+        </li>
+		<li class="active treeview">
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>Director Message</span>
+          </a>
+        </li>
      </ul>
     </section>
     <!-- /.sidebar -->
