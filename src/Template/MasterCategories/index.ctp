@@ -66,6 +66,7 @@
 	<?php echo $this->html->script('/plugins/datatables/dataTables.bootstrap.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
 	<?php  $js="
 		$(document).ready(function(){
+			
 			$('#cateForm').validate({
 				rules:{
 					category_name:{
@@ -80,32 +81,9 @@
 			});
 			
 			//////
-			var saveCategoryData = $('.saveCategoryData').val();
-			$('#cateForm').on('submit', function (e) {
-				e.preventDefault();
-				var saveData = $('#cateForm').serialize();
-				if(saveData != ''){
-					$.ajax({
-						type: 'post',
-						url: saveCategoryData,
-						dataType : 'json',
-						data: $('#cateForm').serialize(),
-						success: function (result) {
-							if(result.status == true){
-								$('.show-success').html(result.success).show();
-								$('.show-danger').html(result.success).hide();
-							}else if(result.status == false){
-								$('.show-success').html(result.success).hide();
-								$('.show-danger').html(result.success).show();
-							}		
-						}
-					});
-				}
-			});
-			//////
 			var getCategoryData = $('.getCategoryData').val();
 			var deleteCategoryData = $('.deleteCategoryData').val();
-			$('#catedata').DataTable({
+			var table= $('#catedata').DataTable({
 			'ajax':{
 				'url':getCategoryData
 			},
@@ -121,7 +99,7 @@
 				}
 			],
 			'columns':[
-				{'data': 'null'},
+				
 				{'data': 'category_name'}
 			],
 			'fnRowCallback' : function(nRow, aData, iDisplayIndex){
@@ -131,6 +109,27 @@
 			});
 			
 		});
+			var saveCategoryData = $('.saveCategoryData').val();
+			$('#cateForm').on('submit', function (e) {
+				e.preventDefault();
+				
+					$.ajax({
+						type: 'post',
+						url: saveCategoryData,
+						dataType : 'json',
+						data: $(this).serialize(),
+						success: function (result) {
+							if(result.status == true){
+								$('.show-success').html(result.success).show();
+								$('.show-danger').html(result.success).hide();
+								 table.reload();
+							}		
+						}
+					});
+				
+			});
+			//////
+			
 		
 		function deleteCategory(id){
 			
@@ -140,4 +139,4 @@
 			
 		}
 	";
-	echo $this->html->scriptBlock($js, ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+	echo $this->html->scriptBlock($js, ['block' => 'scriptBottom']); ?>

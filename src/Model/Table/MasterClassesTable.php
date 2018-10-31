@@ -65,7 +65,7 @@ class MasterClassesTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+       /*  $validator
             ->scalar('class_name')
             ->maxLength('class_name', 50)
             ->requirePresence('class_name', 'create')
@@ -80,7 +80,7 @@ class MasterClassesTable extends Table
         $validator
             ->integer('flag')
             ->requirePresence('flag', 'create')
-            ->notEmpty('flag');
+            ->notEmpty('flag'); */
 
         return $validator;
     }

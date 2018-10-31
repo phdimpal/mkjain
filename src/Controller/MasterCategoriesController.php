@@ -15,15 +15,13 @@ class MasterCategoriesController extends AppController
 	
 	public function saveCategory(){
 		$masterCategory = $this->MasterCategories->newEntity();
+		$status =false;
         if ($this->request->is('post')) {
 			$masterCategory = $this->MasterCategories->patchEntity($masterCategory, $this->request->getData());
 			if ($this->MasterCategories->save($masterCategory)) {
                $success = 'The master category has been saved.' ;
 			   $status = true;
-            }else{
-				 $success = 'The master category could not be saved. Please, try again.';
-				  $status =false;
-			}
+            }
            echo json_encode(['success'=>$success,'status'=>$status]);
 			exit;
 		}

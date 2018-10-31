@@ -342,7 +342,7 @@ public function login(){
 				
 				$fff=array_unique($timestamp);
 				unset($timestamp);
-				$result=array();
+				$result=array();$d=array();
 				foreach($fff as $cal_ex11)
 				{
 					$dt=str_replace('-', '', $cal_ex11);
@@ -354,6 +354,7 @@ public function login(){
 					$ey=$datetime->format('Y');
 
 					$AcademicCalenders = $this->AcademicCalenders->find()->contain(['MasterCategories'])->where(['calender_date'=>$cal_ex11]);
+					$AcademicCalendersDatas = $this->AcademicCalenders->find()->contain(['MasterCategories'])->where(['calender_date'=>$cal_ex11]);
 					
 					$result_c=array();
 					if(sizeOf($AcademicCalenders)>0)
@@ -366,6 +367,8 @@ public function login(){
 								'type' => $academiccalender->master_category->category_name,
 								'date' => date('d-m-Y',strtotime($academiccalender->calender_date)),
 							);
+							
+						
 						}
 					}
 					else
@@ -380,6 +383,19 @@ public function login(){
 								'time' =>''
 							); 
 					}
+					
+			
+				    foreach($AcademicCalendersDatas as $abc){
+				        	if($abc->master_category->id == "1"){
+								$d[$abc->master_category->category_name][] = ['title'=>$abc->title,'event_Date'=>date('d-m-Y',strtotime($abc->calender_date))];
+							}else if($abc->master_category->id == "2"){
+								$d[$abc->master_category->category_name][] = ['title'=>$abc->title,'event_Date'=>date('d-m-Y',strtotime($abc->calender_date))];
+							}else if($abc->master_category->id == "3"){
+								$d[$abc->master_category->category_name][] =['title'=>$abc->title,'event_Date'=>date('d-m-Y',strtotime($abc->calender_date))];
+							}
+								
+				    }
+				    
 					$result[] =array('date' => $ed,
 						'day' => $edd,
 						'month' => $em,
@@ -387,17 +403,18 @@ public function login(){
 						'event'=>$result_c);
 					unset($result_c);
 				}
-				
+			
 				unset($timestamp);
 				$result1[] = array('month_id' => $monthss, 'year'=>$ey,
-				'data' => $result);
+				'data' => $result,'eventData'=>$d);
 				unset($result);
+				unset($d);
 			}
 			
  			$yearArray[]=array('year'=> $x,'monthdata'=> $result1);
 			unset($result1);
 		}	
-	     
+	    
 		if($yearArray){
 	    	$success = true;
 	    	$message = 'Data Found';

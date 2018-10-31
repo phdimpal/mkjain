@@ -20,10 +20,40 @@ class MasterClassesController extends AppController
      */
     public function index()
     {
+		$this->viewBuilder()->layout('index_layout');
+		$master_role_id=$this->Auth->User('master_role_id');
+		
         $masterClasses = $this->paginate($this->MasterClasses);
+		
+		$masterClass = $this->MasterClasses->newEntity();
+        if ($this->request->is('post')) {
+            $masterClass = $this->MasterClasses->patchEntity($masterClass, $this->request->getData());
+			
+            if ($this->MasterClasses->save($masterClass)) {
+                $this->Flash->success(__('The master class has been saved.'));
 
-        $this->set(compact('masterClasses'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The master class could not be saved. Please, try again.'));
+        }
+		
+        $this->set(compact('masterClasses','masterClass'));
     }
+	
+	public function checkClassNames(){
+		$class_name = $this->request->data('class_name');
+		$class_id = $this->request->data('id');
+		
+		$MasterClassesexists = $this->MasterClasses->exists(['class_name' => $class_name]);
+		$MasterClassesNameexists = $this->MasterClasses->exists(['class_name' => $class_name,'id'=>$class_id]);
+		
+		if($MasterClassesexists){
+			echo true;
+		}else{
+			echo false;
+		}
+		exit;
+	}
 
     /**
      * View method
