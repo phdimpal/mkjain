@@ -176,7 +176,7 @@ padding-left: 0px;
 					$.ajax({ 
 						url:url,
 						type:'GET',
-						}).done(function(response){  alert(response);
+						}).done(function(response){  
 						$('#section').html(response);
 					}); 
 				});
