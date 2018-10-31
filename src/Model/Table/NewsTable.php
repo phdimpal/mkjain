@@ -48,7 +48,7 @@ class NewsTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+       /*  $validator
             ->scalar('title')
             ->requirePresence('title', 'create')
             ->notEmpty('title');
@@ -91,7 +91,7 @@ class NewsTable extends Table
 
         $validator
             ->requirePresence('is_deleted', 'create')
-            ->notEmpty('is_deleted');
+            ->notEmpty('is_deleted'); */
 
         return $validator;
     }

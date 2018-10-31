@@ -23,6 +23,9 @@
 	$('#calender_date').datepicker({
 		autoclose: true
 	});
+	$('#news_date').datepicker({
+		autoclose: true
+	});
 
 	
 	$(".txtEditor").Editor({

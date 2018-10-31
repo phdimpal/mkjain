@@ -1,59 +1,118 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\News[]|\Cake\Collection\CollectionInterface $news
- */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New News'), ['action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="news index large-9 medium-8 columns content">
-    <h3><?= __('News') ?></h3>
-    <table cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('news_url') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('news_date') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created_on') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('updated_on') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created_by') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('edited_by') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('is_deleted') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($news as $news): ?>
-            <tr>
-                <td><?= $this->Number->format($news->id) ?></td>
-                <td><?= h($news->news_url) ?></td>
-                <td><?= h($news->news_date) ?></td>
-                <td><?= h($news->created_on) ?></td>
-                <td><?= h($news->updated_on) ?></td>
-                <td><?= $this->Number->format($news->created_by) ?></td>
-                <td><?= $this->Number->format($news->edited_by) ?></td>
-                <td><?= $this->Number->format($news->is_deleted) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $news->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $news->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $news->id], ['confirm' => __('Are you sure you want to delete # {0}?', $news->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
-    </div>
-</div>
+<section class="content-header">
+		<h1>News</h1>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+			<li class="active">News</li>
+		</ol>
+		
+	</section>
+	
+	 <section class="content">
+	 
+		<div class="row">
+		
+			<div class="col-md-6">
+				<div class="box box-danger">
+					<div class="box-header ui-sortable-handle" style="cursor: move;">
+						<h3 class="box-title">News</h3>
+						<!-- tools box -->
+						
+						<!-- /. tools -->
+					</div>
+					<?= $this->Form->create($newss,['type' => 'file','id'=>'classForm']) ?>
+					<input type="hidden" class="form-control" name="id" id="id" placeholder="Class Name" required value="<?php echo @$newss->id?>"> 
+						<div class="box-body">
+							<div class="form-group">
+								<label class="control-label">News Title</label>
+								<input type="text" class="form-control" name="title" id="title" placeholder="News Title" required value="<?php echo @$newss->title?>">
+							</div>
+							<div class="form-group">
+								<label class="control-label">News Description</label><br/>
+								<textarea name="description" id="description" class="form-control"><?php echo @$newss->description?></textarea>
+							</div>
+							<div class="form-group">
+									<label class="control-label">News Date</label>
+									<input type="text" class="form-control" name="news_date" id="news_date" placeholder="News Date" required value="<?php echo date('d-m-Y',strtotime(@$newss->news_date))?>"> 
+							</div>
+							<div class="form-group">
+									<label class="control-label">News Url</label>
+									<input type="file" class="form-control" name="news_url" id="news_url" placeholder="Calender Date" value="<?php echo @$newss->news_url ?>"> 
+							</div>
+						</div>
+						<div class="box-footer clearfix">
+						  <button type="submit" class="pull-right btn btn-danger" id="sendEmail">Save
+							<i class="fa fa-arrow-circle-right"></i></button>
+						</div>
+					<?= $this->Form->end() ?>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="box box-danger">
+					<div class="box-header">
+					  <h3 class="box-title">News</h3>
+					  <div class="pull-right box-tools">
+							<a href="<?php echo $this->url->build(['action'=>'index']) ?>"><button class="btn btn-sm bg-red"><i class="fa fa-plus"></i> Add</button></a>
+						</div>
+					</div>
+					 <div class="box-body">
+						<table id="classdata" class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th>S.No</th>
+									<th class="text-center">News Title</th>
+									<th class="text-center">Created Date</th>
+									<th class="text-center">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php $i=1;foreach($News as $newses){ ?>
+									<tr>
+										<td><?php echo $i++; ?></td>
+										<td class="text-center"><?php echo $newses->title; ?></td>
+										
+										<td class="text-center"><?php echo date('d-m-Y',strtotime($newses->news_date)); ?></td>
+										<td class="text-center">
+											<a href="<?php echo $this->url->build(['action'=>'index',$newses->id]); ?>"><button class="btn btn-sm bg-olive"><i class="fa fa-pencil"></i></button> </a><a data-original-title="Delete" onclick="return confirm('Are you sure you want to delete?')" href="<?php echo $this->url->build(['action'=>'delete',$newses->id]); ?>"><button class="btn btn-sm bg-red "><i class="fa fa-trash"></i></button> </a>
+										</td>
+									</tr>
+								<?php } ?>
+								
+							</tbody>
+						</table>	
+				</div>	
+			</div>
+		</div>
+	</div>	
+</section>
+ 	<input type="hidden" class="classValidate" value="<?php echo $this->Url->build(['controller'=>'MasterCategories','action'=>'checkMasterCategoriesNames']); ?>">
+	<?php echo $this->html->css('/plugins/datatables/dataTables.bootstrap.css', ['block' => 'PAGE_LEVEL_PLUGINS_CSS']); ?> 
+	<?php echo $this->html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->html->script('/plugins/datatables/jquery.dataTables.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->html->script('/plugins/datatables/dataTables.bootstrap.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->html->script('/plugins/select2/select2.full.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php  $js="
+		$(document).ready(function(){
+			$('#classdata').DataTable();
+			$('.master_category_id').select2();
+			
+			var classValidate = $('.classValidate').val();
+			$('#classForm').validate({
+				rules:{
+					title:{
+						required:true,
+					}
+				},
+				messages:{
+					title:{
+						required: 'title is required',
+					}
+				}
+			});
+			////
+			
+		$('.alert').fadeOut(5000);
+	
+		});	
+		";
+	echo $this->html->scriptBlock($js, ['block' => 'scriptBottom']); ?>	

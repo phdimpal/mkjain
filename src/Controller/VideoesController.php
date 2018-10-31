@@ -18,9 +18,11 @@ class VideoesController extends AppController
 		if(empty($id)){
 			$video = $this->Videoes->newEntity();
 			$message = 'The videos has been saved.';
+			$video->created_by = $master_role_id;
 		}else{
 			$video = $this->Videoes->get($id);
 			$message = 'The videos has been updated.';
+			$video->edited_by = $master_role_id;
 		}
 		
         if ($this->request->is(['post','put','patch'])) {
