@@ -67,4 +67,24 @@ class ClassSectionMappingsController extends AppController
 		return $this->redirect(['action' => 'index']);
        
     }
+	
+	public function getSectionLists($class_id=null){
+		$classsectionmappings = $this->ClassSectionMappings->find()->where(['master_class_id'=>$class_id])->contain(['MasterSections']);
+		$options=[];
+		foreach($classsectionmappings as $classsectionmapping){
+			$options[]= ['text'=>$classsectionmapping->master_section->section_name,'value'=>$classsectionmapping->master_section->id];
+		}
+		
+		 $this->set(compact('options'));
+	}
+	
+	public function getSubjectLists($class_id=null,$section_id=null){
+		$classsectionmappings = $this->ClassSectionMappings->find()->where(['master_class_id'=>$class_id,'master_section_id'=>$section_id,'is_deleted'=>0])->contain(['MasterSections','MasterSections']);
+		$options=[];
+		foreach($classsectionmappings as $classsectionmapping){
+			$options[]= ['text'=>$classsectionmapping->master_subject->subject_name,'value'=>$classsectionmapping->master_subject->id];
+		}
+		
+		 $this->set(compact('options'));
+	}
 }

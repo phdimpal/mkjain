@@ -3,104 +3,68 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 
-/**
- * Syllabuses Controller
- *
- * @property \App\Model\Table\SyllabusesTable $Syllabuses
- *
- * @method \App\Model\Entity\Syllabus[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
- */
 class SyllabusesController extends AppController
 {
 
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|void
-     */
     public function index()
     {
-        $this->paginate = [
+		$this->viewBuilder()->layout('index_layout');
+		$master_role_id=$this->Auth->User('master_role_id');
+		 $this->paginate = [
             'contain' => ['MasterClasses', 'MasterSections', 'MasterSubjects']
         ];
-        $syllabuses = $this->paginate($this->Syllabuses);
-
-        $this->set(compact('syllabuses'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Syllabus id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $syllabus = $this->Syllabuses->get($id, [
-            'contain' => ['MasterClasses', 'MasterSections', 'MasterSubjects']
-        ]);
-
-        $this->set('syllabus', $syllabus);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $syllabus = $this->Syllabuses->newEntity();
-        if ($this->request->is('post')) {
+        $Syllabuses = $this->paginate($this->Syllabuses->find()->where(['is_deleted'=>0]));
+		$message='';
+		if(empty($id)){
+			$syllabus = $this->Syllabuses->newEntity();
+			$message = 'The Syllabuses has been saved.';
+			$syllabus->created_by = $master_role_id;
+		}else{
+			$syllabus = $this->Syllabuses->get($id);
+			$message = 'The Syllabuses has been updated.';
+			$syllabus->edited_by = $master_role_id;
+			$syllabus_url_old=$syllabus->syllabus_file;
+		}
+		
+        if ($this->request->is(['post','put','patch'])) {
+			$syllabus_file=$this->request->getData('syllabus_file');
+			
+			if(!empty($syllabus_file['tmp_name'])){
+				$extt=explode('/',$syllabus_file['type']);
+				$ext=$extt[1];
+				$setNewFileName = rand(1, 100000);
+				$fullpath= WWW_ROOT."img".DS."syllabus";
+				$news_url_data = "/img/syllabus/".$setNewFileName .'.'.$ext;
+				$res1 = is_dir($fullpath);
+				if($res1 != 1) {
+						new Folder($fullpath, true, 0777);
+					}
+				$this->request->data['syllabus_file']=$news_url_data;
+					
+			}else{
+				$this->request->data['syllabus_file']=$news_url_old;
+			}
+			
             $syllabus = $this->Syllabuses->patchEntity($syllabus, $this->request->getData());
-            if ($this->Syllabuses->save($syllabus)) {
-                $this->Flash->success(__('The syllabus has been saved.'));
+			
+			if ($this->Syllabuses->save($syllabus)) {
+				if(!empty($syllabus_file['tmp_name'])){
+					@unlink(WWW_ROOT .$news_url_old);
+					move_uploaded_file($syllabus_file['tmp_name'],$fullpath.DS.$setNewFileName .'.'. $ext);
+				}	
+                $this->Flash->success(__($message));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The syllabus could not be saved. Please, try again.'));
+            $this->Flash->error(__('The Syllabuses could not be saved. Please, try again.'));
         }
-        $masterClasses = $this->Syllabuses->MasterClasses->find('list', ['limit' => 200]);
-        $masterSections = $this->Syllabuses->MasterSections->find('list', ['limit' => 200]);
-        $masterSubjects = $this->Syllabuses->MasterSubjects->find('list', ['limit' => 200]);
-        $this->set(compact('syllabus', 'masterClasses', 'masterSections', 'masterSubjects'));
+		
+		$masterclasses = $this->Syllabuses->MasterClasses->find('list')->where(['flag'=>0]);
+        $this->set(compact('Syllabuses','syllabus','masterclasses'));
+		
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Syllabus id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $syllabus = $this->Syllabuses->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $syllabus = $this->Syllabuses->patchEntity($syllabus, $this->request->getData());
-            if ($this->Syllabuses->save($syllabus)) {
-                $this->Flash->success(__('The syllabus has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The syllabus could not be saved. Please, try again.'));
-        }
-        $masterClasses = $this->Syllabuses->MasterClasses->find('list', ['limit' => 200]);
-        $masterSections = $this->Syllabuses->MasterSections->find('list', ['limit' => 200]);
-        $masterSubjects = $this->Syllabuses->MasterSubjects->find('list', ['limit' => 200]);
-        $this->set(compact('syllabus', 'masterClasses', 'masterSections', 'masterSubjects'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Syllabus id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
+    
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);

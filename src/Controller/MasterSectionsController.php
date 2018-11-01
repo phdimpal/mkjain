@@ -72,4 +72,6 @@ class MasterSectionsController extends AppController
 		$this->Flash->error(__('The master section has been deleted.'));
 		return $this->redirect(['action' => 'index']);
     }
+	
+	
 }

@@ -1,0 +1,1 @@
+<?php echo $this->Form->input('master_section_id', ['empty' => "--Select--",'options'=>$options,'label' => false,'class' => 'form-control master_section_id','required']); ?> 

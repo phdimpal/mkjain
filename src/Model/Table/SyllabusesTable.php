@@ -51,6 +51,7 @@ class SyllabusesTable extends Table
             'foreignKey' => 'master_subject_id',
             'joinType' => 'INNER'
         ]);
+		 $this->belongsTo('ClassSectionMappings');
     }
 
     /**
@@ -65,7 +66,7 @@ class SyllabusesTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+       /*  $validator
             ->scalar('syllabus_file')
             ->maxLength('syllabus_file', 500)
             ->requirePresence('syllabus_file', 'create')
@@ -83,7 +84,7 @@ class SyllabusesTable extends Table
 
         $validator
             ->requirePresence('is_deleted', 'create')
-            ->notEmpty('is_deleted');
+            ->notEmpty('is_deleted'); */
 
         return $validator;
     }
