@@ -19,7 +19,7 @@
 						
 						<!-- /. tools -->
 					</div>
-					<?= $this->Form->create($syllabus,['id'=>'classForm']) ?>
+					<?= $this->Form->create($syllabus,['type'=>'file','id'=>'classForm']) ?>
 					<input type="hidden" class="form-control" name="id" id="id" placeholder="Class Name" required value="<?php echo @$syllabus->id?>"> 
 					
 						<div class="box-body">
@@ -29,18 +29,31 @@
 								<label class="error" for="master-class-id"></label>
 							</div>
 							<div class="form-group" id='section_div'>
+								<?php $optionss=[];
+									foreach($mastersections as $mastersection){
+										if($mastersection->master_class_id == $syllabus->master_class_id){
+											$optionss[] = ['text'=>$mastersection->master_section->section_name,'value'=>$mastersection->master_section->id];
+										}
+									}
+									$optionsss=[]; 
+									foreach($mastersubjects as $mastersubject){
+										 if($mastersubject->master_class_id == $syllabus->master_class_id && $mastersubject->master_section_id == $syllabus->master_section_id){
+											$optionsss[] = ['text'=>$mastersubject->master_subject->subject_name,'value'=>$mastersubject->master_subject->id];
+										}
+									}
+								?>
 								<label class="control-label">Syllabus Section</label>
-								<?php echo $this->Form->input('aa', ['empty' => "--Select--",'options'=>'','label' => false,'class' => 'form-control','required']); ?> 
-								<label class="error" for="master-section-id"></label>
+									<?php echo $this->Form->input('master_section_id', ['empty' => "--Select--",'options'=>$optionss,'label' => false,'class' => 'form-control master_section_id','required','onchange'=>'getSubject(this.value)']); ?> 
+									<label class="error" for="master-section-id"></label>
 							</div>
 							<div class="form-group" id='subject_div'>
 								<label class="control-label">Syllabus Subject</label>
-								<?php echo $this->Form->input('master_subject_id', ['empty' => "--Select--",'options'=>'','label' => false,'class' => 'form-control  master_subject_id','required','value'=>@$syllabus->master_subject_id]); ?> 
+									<?php echo $this->Form->input('master_subject_id', ['empty' => "--Select--",'options'=>$optionsss,'label' => false,'class' => 'form-control  master_subject_id','required']); ?> 
 								<label class="error" for="master-subject-id"></label>
 							</div>
 							<div class="form-group">
 								<label class="control-label">Syllabus Url</label>
-								<?php echo $this->Form->input('syllabus_url', ['type'=>'file','label' => false,'class' => 'form-control ','required','value'=>@$syllabus->syllabus_url]); ?> 
+								<?php echo $this->Form->input('syllabus_file', ['type'=>'file','label' => false,'class' => 'form-control ','value'=>@$syllabus->syllabus_file,'accept'=>'application/pdf']); ?> 
 							</div>
 						</div>
 						<div class="box-footer clearfix">
@@ -77,7 +90,13 @@
 										<td class="text-center"><?php echo $syllabuse->master_class->class_name; ?></td>
 										<td class="text-center"><?php echo $syllabuse->master_section->section_name; ?></td>
 										<td class="text-center"><?php echo $syllabuse->master_subject->subject_name; ?></td>
-										<td class="text-center"><?php echo $syllabuse->syllabus_url; ?></td>
+										<td class="text-center">
+										<?php if(!empty($syllabuse->syllabus_file)){ ?>
+										<a href="<?php echo $this->Url->build($syllabuse->syllabus_file, ['escape' => false, 'fullBase' => true]); ?>" target="_blank">File</a>
+										<?php }else{ ?>
+											NO File
+										<?php } ?>
+										</td>
 										
 										<td class="text-center">
 											<a href="<?php echo $this->url->build(['action'=>'index',$syllabuse->id]); ?>"><button class="btn btn-sm bg-olive"><i class="fa fa-pencil"></i></button> </a><a data-original-title="Delete" onclick="return confirm('Are you sure you want to delete?')" href="<?php echo $this->url->build(['action'=>'delete',$syllabuse->id]); ?>"><button class="btn btn-sm bg-red "><i class="fa fa-trash"></i></button> </a>
@@ -94,12 +113,12 @@
 </section>
  	<input type="hidden" class="sectionGet" value="<?php echo $this->Url->build(['controller'=>'ClassSectionMappings','action'=>'getSectionLists']); ?>">
  	<input type="hidden" class="subjectGet" value="<?php echo $this->Url->build(['controller'=>'ClassSectionMappings','action'=>'getSubjectLists']); ?>">
-	<?php echo $this->html->css('/plugins/datatables/dataTables.bootstrap.css', ['block' => 'PAGE_LEVEL_PLUGINS_CSS']); ?> 
-	<?php echo $this->html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
-	<?php echo $this->html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
-	<?php echo $this->html->script('/plugins/datatables/jquery.dataTables.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
-	<?php echo $this->html->script('/plugins/datatables/dataTables.bootstrap.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
-	<?php echo $this->html->script('/plugins/select2/select2.full.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->Html->css('/plugins/datatables/dataTables.bootstrap.css', ['block' => 'PAGE_LEVEL_PLUGINS_CSS']); ?> 
+	<?php echo $this->Html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->Html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->Html->script('/plugins/datatables/jquery.dataTables.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->Html->script('/plugins/datatables/dataTables.bootstrap.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->Html->script('/plugins/select2/select2.full.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
 	<?php  $js="
 		$(document).ready(function(){
 			$('#classdata').DataTable();
@@ -128,34 +147,34 @@
 					$('#section_div').html('Loading...');
 					var master_class_id=$('select[name=master_class_id] option:selected').val();
 					var url = $('.sectionGet').val();
-					url=url+'/'+master_class_id; alert(url);
+					url=url+'/'+master_class_id; 
 						$.ajax({
 							url: url,
 							type: 'GET',
-						}).done(function(response) {alert(response);
+						}).done(function(response) {
 							$('#section_div').html(response);
 							$('select[name=master_section_id]').select2();
 						});
 				}
 			});
 			/////
-			$('#master-section-id').on('change',function() { alert();
-				if($(this).val())
-				{
+			
+		});	
+		function getSubject(id){
+			
 					$('#subject_div').html('<i style= margin-top: 32px;margin-left: 65px; class=fa fa-refresh fa-spin fa-1x fa-fw></i><b> Loading... </b>');
 					var master_class_id=$('select[name=master_class_id] option:selected').val();
 					var master_section_id=$('select[name=master_section_id] option:selected').val();
 					var urls = $('.subjectGet').val();
-					urls=urls+'/'+master_class_id+'/'+master_section_id; alert(urls);
+					urls=urls+'/'+master_class_id+'/'+master_section_id; 
 						$.ajax({
 							url: urls,
 							type: 'GET',
-						}).done(function(response) {alert(response);
+						}).done(function(response) {
 							$('#subject_div').html(response);
-							$('select[name=master_section_id]').select2();
+							$('select[name=master_subject_id]').select2();
 						});
-				}
-			});
-		});	
+				
+		}
 		";
 	echo $this->html->scriptBlock($js, ['block' => 'scriptBottom']); ?>	

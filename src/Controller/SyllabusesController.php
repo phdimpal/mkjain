@@ -2,11 +2,12 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-
+use Cake\Filesystem\Folder;
+use Cake\Filesystem\File;
 class SyllabusesController extends AppController
 {
 
-    public function index()
+    public function index($id=null)
     {
 		$this->viewBuilder()->layout('index_layout');
 		$master_role_id=$this->Auth->User('master_role_id');
@@ -42,14 +43,14 @@ class SyllabusesController extends AppController
 				$this->request->data['syllabus_file']=$news_url_data;
 					
 			}else{
-				$this->request->data['syllabus_file']=$news_url_old;
+				$this->request->data['syllabus_file']=$syllabus_url_old;
 			}
 			
             $syllabus = $this->Syllabuses->patchEntity($syllabus, $this->request->getData());
 			
 			if ($this->Syllabuses->save($syllabus)) {
 				if(!empty($syllabus_file['tmp_name'])){
-					@unlink(WWW_ROOT .$news_url_old);
+					@unlink(WWW_ROOT .$syllabus_url_old);
 					move_uploaded_file($syllabus_file['tmp_name'],$fullpath.DS.$setNewFileName .'.'. $ext);
 				}	
                 $this->Flash->success(__($message));
@@ -60,21 +61,24 @@ class SyllabusesController extends AppController
         }
 		
 		$masterclasses = $this->Syllabuses->MasterClasses->find('list')->where(['flag'=>0]);
-        $this->set(compact('Syllabuses','syllabus','masterclasses'));
+		$mastersections = $this->Syllabuses->ClassSectionMappings->find()->where(['is_deleted'=>0])->contain(['MasterSections']);
+		$mastersubjects = $this->Syllabuses->ClassSectionMappings->find()->where(['is_deleted'=>0])->contain(['MasterSections','MasterSubjects']);
+		//$mastersubjects = $this->Syllabuses->MasterSubjects->find()->where(['flag'=>0]);
+        $this->set(compact('Syllabuses','syllabus','masterclasses','mastersections','mastersubjects'));
 		
     }
 
     
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $syllabus = $this->Syllabuses->get($id);
-        if ($this->Syllabuses->delete($syllabus)) {
-            $this->Flash->success(__('The syllabus has been deleted.'));
-        } else {
-            $this->Flash->error(__('The syllabus could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
+		$query2 = $this->Syllabuses->query();
+						$query2->update()
+							->set(['is_deleted' =>1])
+							->where(['id' => $id])
+							->execute();
+							
+		$this->Flash->error(__('The syllabus has been deleted.'));
+		return $this->redirect(['action' => 'index']);
+       
     }
 }
