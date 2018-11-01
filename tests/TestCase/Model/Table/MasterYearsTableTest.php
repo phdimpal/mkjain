@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\AchievementsTable;
+use App\Model\Table\MasterYearsTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\AchievementsTable Test Case
+ * App\Model\Table\MasterYearsTable Test Case
  */
-class AchievementsTableTest extends TestCase
+class MasterYearsTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\AchievementsTable
+     * @var \App\Model\Table\MasterYearsTable
      */
-    public $Achievements;
+    public $MasterYears;
 
     /**
      * Fixtures
@@ -24,8 +24,7 @@ class AchievementsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.achievements',
-        'app.registrations'
+        'app.master_years'
     ];
 
     /**
@@ -36,8 +35,8 @@ class AchievementsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Achievements') ? [] : ['className' => AchievementsTable::class];
-        $this->Achievements = TableRegistry::getTableLocator()->get('Achievements', $config);
+        $config = TableRegistry::getTableLocator()->exists('MasterYears') ? [] : ['className' => MasterYearsTable::class];
+        $this->MasterYears = TableRegistry::getTableLocator()->get('MasterYears', $config);
     }
 
     /**
@@ -47,7 +46,7 @@ class AchievementsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Achievements);
+        unset($this->MasterYears);
 
         parent::tearDown();
     }
@@ -68,16 +67,6 @@ class AchievementsTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test buildRules method
-     *
-     * @return void
-     */
-    public function testBuildRules()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

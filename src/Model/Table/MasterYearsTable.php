@@ -32,8 +32,8 @@ class MasterYearsTable extends Table
         parent::initialize($config);
 
         $this->setTable('master_years');
-        $this->setDisplayField('id');
-        $this->setPrimaryKey('id');
+        $this->setDisplayField('year_name');
+        $this->setPrimaryKey('year_name');
     }
 
     /**

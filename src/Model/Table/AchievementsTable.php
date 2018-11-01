@@ -41,6 +41,8 @@ class AchievementsTable extends Table
             'foreignKey' => 'student_id',
             'joinType' => 'INNER'
         ]);
+		
+		$this->belongsTo('MasterYears');
     }
 
     /**
@@ -55,7 +57,7 @@ class AchievementsTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+        /* $validator
             ->scalar('achivement_year')
             ->maxLength('achivement_year', 50)
             ->requirePresence('achivement_year', 'create')
@@ -98,7 +100,7 @@ class AchievementsTable extends Table
             ->notEmpty('edited_by');
 
         $validator
-            ->allowEmpty('is_deleted');
+            ->allowEmpty('is_deleted'); */
 
         return $validator;
     }
@@ -112,7 +114,7 @@ class AchievementsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['student_id'], 'Students'));
+        $rules->add($rules->existsIn(['student_id'], 'Registrations'));
 
         return $rules;
     }

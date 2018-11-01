@@ -52,9 +52,9 @@ class AchievementsFixture extends TestFixture
                 'student_id' => 1,
                 'achivement' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
                 'achivement_rank' => 'Lorem ipsum dolor sit amet',
-                'achivement_date' => '2018-10-25',
-                'created_on' => 1540459790,
-                'updated_on' => 1540459790,
+                'achivement_date' => '2018-10-31',
+                'created_on' => 1540992642,
+                'updated_on' => 1540992642,
                 'created_by' => 1,
                 'edited_by' => 1,
                 'is_deleted' => 1
