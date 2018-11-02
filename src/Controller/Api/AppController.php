@@ -12,7 +12,7 @@
  * @since     0.2.9
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
@@ -27,7 +27,8 @@ use Cake\Event\Event;
  */
 class AppController extends Controller
 {
-
+ use \Crud\Controller\ControllerTrait;
+	//use Crud\Controller\Component;
     /**
      * Initialization hook method.
      *
@@ -45,7 +46,7 @@ class AppController extends Controller
             'enableBeforeRedirect' => false,
         ]);
         $this->loadComponent('Flash');
-		$this->loadComponent('Crud.Crud', [
+		 $this->loadComponent('Crud.Crud', [
             'actions' => [
                 'Crud.Index',
                 'Crud.View',

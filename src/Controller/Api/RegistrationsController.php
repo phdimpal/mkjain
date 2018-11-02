@@ -1,11 +1,12 @@
 <?php
 namespace App\Controller\Api;
-use App\Controller\AppController;
+use App\Controller\Api\AppController;
 use Cake\Event\Event;
 use Cake\Network\Exception\UnauthorizedException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
+use Cake\Controller\Component;
 /**
  * Registrations Controller
  *
@@ -30,14 +31,16 @@ class RegistrationsController extends AppController
 	
 public function login(){
 		$Registrations=[];
-		$username=$this->request->data['username']; 
-		$password=$this->request->data['password']; 
+		 $username=$this->request->data['username']; 
+		 $password=$this->request->data['password']; 
 		$master_role_id=$this->request->data['role_id']; 
 		if(!empty($username) and !empty($password)){
 			
-			$Registrationcount=$this->Registrations->find()->where(['roll_no'=>$username,'dob'=>$password,'master_role_id'=>$master_role_id])->count(); 
+			$Registrationcount=$this->Registrations->find()
+			->where(['student_mobile_no'=>$username,'roll_no'=>$password,'master_role_id'=>$master_role_id])
+			->orwhere(['teacher_mobile_no'=>$username,'roll_no'=>$password,'master_role_id'=>$master_role_id])->count(); 
 			if($Registrationcount>0){
-				$Registrations=$this->Registrations->find()->where(['roll_no'=>$username,'dob'=>$password,'master_role_id'=>$master_role_id])->contain(['MasterClasses','MasterSections']); 
+				$Registrations=$this->Registrations->find()->where(['student_mobile_no'=>$username,'roll_no'=>$password,'master_role_id'=>$master_role_id])->orwhere(['teacher_mobile_no'=>$username,'roll_no'=>$password,'master_role_id'=>$master_role_id])->contain(['MasterClasses','MasterSections']); 
 				$success = true;
 				$message = 'Data Found Successfully';	
 			}else{
