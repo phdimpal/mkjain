@@ -100,7 +100,7 @@
 						url:url,
 						type:'GET',
 						}).done(function(response){  
-							alert(response);
+							
 							$('#Setdata').html(response);
 					}); 
 				});
