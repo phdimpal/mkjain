@@ -86,9 +86,29 @@
           <ul class="treeview-menu">
             <li><a href="<?php echo $this->url->build(['controller'=>'Complains','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Complains / Feedback</a></li>
             <li><a href="<?php echo $this->url->build(['controller'=>'Leaves','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Leaves</a></li>
+			 <li><a href="<?php echo $this->url->build(['controller'=>'Attendances','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Attendance</a></li>
           </ul>
         </li>
-		
+		<li class="active treeview">
+          <a href="<?= $this->Url->build(['controller'=>'TimeTables','action'=>'add']) ?>">
+            <i class="fa fa-dashboard"></i> <span>Time Tables</span>
+          </a>
+        </li>
+		<li class="active treeview">
+          <a href="<?= $this->Url->build(['controller'=>'Syllabuses','action'=>'index']) ?>">
+            <i class="fa fa-dashboard"></i> <span>Syllabus</span>
+          </a>
+        </li>
+		<li class="active treeview">
+          <a href="<?= $this->Url->build(['controller'=>'Achievements','action'=>'index']) ?>">
+            <i class="fa fa-dashboard"></i> <span>Achievements</span>
+          </a>
+        </li>
+		<li class="active treeview">
+          <a href="<?= $this->Url->build(['controller'=>'Registrations','action'=>'logout']) ?>">
+            <i class="fa fa-lock"></i> <span>Logout</span>
+          </a>
+        </li>
 		
 		
      </ul>

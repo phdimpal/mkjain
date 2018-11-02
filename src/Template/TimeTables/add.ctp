@@ -1,6 +1,13 @@
+<section class="content-header">
+	<h1>Time Table Add</h1>
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+		<li class="active">Time Table Add</li>
+	</ol>
+</section>
 <?php echo $this->Form->create($timeTable, ['type' => 'file','id'=>'registratiomForm']); ?>
 		<div class="col-md-12">
-			<div class="box box-primary">
+			<div class="box box-danger">
 				<div class="box-header with-border no-print">
 				  <h3 class="box-title">Time Table Add</h3>
 				</div>
@@ -61,17 +68,19 @@
 					<div class="box-footer">
 						<center>
 						
-						<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']).__(' Submit') ,['class'=>'btn btn-success','type'=>'Submit','id'=>'submit_member','name'=>'registration_submit']);
+						<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']).__(' Submit') ,['class'=>'btn btn-danger','type'=>'Submit','id'=>'submit_member','name'=>'registration_submit']);
 							   ?>
 						</center>
 					</div>
 					
 				</div>
 		</div>	
+	</div>
+</section>	
 	<?php echo $this->Form->end(); ?>
 	
-	<?php echo $this->html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
-		<?php echo $this->html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->Html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+		<?php echo $this->Html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
 		
 		<?php  $js=" 
 			
@@ -115,7 +124,7 @@
 				});
 			});
 		";
-		echo $this->html->scriptBlock($js, ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+		echo $this->Html->scriptBlock($js, ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
 
 
 
