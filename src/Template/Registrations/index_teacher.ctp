@@ -10,7 +10,7 @@
 <div class="col-md-12">
 	<div class="box box-danger">
 		<div class="box-header with-border no-print">
-			<h3 class="box-title">Student List</h3>
+			<h3 class="box-title">Teacher List</h3>
 		</div>
 		<div class="box-body">
 		

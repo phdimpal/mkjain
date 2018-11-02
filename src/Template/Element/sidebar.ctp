@@ -49,7 +49,8 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="<?php echo $this->url->build(['controller'=>'Registrations','action'=>'add'])?>"><i class="fa fa-circle-o"></i>Add</a></li>
-            <li><a href="<?php echo $this->url->build(['controller'=>'Registrations','action'=>'index'])?>"><i class="fa fa-circle-o"></i>View</a></li>
+            <li><a href="<?php echo $this->url->build(['controller'=>'Registrations','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Student View</a></li>
+			 <li><a href="<?php echo $this->url->build(['controller'=>'Registrations','action'=>'indexTeacher'])?>"><i class="fa fa-circle-o"></i>Teacher View</a></li>
           </ul>
         </li>
 		<li class="active treeview">

@@ -61,12 +61,22 @@ class RegistrationsController extends AppController
 		
 		$this->viewBuilder()->layout('index_layout');
         $this->paginate = [
-            'contain' => ['MasterRoles', 'MasterClasses', 'MasterSections', 'MasterMediums']
+            'contain' => ['MasterClasses', 'MasterSections']
         ];
-        $registrations = $this->paginate($this->Registrations->find()->where(['is_deleted'=>0]));
+        $registrations = $this->paginate($this->Registrations->find()->where(['is_deleted'=>0,'master_role_id NOT IN'=>['4'],'master_role_id'=>'3']));
 
         $this->set(compact('registrations'));
     }
+	
+	public function indexTeacher(){
+		$this->viewBuilder()->layout('index_layout');
+        $this->paginate = [
+            'contain' => ['MasterClasses', 'MasterSections']
+        ];
+        $registrations = $this->paginate($this->Registrations->find()->where(['is_deleted'=>0,'master_role_id NOT IN'=>['4'],'master_role_id'=>'2']));
+
+        $this->set(compact('registrations'));
+	}
 
     /**
      * View method
