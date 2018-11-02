@@ -58,6 +58,7 @@ class RegistrationsController extends AppController
 	
     public function index()
     {
+		
 		$this->viewBuilder()->layout('index_layout');
         $this->paginate = [
             'contain' => ['MasterRoles', 'MasterClasses', 'MasterSections', 'MasterMediums']
