@@ -50,9 +50,9 @@ class GalleriesFixture extends TestFixture
                 'title' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
                 'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
                 'image_url' => 'Lorem ipsum dolor sit amet',
-                'media_date' => '2018-10-25',
-                'created_on' => 1540459811,
-                'updated_on' => 1540459811,
+                'media_date' => '2018-11-02',
+                'created_on' => 1541159965,
+                'updated_on' => 1541159965,
                 'is_deleted' => 1,
                 'created_by' => 1,
                 'edited_by' => 1
