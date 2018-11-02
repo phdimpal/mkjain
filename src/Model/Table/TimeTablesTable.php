@@ -60,7 +60,8 @@ class TimeTablesTable extends Table
         $this->belongsTo('Registrations', [
             'foreignKey' => 'registration_id',
             'joinType' => 'LEFT'
-        ]);
+        ]); 
+		$this->belongsTo('ClassSectionMappings');
     }
 
     /**
