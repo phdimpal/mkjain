@@ -40,6 +40,17 @@
 									<label class="control-label">Gallery Url</label>
 									<input type="file" class="form-control" name="news_url" id="news_url" placeholder="Calender Date" value="<?php echo @$newss->news_url ?>"> 
 							</div>
+
+							<div class="col-md-12 ">
+								<table id="file_table" style="line-height:2.5">
+								<tr>
+								<td><?= $this->Form->file('file[]',['multiple'=>'multiple']); ?></td>
+								<td><?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']) . __(' Add More'), ['class'=>'btn btn-block btn-primary btn-sm add_more','type'=>'button']) ?></td>
+								<td></td>
+								</tr>
+								</table>
+
+							</div>
 						</div>
 						<div class="box-footer clearfix">
 						  <button type="submit" class="pull-right btn btn-danger" id="sendEmail">Save
@@ -48,6 +59,22 @@
 					<?= $this->Form->end() ?>
 				</div>
 			</div>
+			
+			
+			<table id="copy_row" style="display:none;">	
+				<tbody>
+					<tr>
+						<td><?= $this->Form->file('file[]',['multiple'=>'multiple']); ?></td>
+						<td><?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']) . __(' Add More'), ['class'=>'btn btn-block btn-primary btn-sm add_more','type'=>'button']) ?>
+						</td>
+						<td style="padding: 5px;">
+						<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-trash']) . __(' Delete'), ['class'=>'btn btn-block btn-danger btn-sm delete_row','type'=>'button']) ?></td>
+					</tr>
+				</tbody>
+			</table>
+			
+			
+			
 			<div class="col-md-6">
 				<div class="box box-danger">
 					<div class="box-header">
@@ -95,6 +122,18 @@
 	<?php echo $this->Html->script('/plugins/select2/select2.full.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
 	<?php  $js="
 		$(document).ready(function(){
+			
+			$(document).on('click','button.add_more',function() {
+				var row=$('#copy_row tbody').html();
+				$('#file_table tbody').append(row);
+
+			});
+			
+			$(document).on('click','button.delete_row',function() {
+				$(this).closest('tr').remove();
+			});
+			
+			
 			$('#classdata').DataTable();
 			$('.master_category_id').select2();
 			
