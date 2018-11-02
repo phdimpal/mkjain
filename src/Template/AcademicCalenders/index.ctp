@@ -21,6 +21,8 @@
 					</div>
 					<?= $this->Form->create($academiccalender,['id'=>'classForm']) ?>
 					<input type="hidden" class="form-control" name="id" id="id" placeholder="Class Name" required value="<?php echo @$academiccalender->id?>"> 
+<?php $dates='00-00-0000';if(date('d-m-Y',strtotime(@$academiccalender->calender_date)) != '00-00-0000' && date('d-m-Y',strtotime(@$academiccalender->calender_date)) != '01-01-1970'){ 
+	$dates = date('d-m-Y',strtotime(@$academiccalender->calender_date));}else{ $dates = date('d-m-Y');} ?>
 						<div class="box-body">
 								
 								<div class="form-group">
@@ -34,7 +36,7 @@
 								</div>
 								<div class="form-group">
 									<label class="control-label">Calender Date</label>
-									<input type="text" class="form-control" name="calender_date" id="calender_date" placeholder="Calender Date" required value="<?php echo @$academiccalender->calender_date?>"> 
+									<input type="text" class="form-control" name="calender_date" id="calender_date" placeholder="Calender Date" required value="<?php echo @$dates?>"> 
 								</div>
 								
 						</div>
@@ -85,12 +87,12 @@
 	</div>	
 </section>
  	<input type="hidden" class="classValidate" value="<?php echo $this->Url->build(['controller'=>'MasterCategories','action'=>'checkMasterCategoriesNames']); ?>">
-	<?php echo $this->html->css('/plugins/datatables/dataTables.bootstrap.css', ['block' => 'PAGE_LEVEL_PLUGINS_CSS']); ?> 
-	<?php echo $this->html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
-	<?php echo $this->html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
-	<?php echo $this->html->script('/plugins/datatables/jquery.dataTables.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
-	<?php echo $this->html->script('/plugins/datatables/dataTables.bootstrap.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
-	<?php echo $this->html->script('/plugins/select2/select2.full.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->Html->css('/plugins/datatables/dataTables.bootstrap.css', ['block' => 'PAGE_LEVEL_PLUGINS_CSS']); ?> 
+	<?php echo $this->Html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+	<?php echo $this->Html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
+	<?php echo $this->Html->script('/plugins/datatables/jquery.dataTables.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
+	<?php echo $this->Html->script('/plugins/datatables/dataTables.bootstrap.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
+	<?php echo $this->Html->script('/plugins/select2/select2.full.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
 	<?php  $js="
 		$(document).ready(function(){
 			$('#classdata').DataTable();
@@ -115,4 +117,4 @@
 	
 		});	
 		";
-	echo $this->html->scriptBlock($js, ['block' => 'scriptBottom']); ?>	
+	echo $this->Html->scriptBlock($js, ['block' => 'scriptBottom']); ?>	

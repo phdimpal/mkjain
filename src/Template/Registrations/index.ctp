@@ -1,5 +1,14 @@
+<section class="content-header">
+	<h1>Registrations</h1>
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+		<li class="active">Registrations</li>
+	</ol>
+</section>
+<section class="content">
+	 <div class="row">
 <div class="col-md-12">
-	<div class="box box-primary">
+	<div class="box box-danger">
 		<div class="box-header with-border no-print">
 			<h3 class="box-title">Registration View</h3>
 		</div>
@@ -45,16 +54,16 @@
 								  <td><?= $registration->master_class->class_name ?></td>
 								  <td><?= $registration->master_section->section_name ?></td>
 								<td><center>
-								<?php  echo $this->Html->link('Edit', 
+								<?php  echo $this->Html->link('<i class="fa fa-pencil"></i>', 
 								array('controller' => 'Registrations', 'action' => 'edit',$registration->id),
-								['class' => 'btn btn-sm btn-primary','escape'=>false]); ?>
+								['class' => 'btn btn-sm bg-olive','escape'=>false]); ?>
 								
 								
 								<?php
 								echo $this->Form->postLink(
-									'Delete',
+									'<i class="fa fa-trash"></i>',
 									['controller' => 'Registrations', 'action' => 'delete', $registration->id],
-									['class' => 'btn btn-sm btn-danger',
+									['class' => 'btn btn-sm bg-red',
 										'escape' => false,
 										'confirm' => 'Are you sure you want to delete ?']
 								);
@@ -88,7 +97,8 @@
 	    </div>
 	</div>
 </div>
-
+</div>
+</section>
 
 
 

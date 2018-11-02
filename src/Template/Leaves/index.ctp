@@ -1,5 +1,16 @@
+<section class="content-header">
+	<h1>Leaves</h1>
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+		<li class="active">Leaves</li>
+	</ol>
+</section>
+	
+	 <section class="content">
+	 
+		<div class="row">
 <div class="col-md-12">
-	<div class="box box-primary">
+	<div class="box box-danger">
 		<div class="box-header with-border no-print">
 			<h3 class="box-title">Leaves</h3>
 		</div>
@@ -8,8 +19,8 @@
 			<div class="col-sm-12 no-print">
 				<div class="table-responsive no-padding">
 		
-					<table class="table table-bordered table-striped dataTable" style="width: 100%;border: #00c0ef; border-spacing: 0;border-collapse: collapse;" >
-						<thead style="background-color:#eee">
+					<table class="table table-bordered table-striped"  id="leavedata">
+						<thead >
 							<tr>
 								<th>S.No.</th>
 								<th>Leave By</th>
@@ -71,6 +82,17 @@
 	    </div>
 	</div>
 </div>
+</div>
+</section>
+<?php echo $this->Html->css('/plugins/datatables/dataTables.bootstrap.css', ['block' => 'PAGE_LEVEL_PLUGINS_CSS']); ?> 
+<?php echo $this->Html->script('/plugins/datatables/jquery.dataTables.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
+	<?php echo $this->Html->script('/plugins/datatables/dataTables.bootstrap.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
+<?php  $js="
+		$(document).ready(function(){
+			$('#leavedata').DataTable();	
+			});	
+		";
+	echo $this->Html->scriptBlock($js, ['block' => 'scriptBottom']); ?>	
 
 
 

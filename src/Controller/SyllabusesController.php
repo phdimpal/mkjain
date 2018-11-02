@@ -43,7 +43,7 @@ class SyllabusesController extends AppController
 				$this->request->data['syllabus_file']=$news_url_data;
 					
 			}else{
-				$this->request->data['syllabus_file']=$syllabus_url_old;
+				@$this->request->data['syllabus_file']=@$syllabus_url_old;
 			}
 			
             $syllabus = $this->Syllabuses->patchEntity($syllabus, $this->request->getData());

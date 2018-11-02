@@ -8,9 +8,19 @@ padding-left: 0px;
 	margin-bottom: 0px;
 }
 </style>
-<div class="col-md-12">
-<?php echo $this->Form->create($registration, ['type' => 'file','id'=>'registratiomForm']); ?>
-		<div class="box box-primary">
+<section class="content-header">
+	<h1>Registrations</h1>
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+		<li class="active">Registrations</li>
+	</ol>
+	
+</section>
+<section class="content">
+	 <div class="row">
+		<div class="col-md-12">
+		<?php echo $this->Form->create($registration, ['type' => 'file','id'=>'registratiomForm']); ?>
+		<div class="box box-danger">
 			<div class="box-header with-border">
 				<h3 class="box-title">Registration Add</h3>
 			</div>
@@ -22,8 +32,9 @@ padding-left: 0px;
 										<div class="form-group">
 											<label class="control-label">Role </label>
 										<?php
-										echo $this->Form->input('master_role_id', ['empty'=> '--Select--','data-placeholder'=>'Select role','label' => false,'class'=>'form-control select2','options'=>$masterRoles,'style'=>'width:100%;']);
+										echo $this->Form->input('master_role_id', ['empty'=> '--Select--','data-placeholder'=>'Select role','label' => false,'class'=>'form-control select2 master_role_id','options'=>$masterRoles,'style'=>'width:100%;']);
 										?>
+										<label class="error" for="master-role-id"></label>
 										</div>
 									</div>
 								   
@@ -35,6 +46,7 @@ padding-left: 0px;
 												<?php
 													echo $this->Form->input('master_class_id', ['empty'=> '--Select--','data-placeholder'=>'Select class','label' => false,'class'=>'form-control select2 class_change','options'=>$masterClasses,'style'=>'width:100%;']);
 												?>
+												<label class="error" for="master-class-id"></label>
 										</div>
 									</div>
 									 <div class="col-md-4" id="section">
@@ -44,6 +56,7 @@ padding-left: 0px;
 											$options=[];
 											
 											echo $this->Form->input('master_section_id', ['empty'=> '--Select--','data-placeholder'=>'Select a section ','label' => false,'class'=>'form-control select2','options'=>$options,'style'=>'width:100%;']); ?>
+											<label class="error" for="master-section-id"></label>
 										</div>
 									</div>
 									
@@ -120,14 +133,14 @@ padding-left: 0px;
 									<div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label">Student Mobile no. </label>
-												<?php echo $this->Form->input('student_mobile_no', ['label' => false,'placeholder'=>'Student Mobile','class'=>'form-control','oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'maxlength'=>10]); ?>
+												<?php echo $this->Form->input('student_mobile_no', ['label' => false,'placeholder'=>'Student Mobile','class'=>'form-control student_mobile_no','oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'maxlength'=>10]); ?>
 										</div>
 									</div>
 									
 									<div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label">Teacher Mobile no. </label>
-												<?php echo $this->Form->input('teacher_mobile_no', ['label' => false,'placeholder'=>'Teacher Mobile','class'=>'form-control','oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'maxlength'=>10]); ?>
+												<?php echo $this->Form->input('teacher_mobile_no', ['label' => false,'placeholder'=>'Teacher Mobile','class'=>'form-control teacher_mobile_no','oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'maxlength'=>10]); ?>
 										</div>
 									</div>
 									
@@ -155,20 +168,32 @@ padding-left: 0px;
 			<div class="box-footer">
 				<center>
 				
-				<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']).__(' Submit') ,['class'=>'btn btn-success','type'=>'Submit','id'=>'submit_member','name'=>'registration_submit']);
+				<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-arrow-circle-right']).__(' Submit') ,['class'=>'btn btn-danger','type'=>'Submit','id'=>'submit_member','name'=>'registration_submit']);
 					   ?>
 				</center>
 			</div>
 			</div>
 			<?php echo $this->Form->end(); ?>
 			</div>
-			
-		<?php echo $this->html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
-		<?php echo $this->html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
-		
+		</div>
+	<section>		
+		<?php echo $this->Html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
+		<?php echo $this->Html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
+		<?php echo $this->Html->script('/plugins/select2/select2.full.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
 		<?php  $js=" 
 			
 			$(document).ready(function(){ 
+			$('.select2').select2();
+				$(document).on('change', '.master_role_id', function(){   
+					var master_role_id=$('select[name=master_role_id] option:selected').val();
+					if(master_role_id == 2){
+						$('.teacher_mobile_no').attr('required','required');
+						$('.student_mobile_no').removeAttr('required');
+					}else if(master_role_id == 3){
+						$('.student_mobile_no').attr('required','required');
+						$('.teacher_mobile_no').removeAttr('required');
+					}
+				});
 				$(document).on('change', '.class_change', function(){   
 					 var state_id= $(this).val();
 					var url='".$this->Url->build(['controller'=>'Registrations','action'=>'classsection'])."';
@@ -178,6 +203,7 @@ padding-left: 0px;
 						type:'GET',
 						}).done(function(response){  
 						$('#section').html(response);
+						$('select[name=master_section_id]').select2();
 					}); 
 				});
 				
@@ -191,5 +217,5 @@ padding-left: 0px;
 				});
 			});
 		";
-		echo $this->html->scriptBlock($js, ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+		echo $this->Html->scriptBlock($js, ['block' => 'scriptBottom']); ?>
 		

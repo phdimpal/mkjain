@@ -127,19 +127,19 @@ class RegistrationsTable extends Table
             ->maxLength('mother_mobile_no', 15)
             ->requirePresence('mother_mobile_no', 'create')
             ->notEmpty('mother_mobile_no');
-
+/* 
         $validator
             ->scalar('student_mobile_no')
-            ->maxLength('student_mobile_no', 15)
-            ->requirePresence('student_mobile_no', 'create')
-            ->notEmpty('student_mobile_no');
+            ->maxLength('student_mobile_no', 15);
+           // ->requirePresence('student_mobile_no', 'create')
+            //->notEmpty('student_mobile_no');
 
         $validator
             ->scalar('teacher_mobile_no')
-            ->maxLength('teacher_mobile_no', 15)
-            ->requirePresence('teacher_mobile_no', 'create')
-            ->notEmpty('teacher_mobile_no');
-
+            ->maxLength('teacher_mobile_no', 15);
+            //->requirePresence('teacher_mobile_no', 'create')
+          //  ->notEmpty('teacher_mobile_no');
+ */
         $validator
             ->scalar('address')
             ->requirePresence('address', 'create')

@@ -3,10 +3,18 @@
 	min-height: 800px !important;
 }
 </style>
-
+<section class="content-header">
+	<h1>Director Messages</h1>
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+		<li class="active">Director Messages</li>
+	</ol>
+</section>
+<section class="content">
+	 <div class="row">
 <div class="col-md-12">
 <?php echo $this->Form->create($directorMessage, ['type' => 'file','id'=>'registratiomForm']); ?>
-		<div class="box box-primary">
+		<div class="box box-danger">
 			<div class="box-header with-border">
 				<h3 class="box-title">Director Message</h3>
 			</div>
@@ -62,7 +70,7 @@
 			<div class="box-footer">
 				<center>
 				
-				<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']).__(' Submit') ,['class'=>'btn btn-success','type'=>'Submit','id'=>'submit_member','name'=>'registration_submit']);
+				<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-arrow-circle-right']).__(' Submit') ,['class'=>'btn btn-danger','type'=>'Submit','id'=>'submit_member','name'=>'registration_submit']);
 					   ?>
 				</center>
 			</div>
@@ -70,7 +78,8 @@
 			</div>
 		<?php echo $this->Form->end(); ?>
 </div>
-<?php echo $this->html->script('/plugins/jQuery/jquery-2.2.3.min.js', ['block' => 'scriptBottom']); ?>
+</div>
+</section>
 
 	<?php $js="$(document).ready(function(){
 		
@@ -82,4 +91,4 @@
 		}); 
 	});";	
 	
-	echo $this->html->scriptBlock($js, ['block' => 'scriptBottom']); ?>
+	echo $this->Html->scriptBlock($js, ['block' => 'scriptBottom']); ?>

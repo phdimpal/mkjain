@@ -138,7 +138,7 @@ class RegistrationsController extends AppController
             }
             $this->Flash->error(__('The registration could not be saved. Please, try again.'));
         }
-        $masterRoles = $this->Registrations->MasterRoles->find('list', ['limit' => 200]);
+        $masterRoles = $this->Registrations->MasterRoles->find('list', ['limit' => 200])->where(['id NOT IN'=>['1','4']]);
         $masterClasses = $this->Registrations->MasterClasses->find('list', ['limit' => 200]);
         $masterSections = $this->Registrations->MasterSections->find('list', ['limit' => 200]);
         $masterMedia = $this->Registrations->MasterMediums->find('list', ['limit' => 200]);

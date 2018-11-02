@@ -35,8 +35,11 @@
 		<?= $this->element('footer');?>
 		<div class="control-sidebar-bg"></div>
 	</div>
-	<?= $this->element('script_layout');?>
+	
 	<?= $this->fetch('PAGE_LEVEL_PLUGINS_JS')?>
+	<?= $this->element('script_layout');?>
+	<?= $this->fetch('PAGE_LEVEL_PLUGINS_JSS')?>
 	<?= $this->fetch('scriptBottom')?>
-</body>
+
+	</body>
 </html>
