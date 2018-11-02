@@ -169,23 +169,25 @@ public function login(){
 							}    
 						if ($this->Registrations->save($image)) {
 							$success = true;   $message = 'data save';
-							
+							$userProfiles = $this->Registrations->find()->where(['is_deleted'=>0,'Registrations.id' => $id,'Registrations.master_role_id'=>$master_role_id])->contain(['MasterClasses','MasterSections']);
 						} else {
 							$success = false;   $message = 'The image could not be saved. Please, try again.';
+							$userProfiles=[];
 						}
 					}
 				}
 				  
 			}else{
-				$success = false;   $message = 'profile pic empty'; 
+				$success = false;   $message = 'profile pic empty'; 	$userProfiles=[];
 			}
 			
 		}else{
-			$success = false;   $message = 'data not correct';  
+			$success = false;   $message = 'data not correct';  	$userProfiles=[];
 		}
 		
-		$this->set(['success' => $success,'message'=>$message,'_serialize' => ['success','message']]);
+		$this->set(['success' => $success,'message'=>$message,'userProfiles'=>$userProfiles,'_serialize' => ['success','message','userProfiles']]);
 	}
+	
 	
 	
 	public function updateDeviceTokens(){
