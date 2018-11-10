@@ -148,11 +148,11 @@ class AssignmentsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['master_role_id'], 'MasterRoles'));
-        $rules->add($rules->existsIn(['student_id'], 'Registrations'));
+       // $rules->add($rules->existsIn(['student_id'], 'Registrations'));
         $rules->add($rules->existsIn(['master_class_id'], 'MasterClasses'));
         $rules->add($rules->existsIn(['master_section_id'], 'MasterSections'));
         $rules->add($rules->existsIn(['master_subject_id'], 'MasterSubjects'));
-        $rules->add($rules->existsIn(['registration_id'], 'Registrations'));
+       // $rules->add($rules->existsIn(['registration_id'], 'Registrations'));
 
         return $rules;
     }

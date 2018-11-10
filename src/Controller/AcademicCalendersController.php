@@ -10,10 +10,8 @@ class AcademicCalendersController extends AppController
     {
 		$this->viewBuilder()->layout('index_layout');
 		$master_role_id=$this->Auth->User('master_role_id');
-		$this->paginate = [
-            'contain' => ['MasterCategories']
-        ];
-        $AcademicCalenders = $this->paginate($this->AcademicCalenders->find());
+		
+        $AcademicCalenders = $this->AcademicCalenders->find()->contain(['MasterCategories']);;
 		$message='';
 		if(empty($id)){
 			$academiccalender = $this->AcademicCalenders->newEntity();

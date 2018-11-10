@@ -72,6 +72,7 @@ class RegistrationsTable extends Table
 		 $this->belongsTo('Attendances');
 		 $this->belongsTo('AcademicCalenders');
         $this->belongsTo('MasterMediums');
+        $this->belongsTo('RegSms');
     }
 
     /**
@@ -85,7 +86,7 @@ class RegistrationsTable extends Table
         $validator
             ->integer('id')
             ->allowEmpty('id', 'create');
-
+/*
        $validator
             ->scalar('roll_no')
             ->maxLength('roll_no', 150)
@@ -126,7 +127,7 @@ class RegistrationsTable extends Table
             ->scalar('mother_mobile_no')
             ->maxLength('mother_mobile_no', 15)
             ->requirePresence('mother_mobile_no', 'create')
-            ->notEmpty('mother_mobile_no');
+            ->notEmpty('mother_mobile_no');*/
 /* 
         $validator
             ->scalar('student_mobile_no')
@@ -140,7 +141,7 @@ class RegistrationsTable extends Table
             //->requirePresence('teacher_mobile_no', 'create')
           //  ->notEmpty('teacher_mobile_no');
  */
-        $validator
+   /*     $validator
             ->scalar('address')
             ->requirePresence('address', 'create')
             ->notEmpty('address');
@@ -158,7 +159,7 @@ class RegistrationsTable extends Table
 		$validator
 		->scalar('master_role_id')
 		->requirePresence('master_role_id', 'create')
-		->notEmpty('master_role_id');
+		->notEmpty('master_role_id');*/
 
        /*  $validator
             ->requirePresence('is_deleted', 'create')

@@ -75,7 +75,7 @@ class GalleriesTable extends Table
             ->requirePresence('media_date', 'create')
             ->notEmpty('media_date');
 
-        $validator
+       /*  $validator
             ->dateTime('created_on')
             ->requirePresence('created_on', 'create')
             ->notEmpty('created_on');
@@ -97,7 +97,7 @@ class GalleriesTable extends Table
         $validator
             ->integer('edited_by')
             ->requirePresence('edited_by', 'create')
-            ->notEmpty('edited_by');
+            ->notEmpty('edited_by'); */
 
         return $validator;
     }

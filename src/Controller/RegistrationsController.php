@@ -33,6 +33,17 @@ class RegistrationsController extends AppController
 		$this->Auth->allow(['logout','login']);
 		
 	}
+	
+	public function beforeFilter(Event $event)
+    {
+		
+        parent::beforeFilter($event);
+	
+        // Allow users to register and logout.
+        // You should not add the "login" action to allow list. Doing so would
+        // cause problems with normal functioning of AuthComponent.
+        $this->Auth->allow(['sendSMS']);
+    }
 	 
 	public function login(){
 		$this->viewBuilder()->layout('login_layout');
@@ -71,7 +82,7 @@ class RegistrationsController extends AppController
 	public function indexTeacher(){
 		$this->viewBuilder()->layout('index_layout');
         $this->paginate = [
-            'contain' => ['MasterClasses', 'MasterSections']
+            'contain' => ['MasterClasses']
         ];
         $registrations = $this->paginate($this->Registrations->find()->where(['is_deleted'=>0,'master_role_id NOT IN'=>['4'],'master_role_id'=>'2']));
 
@@ -235,5 +246,48 @@ class RegistrationsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+    
+    public function sendSMS(){
+        $sms = $this->Registrations->RegSms->find()->limit('5')->where(['RegSms.status'=>0]);
+      
+	
+        foreach($sms as $value){
+            $roll_no =$value->roll_no;
+            $username =$value->name;
+            $father_mobile_no =$value->father_mobile_no;
+            $student_mobile_no =$value->student_mobile_no;
+            
+           $sms1=str_replace(' ', '+', 'Dear '.$username.', we are happy to announce that MK Jain Classes has launched mobile app for android phone. Login with username '.$student_mobile_no.' and password '.$roll_no.'. Download app by clicking it here.https://play.google.com/store/apps/details?id=com.phppoets.mkjainclasses . Regards MK Jain Classes.');
+            $sms_replace=str_replace(" ", '+', $sms1);
+			$sms_sender='MKJAIN';
+			$working_key='A7a76ea72525fc05bbe9963267b48dd96';
+			$mobile_no='';
+            if(!empty($father_mobile_no) && empty($student_mobile_no)){
+                $mobile_no =$father_mobile_no;
+            }else if(empty($father_mobile_no) && !empty($student_mobile_no)){
+                $mobile_no =$student_mobile_no;
+            }else if(!empty($father_mobile_no) && !empty($student_mobile_no)){
+                 $mobile_no =$student_mobile_no;
+            }
+            
+           
+            //$mobile_no = 9549993335;
+            if($mobile_no){
+                $sms_send=file_get_contents('http://103.39.134.40/api/mt/SendSMS?user=phppoetsit&password=9829041695&senderid='.$sms_sender.'&channel=Trans&DCS=0&flashsms=0&number='.$mobile_no.'&text='.$sms_replace.'&route=7');
+                $query2 = $this->Registrations->RegSms->query();
+						$query2->update()
+							->set(['status' =>1])
+							->where(['id' => $value->id])
+							->execute();
+            }else{
+                $query2 = $this->Registrations->RegSms->query();
+						$query2->update()
+							->set(['status' =>2])
+							->where(['id' => $value->id])
+							->execute();
+            }
+        }
+        exit;
     }
 }

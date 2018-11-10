@@ -72,7 +72,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="<?php echo $this->url->build(['controller'=>'News','action'=>'index'])?>"><i class="fa fa-circle-o"></i>News</a></li>
+            <li><a href="<?php echo $this->url->build(['controller'=>'News','action'=>'index'])?>"><i class="fa fa-circle-o"></i>News</a></li> 
+			<li><a href="<?php echo $this->url->build(['controller'=>'galleries','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Gallery</a></li>
             <li><a href="<?php echo $this->url->build(['controller'=>'Videoes','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Video</a></li>
           </ul>
         </li>
@@ -101,7 +102,7 @@
           </a>
         </li>
 		<li class="active treeview">
-          <a href="<?= $this->Url->build(['controller'=>'Achievements','action'=>'index']) ?>">
+          <a href="<?= $this->Url->build(['controller'=>'Achievements','action'=>'add']) ?>">
             <i class="fa fa-dashboard"></i> <span>Achievements</span>
           </a>
         </li>

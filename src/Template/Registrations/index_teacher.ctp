@@ -27,7 +27,7 @@
 								<th>Father Name</th>
 								<th>Mother Name</th>
 								<th>Class</th>
-								<th>Section</th>
+								
 								<th>Actions</th>
 								
 							</tr>
@@ -52,7 +52,7 @@
 								  <td><?= h($registration->father_name) ?></td>
 								  <td><?= h($registration->mother_name) ?></td>
 								  <td><?= $registration->master_class->class_name ?></td>
-								  <td><?= $registration->master_section->section_name ?></td>
+								 
 								<td><center>
 								<?php  echo $this->Html->link('<i class="fa fa-pencil"></i>', 
 								array('controller' => 'Registrations', 'action' => 'edit',$registration->id),

@@ -29,7 +29,7 @@ class TimeTablesController extends AppController
 		$this->viewBuilder()->layout('');
 		 $ClassSectionMappings=$this->TimeTables->ClassSectionMappings->find()->where(['ClassSectionMappings.master_class_id'=>$class_id,'ClassSectionMappings.master_section_id'=>$section_id])->contain(['MasterSubjects'])->toArray();
 		 $options=[];
-		 $registrations = $this->TimeTables->Registrations->find('list');
+		 $registrations = $this->TimeTables->Registrations->find('list')->where(['master_role_id'=>2]);
 		 $this->set(compact('ClassSectionMappings','registrations'));
 		 
 	 }
@@ -110,17 +110,12 @@ class TimeTablesController extends AppController
 				}
 				
 			}
-
-			exit;
-            $timeTable = $this->TimeTables->patchEntity($timeTable, $this->request->getData());
-            if ($this->TimeTables->save($timeTable)) {
-                $this->Flash->success(__('The time table has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The time table could not be saved. Please, try again.'));
+			
+			$this->Flash->success(__('The time table has been saved.'));
+			return $this->redirect(['action' => 'add']);
+       
         }
-        $masterRoles = $this->TimeTables->MasterRoles->find('list', ['limit' => 200]);
+        $masterRoles = $this->TimeTables->MasterRoles->find('list', ['limit' => 200])->where(['id NOT IN'=>['1','4']]);
         $masterClasses = $this->TimeTables->MasterClasses->find('list', ['limit' => 200]);
         $masterSections = $this->TimeTables->MasterSections->find('list', ['limit' => 200]);
         $masterSubjects = $this->TimeTables->MasterSubjects->find('list', ['limit' => 200]);

@@ -42,6 +42,11 @@ class AchievementsTable extends Table
             'joinType' => 'INNER'
         ]);
 		
+		$this->hasMany('AchievementRows', [
+            'foreignKey' => 'achievement_id',
+            'joinType' => 'INNER'
+        ]);
+		
 		$this->belongsTo('MasterYears');
     }
 

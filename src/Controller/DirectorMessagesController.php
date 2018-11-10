@@ -106,7 +106,7 @@ class DirectorMessagesController extends AppController
 				$directorMessage = $this->DirectorMessages->patchEntity($directorMessage, $this->request->getData());
             if ($this->DirectorMessages->save($directorMessage)) {
 				if(!empty($profile_pic['tmp_name'])){
-						unlink(WWW_ROOT .$old_image);
+						@unlink(WWW_ROOT .$old_image);
 						move_uploaded_file($profile_pic['tmp_name'],$fullpath.DS.$setNewFileName .'.'. $ext);
 					
 					}

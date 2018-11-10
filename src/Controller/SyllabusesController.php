@@ -45,10 +45,71 @@ class SyllabusesController extends AppController
 			}else{
 				@$this->request->data['syllabus_file']=@$syllabus_url_old;
 			}
-			
+			$master_class_id=$this->request->getData('master_class_id');
+            $master_section_id=$this->request->getData('master_section_id');
             $syllabus = $this->Syllabuses->patchEntity($syllabus, $this->request->getData());
-			
+		
 			if ($this->Syllabuses->save($syllabus)) {
+				
+				// Notifications Code Start	
+						$Registrationsnews=$this->Syllabuses->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$master_class_id,'Registrations.master_section_id'=>$master_section_id,'Registrations.device_token !='=>0]);
+						date_default_timezone_set("Asia/Calcutta");
+						foreach($Registrationsnews as $Registrationsnew){
+							
+							$reg_id=$Registrationsnew->id;
+							$device_token=$Registrationsnew->device_token;
+							
+							$tokens = array($device_token);
+							$random=(string)mt_rand(1000,9999);
+							$header = [
+							'Content-Type:application/json',
+							'Authorization: Key=AAAAMDhcGSU:APA91bGGXZ2FClcRw5lmRvE76x5OHKrm2wqk8Xy5hBBYu0OYPjXrP5c7NJlR8yeYZxWBmC5DwFILj3Tzw7pqZ_zzPrSmI4E2_2j22QVrm4jnUgY6c6SLldZH7eSjaD0CHqryqJqz_oFR'
+							];
+
+							$msg = [
+							'title'=> 'Syllabus',
+							'message' => 'Your Class Syllabus Added',
+							'image' => '',
+							'link' => 'mkjain://Syllabus?id='.$syllabus->id.'&student_id='.$reg_id.'&class_id='.$syllabus->master_class_id.'&section_id='.$syllabus->master_section_id,
+							'notification_id'    => $random,
+							];
+							
+							$payload = array(
+							'registration_ids' => $tokens,
+							'data' => $msg
+							);
+
+							$curl = curl_init();
+							curl_setopt_array($curl, array(
+							CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
+							CURLOPT_RETURNTRANSFER => true,
+							CURLOPT_CUSTOMREQUEST => "POST",
+							CURLOPT_POSTFIELDS => json_encode($payload),
+							CURLOPT_HTTPHEADER => $header
+							));
+							$response = curl_exec($curl);
+							$err = curl_error($curl);
+							curl_close($curl);
+							$final_result=json_decode($response);
+							$sms_flag=$final_result->success; 	
+							if ($err) {
+							//echo "cURL Error #:" . $err;
+							} else {
+							//$response;
+							}	
+							
+							$Notifications=$this->Syllabuses->Registrations->Notifications->newEntity();
+							$Notifications->title='Syllabus';
+							$Notifications->message='Your Class Syllabus Added';
+							$Notifications->notify_date=date("Y-m-d");
+							$Notifications->notify_time=date("h:i A"); 
+							$Notifications->created_by=0; 
+							$Notifications->registration_id=$reg_id; 
+							$Notifications->notify_link='mkjain://Syllabus?id='.$syllabus->id.'&student_id='.$reg_id.'&class_id='.$syllabus->master_class_id.'&section_id='.$syllabus->master_section_id; 
+							$this->Syllabuses->Registrations->Notifications->save($Notifications);
+						}
+					//End Notification Code	
+				
 				if(!empty($syllabus_file['tmp_name'])){
 					@unlink(WWW_ROOT .$syllabus_url_old);
 					move_uploaded_file($syllabus_file['tmp_name'],$fullpath.DS.$setNewFileName .'.'. $ext);
@@ -67,6 +128,7 @@ class SyllabusesController extends AppController
         $this->set(compact('Syllabuses','syllabus','masterclasses','mastersections','mastersubjects'));
 		
     }
+
 
     
     public function delete($id = null)

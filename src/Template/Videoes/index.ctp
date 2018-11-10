@@ -82,7 +82,7 @@
 	<?php echo $this->Html->script('/plugins/select2/select2.full.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
 	<?php  $js="
 		$(document).ready(function(){
-			
+			$('#classdata').DataTable();
 			var classValidate = $('.classValidate').val();
 			$('#classForm').validate({
 				rules:{
