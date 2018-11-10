@@ -18,7 +18,7 @@
       <ul class="sidebar-menu">
         
         <li class="active treeview">
-          <a href="#">
+          <a href="<?php echo $this->url->build(['controller'=>'Registrations','action'=>'dashboard'])?>">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
@@ -60,7 +60,7 @@
         </li>
 		<li class="active treeview">
           <a href="<?= $this->Url->build(['controller'=>'AcademicCalenders','action'=>'index']) ?>">
-            <i class="fa fa-dashboard"></i> <span>Academic Calenders</span>
+            <i class="fa fa-dashboard"></i> <span>Academic Calender</span>
           </a>
         </li>
 		<li class="treeview">
