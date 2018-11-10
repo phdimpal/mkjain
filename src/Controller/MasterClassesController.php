@@ -12,7 +12,7 @@ class MasterClassesController extends AppController
 		$this->viewBuilder()->layout('index_layout');
 		$master_role_id=$this->Auth->User('master_role_id');
 		
-        $masterClasses = $this->paginate($this->MasterClasses->find()->where(['flag'=>0]));
+        $masterClasses = $this->MasterClasses->find()->where(['flag'=>0])->order(['id'=>'DESC']);
 		$message='';
 		if(empty($id)){
 			$masterClass = $this->MasterClasses->newEntity();

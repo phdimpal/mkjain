@@ -11,7 +11,7 @@ class MasterSubjectsController extends AppController
 		$this->viewBuilder()->layout('index_layout');
 		$master_role_id=$this->Auth->User('master_role_id');
 		
-        $MasterSubjects = $this->paginate($this->MasterSubjects->find()->where(['flag'=>0]));
+        $MasterSubjects = $this->MasterSubjects->find()->where(['flag'=>0])->order(['id'=>'DESC']);
 		$message='';
 		if(empty($id)){
 			$mastersubject = $this->MasterSubjects->newEntity();
@@ -45,7 +45,7 @@ class MasterSubjectsController extends AppController
 		
 		if(!empty($subject_name)){
 			if(!empty($subject_id)){
-				if(!$MasterSubjectsNameexists){
+				if(!$MasterSubjectsNameexists && $MasterSubjectsexists){
 					echo 'false';
 				}else{
 					echo 'true';
