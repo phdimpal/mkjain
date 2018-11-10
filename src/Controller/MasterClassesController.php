@@ -36,16 +36,17 @@ class MasterClassesController extends AppController
         $this->set(compact('masterClasses','masterClass'));
     }
 	
-	public function checkClassNames(){
+	public function checkClassNames(){ 
 		$class_name = $this->request->data('class_name');
 		$class_id = $this->request->data('id');
 		
 		$MasterClassesexists = $this->MasterClasses->exists(['class_name' => $class_name]);
 		$MasterClassesNameexists = $this->MasterClasses->exists(['class_name' => $class_name,'id'=>$class_id]);
 		
+		///pr($MasterClassesexists);exit;
 		if(!empty($class_name)){
 			if(!empty($class_id)){
-				if(!$MasterClassesNameexists){
+				if(!$MasterClassesNameexists && $MasterClassesexists){
 					echo 'false';
 				}else{
 					echo 'true';

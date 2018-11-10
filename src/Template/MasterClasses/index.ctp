@@ -83,11 +83,12 @@
 			return this.optional(element) || /^[a-zA-Z\s]+$/.test(value); });
 
 			var classValidate = $('.classValidate').val();
+			
 			$('#classForm').validate({
 				rules:{
 					class_name:{
 						required:true,
-						alphabetsAndSpacesOnly:true,
+						
 						remote :{
                         url:classValidate,
                         type:'post',
@@ -103,7 +104,7 @@
 				messages:{
 					class_name:{
 						required: 'Class Name is required',
-						alphabetsAndSpacesOnly:'Only Alphabets Allowed',
+						
 						remote:'Class Name already exists'	
 					}
 				}
