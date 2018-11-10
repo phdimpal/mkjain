@@ -808,6 +808,53 @@ public function fecthAttendenceView(){
 	
 	public function notification(){
 		
+		$device_token='dhM-J23d1ws:APA91bGmYDGT2MSFCiOIPev9WFd7QkUnTsbfWd2YS92HA6grWM67mkR93eXkvCZrRaN-9IkTLlcInMAGbO3cuqAxJ91X3tcRb-U0eXSUJi4dqYpw-c2SeL29TUrVKNji_jFCyHjo1fZJ';
+		
+		$id=1;
+		$tokens = array($device_token);
+			$random=(string)mt_rand(1000,9999);
+			$header = [
+				'Content-Type:application/json',
+				'Authorization: Key=AAAAMDhcGSU:APA91bGGXZ2FClcRw5lmRvE76x5OHKrm2wqk8Xy5hBBYu0OYPjXrP5c7NJlR8yeYZxWBmC5DwFILj3Tzw7pqZ_zzPrSmI4E2_2j22QVrm4jnUgY6c6SLldZH7eSjaD0CHqryqJqz_oFR'
+			];
+
+			$msg = [
+				'title'=> 'Challan Deliver',
+				'message' => 'Your Challan has Been Delivered',
+				'image' => '',
+				'link' => 'jainthela://order?id='.$id,
+				'notification_id'    => $random,
+			];
+			
+			$payload = array(
+				'registration_ids' => $tokens,
+				'data' => $msg
+			);
+			
+			$curl = curl_init();
+			curl_setopt_array($curl, array(
+			  CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
+			  CURLOPT_RETURNTRANSFER => true,
+			  CURLOPT_CUSTOMREQUEST => "POST",
+			  CURLOPT_POSTFIELDS => json_encode($payload),
+			  CURLOPT_HTTPHEADER => $header
+			));
+			$response = curl_exec($curl);
+			$err = curl_error($curl);
+			curl_close($curl);
+			$final_result=json_decode($response);
+			$sms_flag=$final_result->success; 	
+			if ($err) {
+			  //echo "cURL Error #:" . $err;
+			} else {
+			  //$response;
+			}	
+		pr($final_result);
+		
+		exit;
+		
+		
+		
 		$Notifications=$this->Registrations->Notifications->find()->toArray();
 		 if($Notifications){
 			 $success = true;
