@@ -89,7 +89,7 @@ class ClassSectionMappingsTable extends Table
         $rules->add($rules->existsIn(['master_class_id'], 'MasterClasses'));
         $rules->add($rules->existsIn(['master_section_id'], 'MasterSections'));
         $rules->add($rules->existsIn(['master_subject_id'], 'MasterSubjects'));
-        $rules->add($rules->existsIn(['master_medium_id'], 'MasterMediums'));
+        //$rules->add($rules->existsIn(['master_medium_id'], 'MasterMediums'));
 
         return $rules;
     }

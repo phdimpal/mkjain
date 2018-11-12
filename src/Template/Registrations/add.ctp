@@ -1,7 +1,7 @@
 <style>
 .pad{
 	padding-right: 0px;
-padding-left: 0px;
+	padding-left: 0px;
 }
 .form-group
 {
@@ -39,12 +39,12 @@ padding-left: 0px;
 									</div>
 								   
 								  
-									
+									<div class="hideshow">
 									<div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label">Class </label>
 												<?php
-													echo $this->Form->input('master_class_id', ['empty'=> '--Select--','data-placeholder'=>'Select class','label' => false,'class'=>'form-control select2 class_change','options'=>$masterClasses,'style'=>'width:100%;']);
+													echo $this->Form->input('master_class_id', ['empty'=> '--Select--','data-placeholder'=>'Select class','label' => false,'class'=>'form-control select2 class_change master_class_id','options'=>$masterClasses,'style'=>'width:100%;']);
 												?>
 												<label class="error" for="master-class-id"></label>
 										</div>
@@ -55,11 +55,11 @@ padding-left: 0px;
 											<?php 
 											$options=[];
 											
-											echo $this->Form->input('master_section_id', ['empty'=> '--Select--','data-placeholder'=>'Select a section ','label' => false,'class'=>'form-control select2','options'=>$options,'style'=>'width:100%;']); ?>
+											echo $this->Form->input('master_section_id', ['empty'=> '--Select--','data-placeholder'=>'Select a section ','label' => false,'class'=>'form-control select2 master_section_id','options'=>$options,'style'=>'width:100%;']); ?>
 											<label class="error" for="master-section-id"></label>
 										</div>
 									</div>
-									
+									</div>
 								 
 							</div>
 							
@@ -68,7 +68,7 @@ padding-left: 0px;
 								  <div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label">Enrollment No </label>
-										<?php echo $this->Form->input('roll_no', ['label' => false,'placeholder'=>'Enrollment No','class'=>'form-control']); ?>
+										<?php echo $this->Form->input('roll_no', ['label' => false,'placeholder'=>'Enrollment No','class'=>'form-control roll_no']); ?>
 										</div>
 									</div>
 								   
@@ -176,22 +176,35 @@ padding-left: 0px;
 			<?php echo $this->Form->end(); ?>
 			</div>
 		</div>
-	<section>		
+	<section>	
+	<input type="hidden" class="classValidate" value="<?php echo $this->Url->build(['controller'=>'Registrations','action'=>'checkRegRollnos']); ?>">
+<input type="hidden" class="voucher_no" value="<?php echo $voucher_no; ?>">	
 		<?php echo $this->Html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?> 
 		<?php echo $this->Html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
 		<?php echo $this->Html->script('/plugins/select2/select2.full.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
 		<?php  $js=" 
 			
 			$(document).ready(function(){ 
+			
 			$('.select2').select2();
 				$(document).on('change', '.master_role_id', function(){   
 					var master_role_id=$('select[name=master_role_id] option:selected').val();
 					if(master_role_id == 2){
+						var voucher_no = $('.voucher_no').val();
 						$('.teacher_mobile_no').attr('required','required');
 						$('.student_mobile_no').removeAttr('required');
+						$('.master_section_id').removeAttr('required');
+						$('.hideshow').hide();
+						$('.roll_no').val(voucher_no).attr('readonly','readonly');
+						$('.master_class_id').removeAttr('required');
+						
 					}else if(master_role_id == 3){
 						$('.student_mobile_no').attr('required','required');
 						$('.teacher_mobile_no').removeAttr('required');
+						$('.master_class_id').attr('required','required');
+						$('.master_section_id').attr('required','required');
+						$('.roll_no').val('').removeAttr('readonly');
+						$('.hideshow').show();
 					}
 				});
 				$(document).on('change', '.class_change', function(){   
@@ -206,13 +219,26 @@ padding-left: 0px;
 						$('select[name=master_section_id]').select2();
 					}); 
 				});
-				
+				var classValidate = $('.classValidate').val();
 				$('#registratiomForm').validate({
 					rules:{
-						
+						roll_no:{
+							remote :{
+								url:classValidate,
+								type:'post',
+								data:{
+									id: function()
+									{
+										return $('input[name=id]').val();
+									}
+								}
+							}
+						}
 					},
 					messages:{
-						
+						roll_no:{
+							remote:'Roll No already exists'
+						}
 					}
 				});
 			});

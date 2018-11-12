@@ -39,6 +39,6 @@ class ClassSectionMapping extends Entity
         'master_class' => true,
         'master_section' => true,
         'master_subject' => true,
-        'master_media' => true
+        'teacher_id' => true
     ];
 }

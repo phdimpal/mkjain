@@ -840,7 +840,7 @@ public function assignment(){
 						$ext=$extt[1];
 						$setNewFileName = rand(1, 100000);
 						$fullpath= WWW_ROOT."img".DS."assignment";
-						$statement_year = "/mkjainn/img/assignment/".$setNewFileName .'.'.$ext;
+						$statement_year = "/img/assignment/".$setNewFileName .'.'.$ext;
 						$res1 = is_dir($fullpath);
 						if($res1 != 1) {
 								new Folder($fullpath, true, 0777);

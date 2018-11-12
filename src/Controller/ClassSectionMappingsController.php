@@ -51,6 +51,41 @@ class ClassSectionMappingsController extends AppController
         $this->set(compact('ClassSectionMappings','classsectionmapping','master_class','master_sections','master_subjects'));
 		
     }
+	
+	public function teacherIndex($id=null)
+    {
+		$this->viewBuilder()->layout('index_layout');
+		$master_role_id=$this->Auth->User('master_role_id');
+		
+        $ClassSectionMappings = $this->ClassSectionMappings->find()->where(['ClassSectionMappings.is_deleted'=>0])->contain(['MasterClasses', 'MasterSections', 'Registrations']);
+		//pr($ClassSectionMappings->toArray());exit;
+		$message='';
+		if(empty($id)){
+			$classsectionmapping = $this->ClassSectionMappings->newEntity();
+			$message = 'The class section mapping has been saved.';
+		}else{
+			$classsectionmapping = $this->ClassSectionMappings->get($id);
+			$message = 'The class section mapping has been updated.';
+		}
+		
+        if ($this->request->is(['post','put','patch'])) {
+            $classsectionmapping = $this->ClassSectionMappings->patchEntity($classsectionmapping, $this->request->getData());
+			//pr($classsectionmapping);exit;
+            if ($this->ClassSectionMappings->save($classsectionmapping)) {
+                $this->Flash->success(__($message));
+
+                return $this->redirect(['action' => 'teacherIndex']);
+            }
+            $this->Flash->error(__('The class section mapping could not be saved. Please, try again.'));
+        }
+		
+		$master_class = $this->ClassSectionMappings->MasterClasses->find('list')->where(['flag'=>0]);
+		$master_sections = $this->ClassSectionMappings->MasterSections->find('list')->where(['flag'=>0]);
+		$master_teacher = $this->ClassSectionMappings->Registrations->find('list')->where(['master_role_id'=>2,'Registrations.is_deleted'=>0]);
+		
+        $this->set(compact('ClassSectionMappings','classsectionmapping','master_class','master_sections','master_subjects','master_teacher'));
+		
+    }
 
     
     public function delete($id = null)
@@ -67,11 +102,7 @@ class ClassSectionMappingsController extends AppController
     }
 	
 	public function getSectionLists($class_id=null){
-<<<<<<< HEAD
-		$classsectionmappings = $this->ClassSectionMappings->find()->where(['master_class_id'=>$class_id])->contain(['MasterSections']) ->group(['ClassSectionMappings.master_section_id','ClassSectionMappings.master_class_id']);
-=======
 		$classsectionmappings = $this->ClassSectionMappings->find()->where(['master_class_id'=>$class_id])->contain(['MasterSections'])->group(['ClassSectionMappings.master_section_id','ClassSectionMappings.master_class_id']);
->>>>>>> origin/master
 		$options=[];
 		foreach($classsectionmappings as $classsectionmapping){
 			$options[]= ['text'=>$classsectionmapping->master_section->section_name,'value'=>$classsectionmapping->master_section->id];

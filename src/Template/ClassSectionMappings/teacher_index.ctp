@@ -1,8 +1,8 @@
 <section class="content-header">
-		<h1>Subject Mapping </h1>
+		<h1>Teacher Mapping </h1>
 		<ol class="breadcrumb">
 			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Subject Mapping</li>
+			<li class="active">Teacher Mapping</li>
 		</ol>
 		
 	</section>
@@ -14,7 +14,7 @@
 			<div class="col-md-6">
 				<div class="box box-danger">
 					<div class="box-header ui-sortable-handle" style="cursor: move;">
-						<h3 class="box-title">Subject Mapping</h3>
+						<h3 class="box-title">Teacher Mapping</h3>
 						<!-- tools box -->
 						
 						<!-- /. tools -->
@@ -33,8 +33,8 @@
 								<label for="master-section-id" class="error"></label>
 							</div>
 							<div class="form-group">
-								<label>Subjects</label>
-								<?php echo $this->Form->input('master_subject_id', ['empty' => "--Select--",'options'=>$master_subjects,'label' => false,'class' => 'form-control input-sm master_subject_id','value'=>@$classsectionmapping->master_subject_id]); ?> 
+								<label>Teacher</label>
+								<?php echo $this->Form->input('teacher_id', ['empty' => "--Select--",'options'=>$master_teacher,'label' => false,'class' => 'form-control input-sm teacher_id','value'=>@$classsectionmapping->teacher_id]); ?> 
 							</div>
 						</div>
 						<div class="box-footer clearfix">
@@ -47,7 +47,7 @@
 			<div class="col-md-6">
 				<div class="box box-danger">
 					<div class="box-header">
-					  <h3 class="box-title">Subject Mapping</h3>
+					  <h3 class="box-title">Teacher Mapping</h3>
 					  <div class="pull-right box-tools">
 							<a href="<?php echo $this->url->build(['action'=>'index']) ?>"><button class="btn btn-sm bg-red"><i class="fa fa-plus"></i> Add</button></a>
 						</div>
@@ -59,22 +59,24 @@
 									<th>S.No</th>
 									<th class="text-center">Class </th>
 									<th class="text-center">Section </th>
-									<th class="text-center">Subject </th>
+									<th class="text-center">Teacher </th>
 									<th class="text-center">Action</th>
 								</tr>
 							</thead>
 							<tbody>
-								<?php $i=1;foreach($ClassSectionMappings as $ClassSectionMapping){ ?>
+								<?php $i=1;foreach($ClassSectionMappings as $ClassSectionMapping){ 
+									if(!empty($ClassSectionMapping->registration)){
+								?>
 									<tr>
 										<td><?php echo $i++; ?></td>
 										<td class="text-center"><?php echo $ClassSectionMapping->master_class->class_name; ?></td>
 										<td class="text-center"><?php echo $ClassSectionMapping->master_section->section_name; ?></td>
-										<td class="text-center"><?php echo $ClassSectionMapping->master_subject->subject_name; ?></td>
+										<td class="text-center"><?php echo $ClassSectionMapping->registration->name; ?></td>
 										<td class="text-center">
-											<a href="<?php echo $this->url->build(['action'=>'index',$ClassSectionMapping->id]); ?>"><button class="btn btn-sm bg-olive"><i class="fa fa-pencil"></i></button> </a><a data-original-title="Delete" onclick="return confirm('Are you sure you want to delete?')" href="<?php echo $this->url->build(['action'=>'delete',$ClassSectionMapping->id]); ?>"><button class="btn btn-sm bg-red "><i class="fa fa-trash"></i></button> </a>
+											<a href="<?php echo $this->url->build(['action'=>'teacherIndex',$ClassSectionMapping->id]); ?>"><button class="btn btn-sm bg-olive"><i class="fa fa-pencil"></i></button> </a><a data-original-title="Delete" onclick="return confirm('Are you sure you want to delete?')" href="<?php echo $this->url->build(['action'=>'delete',$ClassSectionMapping->id]); ?>"><button class="btn btn-sm bg-red "><i class="fa fa-trash"></i></button> </a>
 										</td>
 									</tr>
-								<?php } ?>
+								<?php }} ?>
 								
 							</tbody>
 						</table>	
@@ -96,7 +98,7 @@
 		$(document).ready(function(){
 			$('.master_class_id').select2();
 			$('.master_section_id').select2();
-			$('.master_subject_id').select2();
+			$('.teacher_id').select2();
 			$('#classdata').DataTable();
 			jQuery.validator.addMethod('alphabetsAndSpacesOnly', function (value, element) {
 			return this.optional(element) || /^[a-zA-Z\s]+$/.test(value); });

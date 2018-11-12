@@ -35,7 +35,21 @@
             <li><a href="<?php echo $this->url->build(['controller'=>'MasterClasses','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Class</a></li>
             <li><a href="<?php echo $this->url->build(['controller'=>'MasterSections','action'=>'index'])?>"><i class="fa fa-circle-o"></i> Section</a></li>
             <li><a href="<?php echo $this->url->build(['controller'=>'MasterSubjects','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Subject</a></li>
-            <li><a href="<?php echo $this->url->build(['controller'=>'ClassSectionMappings','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Mapping</a></li>
+			<li class="treeview">
+				<a href="#">
+					<i class="fa fa-users"></i>
+					<span>Mapping</span>
+					<span class="pull-right-container">
+					<span class="fa fa-angle-left pull-right"></span>
+					</span>
+				</a>
+				<ul class="treeview-menu">
+					<li><a href="<?php echo $this->url->build(['controller'=>'ClassSectionMappings','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Subject Mapping</a></li>
+					<li><a href="<?php echo $this->url->build(['controller'=>'ClassSectionMappings','action'=>'teacherIndex'])?>"><i class="fa fa-circle-o"></i>Teacher Mapping</a></li>
+					
+				</ul>
+			</li>
+            
 			<li><a href="<?php echo $this->url->build(['controller'=>'MasterCategories','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Category</a></li>
           </ul>
         </li>

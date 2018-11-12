@@ -29,34 +29,38 @@ padding-left: 0px;
 									</div>
 								   
 								  
-									
-									<div class="col-md-4">
-										<div class="form-group">
-											<label class="control-label">Class </label>
-												<?php
-													echo $this->Form->input('master_class_id', ['empty'=> '--Select--','data-placeholder'=>'Select class','label' => false,'class'=>'form-control select2 class_change','options'=>$masterClasses,'style'=>'width:100%;']);
-												?>
+									<?php if($registration->master_role_id == 3){ ?>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label class="control-label">Class </label>
+													<?php
+														echo $this->Form->input('master_class_id', ['empty'=> '--Select--','data-placeholder'=>'Select class','label' => false,'class'=>'form-control select2 class_change','options'=>$masterClasses,'style'=>'width:100%;']);
+													?>
+											</div>
 										</div>
-									</div>
-									 <div class="col-md-4" id="section">
-										<div class="form-group">
-											 <label class="">Section</label>
-											<?php 
-											$options=[];
-											
-											echo $this->Form->input('master_section_id', ['empty'=> '--Select--','data-placeholder'=>'Select a section ','label' => false,'class'=>'form-control select2','options'=>$options,'style'=>'width:100%;']); ?>
+										 <div class="col-md-4" id="section">
+											<div class="form-group">
+												 <label class="">Section</label>
+												<?php 
+												$options=[];
+												
+												echo $this->Form->input('master_section_id', ['empty'=> '--Select--','data-placeholder'=>'Select a section ','label' => false,'class'=>'form-control select2','options'=>$options,'style'=>'width:100%;']); ?>
+											</div>
 										</div>
-									</div>
-									
+									<?php } ?>
 								 
 							</div>
 							
 							<div class="col-md-12 pad">
-							
+							 <?php $readonly='';
+							 if($registration->master_role_id == 2){ 
+								$readonly = "readonly";
+							 
+							 }?>
 								  <div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label">Enrollment No </label>
-										<?php echo $this->Form->input('roll_no', ['label' => false,'placeholder'=>'Enrollment No','class'=>'form-control']); ?>
+										<?php echo $this->Form->input('roll_no', ['label' => false,'placeholder'=>'Enrollment No','class'=>'form-control',$readonly]); ?>
 										</div>
 									</div>
 								   
@@ -116,7 +120,7 @@ padding-left: 0px;
 										</div>
 									</div>
 								   
-								  
+								  <?php if($registration->master_role_id == 3){ ?>
 									
 									<div class="col-md-4">
 										<div class="form-group">
@@ -124,7 +128,7 @@ padding-left: 0px;
 												<?php echo $this->Form->input('student_mobile_no', ['label' => false,'placeholder'=>'Student Mobile','class'=>'form-control','oninput'=>"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');",'maxlength'=>10]); ?>
 										</div>
 									</div>
-									
+								  <?php } ?>
 									<div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label">Teacher Mobile no. </label>

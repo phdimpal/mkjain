@@ -162,13 +162,47 @@ class RegistrationsController extends AppController
             }
             $this->Flash->error(__('The registration could not be saved. Please, try again.'));
         }
+		
+		 $last_voucher_no = $this->Registrations->find()->select(['roll_no'])->where(['master_role_id'=>2])->order(['roll_no'=>'DESC'])->first();
+		
+		if($last_voucher_no){
+			$voucher_no=$last_voucher_no->roll_no+1;
+		}else{
+			$voucher_no='MKTE101';
+		}	
+		 
         $masterRoles = $this->Registrations->MasterRoles->find('list', ['limit' => 200])->where(['id NOT IN'=>['1','4']]);
         $masterClasses = $this->Registrations->MasterClasses->find('list', ['limit' => 200]);
         $masterSections = $this->Registrations->MasterSections->find('list', ['limit' => 200]);
         $masterMedia = $this->Registrations->MasterMediums->find('list', ['limit' => 200]);
-        $this->set(compact('registration', 'masterRoles', 'masterClasses', 'masterSections', 'MasterMediums'));
+        $this->set(compact('registration', 'masterRoles', 'masterClasses', 'masterSections', 'MasterMediums','voucher_no'));
     }
 
+	
+	 public function checkRegRollnos(){
+		$roll_no = $this->request->data('roll_no');
+		$reg_id = $this->request->data('id');
+		
+		$MasterSectionsexists = $this->Registrations->exists(['roll_no' => $roll_no]);
+		$MasterSectionsNameexists = $this->Registrations->exists(['roll_no' => $roll_no,'id'=>$reg_id]);
+		
+		if(!empty($roll_no)){
+			if(!empty($reg_id)){
+				if(!$MasterSectionsNameexists && $MasterSectionsexists){
+					echo 'false';
+				}else{
+					echo 'true';
+				}
+			}else{
+				if($MasterSectionsexists){
+					echo 'false';
+				}else{
+					echo 'true';
+				}
+			}
+		}
+		exit;
+	}
 	public function dashboard(){
 		$this->viewBuilder()->layout('index_layout');
 		
