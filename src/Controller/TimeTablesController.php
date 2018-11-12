@@ -95,7 +95,7 @@ class TimeTablesController extends AppController
         $timeTable = $this->TimeTables->newEntity();
 		$user_id=$this->Auth->User('id');
         if ($this->request->is('post')) {
-			
+			pr($this->request->getData());exit;
 			$week_names=$this->request->getData('week_name');
 			$starts=$this->request->getData('start');
 			$ends=$this->request->getData('end');

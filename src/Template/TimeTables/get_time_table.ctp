@@ -35,7 +35,11 @@
 		<?php
 			echo $this->Form->input('q', ['type'=> 'text','label' => false,'class'=>'form-control start_time','required']);
 		?>
-		
+		<?php
+			$ampm=[];
+			$ampm = [['text'=>'AM','value'=>'AM'],['text'=>'PM','value'=>'PM']];
+			echo $this->Form->input('q', ['empty'=> '--Select--','data-placeholder'=>'Select class','label' => false,'class'=>'form-control select2 ampm','options'=>$ampm,'style'=>'width:100%;','required']);
+		?>
 	</td>
  	<td align="right">
 		<?php
@@ -82,8 +86,10 @@ function rename_rows(){
 				$(this).find("td:nth-child(3) select.teachers").attr({name:"time_table["+i+"][teacher_id]", id:"time_table-"+i+"-teacher_id"});
 				
 				$(this).find('td:nth-child(4) input.start_time').attr("name","time_table["+i+"][start_time]").attr("id","time_table-"+i+"-start_time").rules("add", "required");
+				$(this).find('td:nth-child(4) select.ampm').attr("name","time_table["+i+"][ampm]").attr("id","time_table-"+i+"-ampm").rules("add", "required");
 				
 				$(this).find('td:nth-child(5) input.end_time').attr("name","time_table["+i+"][end_time]").attr("id","time_table-"+i+"-end_time").rules("add", "required");
+				$(this).find('td:nth-child(4) select.ampm').attr("name","time_table["+i+"][ampm]").attr("id","time_table-"+i+"-ampm").rules("add", "required");
 				$(this).find('td:nth-child(6) input.noofminute').attr("name","time_table["+i+"][noofminute]").attr("id","time_table-"+i+"-noofminute");
 				
 			});
