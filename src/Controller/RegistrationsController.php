@@ -42,11 +42,9 @@ class RegistrationsController extends AppController
         // Allow users to register and logout.
         // You should not add the "login" action to allow list. Doing so would
         // cause problems with normal functioning of AuthComponent.
-<<<<<<< HEAD
-        $this->Auth->allow(['sendSMS']);
-=======
+
         $this->Auth->allow(['logout','sendSMS']);
->>>>>>> origin/master
+
     }
 	 
 	public function login(){
