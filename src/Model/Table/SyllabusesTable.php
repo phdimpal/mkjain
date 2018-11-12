@@ -52,6 +52,7 @@ class SyllabusesTable extends Table
             'joinType' => 'INNER'
         ]);
 		 $this->belongsTo('ClassSectionMappings');
+		 $this->belongsTo('Registrations');
     }
 
     /**
