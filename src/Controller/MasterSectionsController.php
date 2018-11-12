@@ -11,7 +11,7 @@ class MasterSectionsController extends AppController
 		$this->viewBuilder()->layout('index_layout');
 		$master_role_id=$this->Auth->User('master_role_id');
 		
-        $masterSections = $this->paginate($this->MasterSections->find()->where(['flag'=>0]));
+        $masterSections = $this->MasterSections->find()->where(['flag'=>0])->order(['id'=>'DESC']);
 		$message='';
 		if(empty($id)){
 			$mastersection = $this->MasterSections->newEntity();
@@ -45,7 +45,7 @@ class MasterSectionsController extends AppController
 		
 		if(!empty($section_name)){
 			if(!empty($section_id)){
-				if(!$MasterSectionsNameexists){
+				if(!$MasterSectionsNameexists && $MasterSectionsexists){
 					echo 'false';
 				}else{
 					echo 'true';

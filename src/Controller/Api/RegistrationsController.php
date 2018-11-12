@@ -234,12 +234,17 @@ public function login(){
 		      $where['TimeTables.registration_id']=$registration_id;
 	    	}
 		}
+<<<<<<< HEAD
+=======
+	
+>>>>>>> origin/master
 	    $WeekArrays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];		
 			
 		$timeTablesData=[];
 	    foreach ($WeekArrays as $week){
 	        if($master_role_id == 2){
 	           $getTimeTables=$this->TimeTables->find()
+<<<<<<< HEAD
 		        ->order(['TimeTables.id' => 'ASC'])->contain(['MasterClasses','MasterSections','MasterSubjects'])->where(['TimeTables.master_role_id'=>$master_role_id,'week_name'=>$week])->where($where)->toArray();
 		        	$timeTablesData[]=['week_name'=>$week,'time_tables'=>$getTimeTables];
 	        }else{
@@ -247,6 +252,16 @@ public function login(){
 		        ->order(['TimeTables.id' => 'ASC'])->contain(['Registrations','MasterClasses','MasterSections','MasterSubjects'])->where(['TimeTables.master_role_id'=>$master_role_id,'week_name'=>$week])->where($where)->toArray();
 		        	$timeTablesData[]=['week_name'=>$week,'time_tables'=>$getTimeTables];
 	        }      	
+=======
+		        ->order(['TimeTables.id' => 'ASC'])->contain(['Registrations','MasterClasses','MasterSections','MasterSubjects'])->where(['week_name'=>$week])->where($where)->toArray();
+		       
+	        }else{
+	            $getTimeTables=$this->TimeTables->find()
+		        ->order(['TimeTables.id' => 'ASC'])->contain(['Registrations','MasterClasses','MasterSections','MasterSubjects'])->where(['TimeTables.master_role_id'=>$master_role_id,'week_name'=>$week])->where($where)->toArray();
+		        
+	        }   
+	        	$timeTablesData[]=['week_name'=>$week,'time_tables'=>$getTimeTables];
+>>>>>>> origin/master
 	    }
 		
 	    if($timeTablesData){

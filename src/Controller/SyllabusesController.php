@@ -129,6 +129,7 @@ class SyllabusesController extends AppController
 		
     }
 
+
     
     public function delete($id = null)
     {

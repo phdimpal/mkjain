@@ -87,7 +87,7 @@
 				rules:{
 					section_name:{
 						required:true,
-						alphabetsAndSpacesOnly:true,
+						
 						remote :{
                         url:classValidate,
                         type:'post',
@@ -103,7 +103,7 @@
 				messages:{
 					section_name:{
 						required: 'Section Name is required',
-						alphabetsAndSpacesOnly:'Only Alphabets Allowed',
+						
 						remote:'Section Name already exists'	
 					}
 				}

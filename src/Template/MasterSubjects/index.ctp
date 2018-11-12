@@ -86,7 +86,7 @@
 				rules:{
 					subject_name:{
 						required:true,
-						alphabetsAndSpacesOnly:true,
+						
 						remote :{
                         url:classValidate,
                         type:'post',
@@ -102,7 +102,7 @@
 				messages:{
 					subject_name:{
 						required: 'Subject Name is required',
-						alphabetsAndSpacesOnly:'Only Alphabets Allowed',
+						
 						remote:'Subject Name already exists'	
 					}
 				}

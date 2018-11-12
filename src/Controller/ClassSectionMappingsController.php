@@ -67,7 +67,11 @@ class ClassSectionMappingsController extends AppController
     }
 	
 	public function getSectionLists($class_id=null){
+<<<<<<< HEAD
 		$classsectionmappings = $this->ClassSectionMappings->find()->where(['master_class_id'=>$class_id])->contain(['MasterSections']) ->group(['ClassSectionMappings.master_section_id','ClassSectionMappings.master_class_id']);
+=======
+		$classsectionmappings = $this->ClassSectionMappings->find()->where(['master_class_id'=>$class_id])->contain(['MasterSections'])->group(['ClassSectionMappings.master_section_id','ClassSectionMappings.master_class_id']);
+>>>>>>> origin/master
 		$options=[];
 		foreach($classsectionmappings as $classsectionmapping){
 			$options[]= ['text'=>$classsectionmapping->master_section->section_name,'value'=>$classsectionmapping->master_section->id];

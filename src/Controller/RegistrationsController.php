@@ -42,7 +42,11 @@ class RegistrationsController extends AppController
         // Allow users to register and logout.
         // You should not add the "login" action to allow list. Doing so would
         // cause problems with normal functioning of AuthComponent.
+<<<<<<< HEAD
         $this->Auth->allow(['sendSMS']);
+=======
+        $this->Auth->allow(['logout','sendSMS']);
+>>>>>>> origin/master
     }
 	 
 	public function login(){
@@ -63,7 +67,7 @@ class RegistrationsController extends AppController
 	public function logout()
 	{
 		
-		$this->Flash->success('You are now logged out.');
+		//$this->Flash->success('You are now logged out.');
 		return $this->redirect($this->Auth->logout());
 	}
 	
@@ -169,6 +173,10 @@ class RegistrationsController extends AppController
 
 	public function dashboard(){
 		$this->viewBuilder()->layout('index_layout');
+		
+		$total_student = $this->Registrations->find()->where(['master_role_id'=>3,'is_deleted'=>0])->count();
+		$total_teacher = $this->Registrations->find()->where(['master_role_id'=>2,'is_deleted'=>0])->count();
+		 $this->set(compact('total_student', 'total_teacher'));
 	}	
     /**
      * Edit method
