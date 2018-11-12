@@ -95,7 +95,8 @@ class TimeTablesController extends AppController
         $timeTable = $this->TimeTables->newEntity();
 		$user_id=$this->Auth->User('id');
         if ($this->request->is('post')) {
-			pr($this->request->getData());exit;
+			
+			$timetables = $this->request->getData('time_table');
 			$week_names=$this->request->getData('week_name');
 			$starts=$this->request->getData('start');
 			$ends=$this->request->getData('end');
@@ -107,32 +108,83 @@ class TimeTablesController extends AppController
 			
 			$ClassSectionMappings=$this->TimeTables->ClassSectionMappings->find()->where(['ClassSectionMappings.master_class_id'=>$master_class_id,'ClassSectionMappings.master_section_id'=>$master_section_id])->contain(['MasterSubjects'])->toArray();
 			
-			foreach($ClassSectionMappings as $data){
-				$id=$data->master_subject->id;
-				$registration_id= $registration_ids[$id]; 
-				for($i=0;$i<7;$i++){
-					
-					$week_name=$week_names[$id][$i];
-					$start=$starts[$id][$i];
-					$end=$ends[$id][$i];
-					$number_of_minute=$number_of_minutes[$id][$i];
-					
-					 $timeTable = $this->TimeTables->newEntity();
-					 $timeTable->week_name=$week_name;
-					 $timeTable->start_time=$start;
-					 $timeTable->end_time=$end;
-					 $timeTable->number_of_minute=$number_of_minute;
+			$this->TimeTables->deleteAll(['TimeTables.master_class_id'=>$master_class_id,'TimeTables.master_section_id' => $master_section_id,'TimeTables.master_role_id'=>$master_role_id]);
+			
+			foreach($timetables as $timetable){ 
+			
+				$timeTable = $this->TimeTables->newEntity();
+				
+					 $timeTable->week_name=$timetable['week_name'];
+					 $timeTable->start_time=$timetable['start_time'].''.$timetable['ampm'];
+					 $timeTable->end_time=$timetable['end_time'].''.@$timetable['ampms'];
+					 $timeTable->number_of_minute=$timetable['noofminute'];
 					 $timeTable->master_role_id=$master_role_id;
 					 $timeTable->master_class_id=$master_class_id;
 					 $timeTable->master_section_id=$master_section_id;
-					 $timeTable->master_subject_id=$id;
-					 $timeTable->registration_id=$registration_id;
+					 $timeTable->master_subject_id=$timetable['subject_id'];
+					 $timeTable->registration_id=$timetable['teacher_id'];
 					 
-					 $this->TimeTables->save($timeTable);
-					
-				}
-				
+					$timeTables= $this->TimeTables->save($timeTable);
 			}
+			
+			// Notifications Code Start	
+						$Registrationsnews=$this->TimeTables->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$master_class_id,'Registrations.master_section_id'=>$master_section_id,'Registrations.device_token !='=>0]);
+						date_default_timezone_set("Asia/Calcutta");
+						foreach($Registrationsnews as $Registrationsnew){
+							
+							$reg_id=$Registrationsnew->id;
+							$device_token=$Registrationsnew->device_token;
+							
+							$tokens = array($device_token);
+							$random=(string)mt_rand(1000,9999);
+							$header = [
+							'Content-Type:application/json',
+							'Authorization: Key=AAAAMDhcGSU:APA91bGGXZ2FClcRw5lmRvE76x5OHKrm2wqk8Xy5hBBYu0OYPjXrP5c7NJlR8yeYZxWBmC5DwFILj3Tzw7pqZ_zzPrSmI4E2_2j22QVrm4jnUgY6c6SLldZH7eSjaD0CHqryqJqz_oFR'
+							];
+
+							$msg = [
+							'title'=> 'Time Table',
+							'message' => 'Timetable added',
+							'image' => '',
+							'link' => 'mkjain://timetable?id='.$timeTables->id,
+							'notification_id'    => $random,
+							];
+							
+							$payload = array(
+							'registration_ids' => $tokens,
+							'data' => $msg
+							);
+
+							$curl = curl_init();
+							curl_setopt_array($curl, array(
+							CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
+							CURLOPT_RETURNTRANSFER => true,
+							CURLOPT_CUSTOMREQUEST => "POST",
+							CURLOPT_POSTFIELDS => json_encode($payload),
+							CURLOPT_HTTPHEADER => $header
+							));
+							$response = curl_exec($curl);
+							$err = curl_error($curl);
+							curl_close($curl);
+							$final_result=json_decode($response);
+							$sms_flag=$final_result->success; 	
+							if ($err) {
+							//echo "cURL Error #:" . $err;
+							} else {
+							//$response;
+							}	
+							
+							$Notifications=$this->TimeTables->Registrations->Notifications->newEntity();
+							$Notifications->title='Time Table';
+							$Notifications->message='Timetable added';
+							$Notifications->notify_date=date("Y-m-d");
+							$Notifications->notify_time=date("h:i A"); 
+							$Notifications->created_by=0; 
+							$Notifications->registration_id=$reg_id; 
+							$Notifications->notify_link='mkjain://timetable?id='.$timeTables->id; 
+							$this->TimeTables->Registrations->Notifications->save($Notifications);
+						}
+					//End Notification Code	
 			
 			$this->Flash->success(__('The time table has been saved.'));
 			return $this->redirect(['action' => 'add']);

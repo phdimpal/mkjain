@@ -32,19 +32,38 @@
 	</td>
 	
 	<td align="right">
-		<?php
+	<div class="row">
+		<div class="col-md-6">
+			<?php
 			echo $this->Form->input('q', ['type'=> 'text','label' => false,'class'=>'form-control start_time','required']);
 		?>
-		<?php
+		</div>
+		<div class="col-md-6">
+			<?php
 			$ampm=[];
 			$ampm = [['text'=>'AM','value'=>'AM'],['text'=>'PM','value'=>'PM']];
-			echo $this->Form->input('q', ['empty'=> '--Select--','data-placeholder'=>'Select class','label' => false,'class'=>'form-control select2 ampm','options'=>$ampm,'style'=>'width:100%;','required']);
+			echo $this->Form->input('q', ['empty'=> '--Select--','data-placeholder'=>'Select class','label' => false,'class'=>'form-control select2 ampm','options'=>$ampm,'required']);
 		?>
+		</div>
+	</div>
+		
+		
 	</td>
  	<td align="right">
+	<div class="row">
+		<div class="col-md-6">
 		<?php
 			echo $this->Form->input('q', ['type'=> 'text','label' => false,'class'=>'form-control end_time','required']);
 		?>
+		</div>
+		<div class="col-md-6">
+		<?php
+			$ampms=[];
+			$ampms = [['text'=>'AM','value'=>'AM'],['text'=>'PM','value'=>'PM']];
+			echo $this->Form->input('q', ['empty'=> '--Select--','data-placeholder'=>'Select class','label' => false,'class'=>'form-control select2 ampms','options'=>$ampms,'required']);
+		?>
+		</div>
+	</div>
 	</td>
 	<td align="right">
 		<?php
@@ -73,7 +92,7 @@ $('.AddNew').click(function(){
 $('table').on('click', '.RemoveRow', function(){ 
   $(this).closest('tr').remove();
 });	
-
+rename_rows();
 function rename_rows(){
 	var list = new Array();
 		var p=0;
@@ -89,9 +108,13 @@ function rename_rows(){
 				$(this).find('td:nth-child(4) select.ampm').attr("name","time_table["+i+"][ampm]").attr("id","time_table-"+i+"-ampm").rules("add", "required");
 				
 				$(this).find('td:nth-child(5) input.end_time').attr("name","time_table["+i+"][end_time]").attr("id","time_table-"+i+"-end_time").rules("add", "required");
-				$(this).find('td:nth-child(4) select.ampm').attr("name","time_table["+i+"][ampm]").attr("id","time_table-"+i+"-ampm").rules("add", "required");
+				$(this).find('td:nth-child(5) select.ampms').attr("name","time_table["+i+"][ampms]").attr("id","time_table-"+i+"-ampms").rules("add", "required");
 				$(this).find('td:nth-child(6) input.noofminute').attr("name","time_table["+i+"][noofminute]").attr("id","time_table-"+i+"-noofminute");
 				
 			});
 }
+
+$(document).ready(function(){
+	$('.alert').fadeOut(5000);
+});
 	</script>

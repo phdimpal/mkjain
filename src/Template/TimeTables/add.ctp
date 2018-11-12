@@ -122,6 +122,7 @@
 						
 					}
 				});
+				$('.alert').fadeOut(5000);
 			});
 		";
 		echo $this->Html->scriptBlock($js, ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
