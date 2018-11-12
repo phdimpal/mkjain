@@ -22,10 +22,8 @@ class ClassSectionMappingsController extends AppController
     {
 		$this->viewBuilder()->layout('index_layout');
 		$master_role_id=$this->Auth->User('master_role_id');
-		 $this->paginate = [
-            'contain' => ['MasterClasses', 'MasterSections', 'MasterSubjects']
-        ];
-        $ClassSectionMappings = $this->paginate($this->ClassSectionMappings->find()->where(['is_deleted'=>0]));
+		
+        $ClassSectionMappings = $this->ClassSectionMappings->find()->where(['is_deleted'=>0])->contain(['MasterClasses', 'MasterSections', 'MasterSubjects']);
 		$message='';
 		if(empty($id)){
 			$classsectionmapping = $this->ClassSectionMappings->newEntity();
@@ -69,7 +67,7 @@ class ClassSectionMappingsController extends AppController
     }
 	
 	public function getSectionLists($class_id=null){
-		$classsectionmappings = $this->ClassSectionMappings->find()->where(['master_class_id'=>$class_id])->contain(['MasterSections']);
+		$classsectionmappings = $this->ClassSectionMappings->find()->where(['master_class_id'=>$class_id])->contain(['MasterSections']) ->group(['ClassSectionMappings.master_section_id','ClassSectionMappings.master_class_id']);
 		$options=[];
 		foreach($classsectionmappings as $classsectionmapping){
 			$options[]= ['text'=>$classsectionmapping->master_section->section_name,'value'=>$classsectionmapping->master_section->id];

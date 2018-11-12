@@ -36,7 +36,7 @@
 								</div>
 								<div class="form-group">
 									<label class="control-label">Calender Date</label>
-									<input type="text" class="form-control" name="calender_date" id="calender_date" placeholder="Calender Date" required value="<?php echo @$dates?>"> 
+									<input type="text" class="form-control" name="calender_date" id="calender_date" data-date-format="dd-mm-yyyy" placeholder="Calender Date" required value="<?php echo @$dates?>"> 
 								</div>
 								
 						</div>

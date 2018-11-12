@@ -99,9 +99,10 @@
 										<td><?php echo $i++; ?></td>
 										<td class="text-center"><?php echo $newses->title; ?></td>
 										
-										<td class="text-center"><?php echo date('d-m-Y',strtotime($newses->news_date)); ?></td>
+										<td class="text-center"><?php echo date('d-m-Y',strtotime($newses->media_date)); ?></td>
 										<td class="text-center">
-											<a href="<?php echo $this->url->build(['action'=>'index',$newses->id]); ?>"><button class="btn btn-sm bg-olive"><i class="fa fa-pencil"></i></button> </a><a data-original-title="Delete" onclick="return confirm('Are you sure you want to delete?')" href="<?php echo $this->url->build(['action'=>'delete',$newses->id]); ?>"><button class="btn btn-sm bg-red "><i class="fa fa-trash"></i></button> </a>
+											<a href="<?php echo $this->url->build(['action'=>'view',$newses->id]); ?>"><button class="btn btn-sm bg-olive"><i class="fa fa-book"></i></button> </a>
+											<a data-original-title="Delete" onclick="return confirm('Are you sure you want to delete?')" href="<?php echo $this->url->build(['action'=>'delete',$newses->id]); ?>"><button class="btn btn-sm bg-red "><i class="fa fa-trash"></i></button> </a>
 										</td>
 									</tr>
 								<?php } ?>

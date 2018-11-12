@@ -64,7 +64,7 @@ class AppController extends Controller
 				],
 				'loginRedirect' => [
 					'controller' => 'Registrations',
-					'action' => 'dashboard'
+					'action' => 'login'
 				],
 				'logoutRedirect' => [
 					'controller' => 'Registrations',

@@ -54,7 +54,7 @@ class GalleriesController extends AppController
 			}
 			
             $gallery = $this->Galleries->patchEntity($gallery, $this->request->getData());
-			$gallery->news_date = date('Y-m-d',strtotime($this->request->getData()['news_date']));
+		
 			if ($this->Galleries->save($gallery)) {
 				
 				if(!empty($files[0]['tmp_name'])){
@@ -105,6 +105,7 @@ class GalleriesController extends AppController
      */
     public function view($id = null)
     {
+		$this->viewBuilder()->layout('index_layout');
         $gallery = $this->Galleries->get($id, [
             'contain' => ['GalleryRows']
         ]);

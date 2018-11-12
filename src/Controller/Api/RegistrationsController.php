@@ -163,9 +163,9 @@ public function login(){
 					if ($this->request->is(['post','put'])) {
 						$image = $this->Registrations->patchEntity($image, $this->request->data);
 							if($master_role_id == 2){
-					        	$image['profile_pic'] = '/mkjainn/registration/teacher/' .$id.'-'.$setNewFileName.'.'.$ext;
+					        	$image['profile_pic'] = '/registration/teacher/' .$id.'-'.$setNewFileName.'.'.$ext;
 							}else if($master_role_id == 3){
-							    $image['profile_pic'] = '/mkjainn/registration/student/' .$id.'-'.$setNewFileName.'.'.$ext;
+							    $image['profile_pic'] = '/registration/student/' .$id.'-'.$setNewFileName.'.'.$ext;
 							}    
 						if ($this->Registrations->save($image)) {
 							$success = true;   $message = 'data save';
@@ -185,7 +185,7 @@ public function login(){
 			$success = false;   $message = 'data not correct';  	$userProfiles=[];
 		}
 		
-		$this->set(['success' => $success,'message'=>$message,'userProfiles'=>$userProfiles,'_serialize' => ['success','message','userProfiles']]);
+		$this->set(['success' => $success,'message'=>$message,'Registrations'=>$userProfiles,'_serialize' => ['success','message','Registrations']]);
 	}
 	
 	
@@ -229,17 +229,24 @@ public function login(){
 		if(!empty($master_section_id)){
 		    $where['TimeTables.master_section_id']=$master_section_id;
 		}
+		if($master_role_id == 2){
 			if(!empty($registration_id)){
-		    $where['TimeTables.registration_id']=$registration_id;
+		      $where['TimeTables.registration_id']=$registration_id;
+	    	}
 		}
-		
-	    $WeekArrays = ['Monday','Tuesday','Wednusday','Thrusday','Friday','Saturday','Sunday'];		
+	    $WeekArrays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];		
 			
 		$timeTablesData=[];
 	    foreach ($WeekArrays as $week){
-	       $getTimeTables=$this->TimeTables->find()
-		->order(['TimeTables.id' => 'ASC'])->contain(['Registrations','MasterClasses','MasterSections','MasterSubjects'])->where(['TimeTables.master_role_id'=>$master_role_id,'week_name'=>$week])->where($where)->toArray();
-		 	$timeTablesData[]=['week_name'=>$week,'time_tables'=>$getTimeTables];
+	        if($master_role_id == 2){
+	           $getTimeTables=$this->TimeTables->find()
+		        ->order(['TimeTables.id' => 'ASC'])->contain(['MasterClasses','MasterSections','MasterSubjects'])->where(['TimeTables.master_role_id'=>$master_role_id,'week_name'=>$week])->where($where)->toArray();
+		        	$timeTablesData[]=['week_name'=>$week,'time_tables'=>$getTimeTables];
+	        }else{
+	            $getTimeTables=$this->TimeTables->find()
+		        ->order(['TimeTables.id' => 'ASC'])->contain(['Registrations','MasterClasses','MasterSections','MasterSubjects'])->where(['TimeTables.master_role_id'=>$master_role_id,'week_name'=>$week])->where($where)->toArray();
+		        	$timeTablesData[]=['week_name'=>$week,'time_tables'=>$getTimeTables];
+	        }      	
 	    }
 		
 	    if($timeTablesData){
@@ -747,7 +754,12 @@ public function fecthAttendenceView(){
 	
 	public function mapping(){
 		
-		 $MasterClasses=$this->Registrations->MasterClasses->find()->contain(['ClassSectionMappings'=>['MasterSections'=>['Registrations']]])->toArray();
+	
+		 $MasterClasses=$this->Registrations->MasterClasses->find()->contain(['ClassSectionMappings'=>function($q){
+			 return $q->select(['master_class_id','master_section_id'])->contain(['MasterSections'=>['Registrations']])
+			 ->group(['ClassSectionMappings.master_section_id','ClassSectionMappings.master_class_id'])
+			 ->enableAutoFields(true);
+		 }])->toArray();
 		// pr($MasterClasses); exit;
 		 $success = true;
 		 $message = 'Data Found';
@@ -778,7 +790,7 @@ public function fecthAttendenceView(){
 			$MasterYears=$this->Registrations->MasterYears->find();
 			foreach($MasterYears as $data){
 				$Achievementdata=$this->Registrations->Achievements->find()
-				->where(['Achievements.achivement_year' => $data->year_name])->contain(['Registrations'])->toArray();
+				->where(['Achievements.achivement_year' => $data->year_name])->contain(['AchievementRows'])->toArray();
 				$Achievements[]=['year_name'=>$data->year_name,'year'=>$Achievementdata];
 			}
 		
@@ -796,53 +808,6 @@ public function fecthAttendenceView(){
 	
 	public function notification(){
 		
-		$device_token='dhM-J23d1ws:APA91bGmYDGT2MSFCiOIPev9WFd7QkUnTsbfWd2YS92HA6grWM67mkR93eXkvCZrRaN-9IkTLlcInMAGbO3cuqAxJ91X3tcRb-U0eXSUJi4dqYpw-c2SeL29TUrVKNji_jFCyHjo1fZJ';
-		
-		$id=1;
-		$tokens = array($device_token);
-			$random=(string)mt_rand(1000,9999);
-			$header = [
-				'Content-Type:application/json',
-				'Authorization: Key=AAAAMDhcGSU:APA91bGGXZ2FClcRw5lmRvE76x5OHKrm2wqk8Xy5hBBYu0OYPjXrP5c7NJlR8yeYZxWBmC5DwFILj3Tzw7pqZ_zzPrSmI4E2_2j22QVrm4jnUgY6c6SLldZH7eSjaD0CHqryqJqz_oFR'
-			];
-
-			$msg = [
-				'title'=> 'Challan Deliver',
-				'message' => 'Your Challan has Been Delivered',
-				'image' => '',
-				'link' => 'jainthela://order?id='.$id,
-				'notification_id'    => $random,
-			];
-			
-			$payload = array(
-				'registration_ids' => $tokens,
-				'data' => $msg
-			);
-			
-			$curl = curl_init();
-			curl_setopt_array($curl, array(
-			  CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
-			  CURLOPT_RETURNTRANSFER => true,
-			  CURLOPT_CUSTOMREQUEST => "POST",
-			  CURLOPT_POSTFIELDS => json_encode($payload),
-			  CURLOPT_HTTPHEADER => $header
-			));
-			$response = curl_exec($curl);
-			$err = curl_error($curl);
-			curl_close($curl);
-			$final_result=json_decode($response);
-			$sms_flag=$final_result->success; 	
-			if ($err) {
-			  //echo "cURL Error #:" . $err;
-			} else {
-			  //$response;
-			}	
-		pr($final_result);
-		
-		exit;
-		
-		
-		
 		$Notifications=$this->Registrations->Notifications->find()->toArray();
 		 if($Notifications){
 			 $success = true;
@@ -859,7 +824,7 @@ public function fecthAttendenceView(){
 	
 	
 	
-	public function assignment(){
+public function assignment(){
 		
 		 $Assignments = $this->Registrations->Assignments->newEntity();
 		 $Notifications=$this->Registrations->Notifications->newEntity();
@@ -894,8 +859,69 @@ public function fecthAttendenceView(){
 						
 							$AssignmentsRows = $this->Registrations->Assignments->AssignmentRows->save($AssignmentsRows);
 						}
+					// Notifications Code Start	
+						$Registrationsnews=$this->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$Assignments->master_class_id,'Registrations.master_section_id'=>$Assignments->master_section_id,'Registrations.device_token !='=>0]);
+						date_default_timezone_set("Asia/Calcutta");
+						foreach($Registrationsnews as $Registrationsnew){
+							
+							$reg_id=$Registrationsnew->id;
+							$device_token=$Registrationsnew->device_token;
+							
+							$tokens = array($device_token);
+							$random=(string)mt_rand(1000,9999);
+							$header = [
+							'Content-Type:application/json',
+							'Authorization: Key=AAAAMDhcGSU:APA91bGGXZ2FClcRw5lmRvE76x5OHKrm2wqk8Xy5hBBYu0OYPjXrP5c7NJlR8yeYZxWBmC5DwFILj3Tzw7pqZ_zzPrSmI4E2_2j22QVrm4jnUgY6c6SLldZH7eSjaD0CHqryqJqz_oFR'
+							];
+
+							$msg = [
+							'title'=> 'Assignment',
+							'message' => 'New Assignment Submitted',
+							'image' => '',
+							'link' => 'mkjain://Assignment?id='.$Assignments->id.'&student_id='.$reg_id.'&class_id='.$Assignments->master_class_id.'&section_id='.$Assignments->master_section_id,
+							'notification_id'    => $random,
+							];
+							
+							$payload = array(
+							'registration_ids' => $tokens,
+							'data' => $msg
+							);
+
+							$curl = curl_init();
+							curl_setopt_array($curl, array(
+							CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
+							CURLOPT_RETURNTRANSFER => true,
+							CURLOPT_CUSTOMREQUEST => "POST",
+							CURLOPT_POSTFIELDS => json_encode($payload),
+							CURLOPT_HTTPHEADER => $header
+							));
+							$response = curl_exec($curl);
+							$err = curl_error($curl);
+							curl_close($curl);
+							$final_result=json_decode($response);
+							$sms_flag=$final_result->success; 	
+							if ($err) {
+							//echo "cURL Error #:" . $err;
+							} else {
+							//$response;
+							}	
+							
+							$Notifications=$this->Registrations->Notifications->newEntity();
+							$Notifications->title='Assignment';
+							$Notifications->message='New Assignment Submitted';
+							$Notifications->notify_date=date("Y-m-d");
+							$Notifications->notify_time=date("h:i A"); 
+							$Notifications->created_by=0; 
+							$Notifications->registration_id=$reg_id; 
+							$Notifications->notify_link='mkjain://Assignment?id='.$Assignments->id.'&student_id='.$reg_id.'&class_id='.$Assignments->master_class_id.'&section_id='.$Assignments->master_section_id; 
+							$this->Registrations->Notifications->save($Notifications);
+						}
+					//End Notification Code	
 						
 					}
+					
+					
+					
 					if(sizeOf($student_ids) > 0){
 						foreach($student_ids as $student_id){
 							$AssignmentsRows = $this->Registrations->Assignments->AssignmentRows->newEntity();
@@ -903,6 +929,69 @@ public function fecthAttendenceView(){
 							$AssignmentsRows->registration_id = $student_id;
 						
 							$AssignmentsRows = $this->Registrations->Assignments->AssignmentRows->save($AssignmentsRows);
+							
+							
+							// Notifications Code Start	
+							$Registrationsnews=$this->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$Assignments->master_class_id,'Registrations.master_section_id'=>$Assignments->master_section_id,'Registrations.device_token !='=>0,'Registrations.id'=>$student_id]);
+							date_default_timezone_set("Asia/Calcutta");
+							foreach($Registrationsnews as $Registrationsnew){
+								
+								$reg_id=$Registrationsnew->id;
+								$device_token=$Registrationsnew->device_token;
+								
+								$tokens = array($device_token);
+								$random=(string)mt_rand(1000,9999);
+								$header = [
+								'Content-Type:application/json',
+								'Authorization: Key=AAAAMDhcGSU:APA91bGGXZ2FClcRw5lmRvE76x5OHKrm2wqk8Xy5hBBYu0OYPjXrP5c7NJlR8yeYZxWBmC5DwFILj3Tzw7pqZ_zzPrSmI4E2_2j22QVrm4jnUgY6c6SLldZH7eSjaD0CHqryqJqz_oFR'
+								];
+
+								$msg = [
+								'title'=> 'Assignment',
+								'message' => 'New Assignment Submitted',
+								'image' => '',
+								'link' => 'mkjain://Assignment?id='.$Assignments->id.'&student_id='.$reg_id.'&class_id='.$Assignments->master_class_id.'&section_id='.$Assignments->master_section_id,
+								'notification_id'    => $random,
+								];
+								
+								$payload = array(
+								'registration_ids' => $tokens,
+								'data' => $msg
+								);
+
+								$curl = curl_init();
+								curl_setopt_array($curl, array(
+								CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
+								CURLOPT_RETURNTRANSFER => true,
+								CURLOPT_CUSTOMREQUEST => "POST",
+								CURLOPT_POSTFIELDS => json_encode($payload),
+								CURLOPT_HTTPHEADER => $header
+								));
+								$response = curl_exec($curl);
+								$err = curl_error($curl);
+								curl_close($curl);
+								$final_result=json_decode($response);
+								$sms_flag=$final_result->success; 	
+								if ($err) {
+								//echo "cURL Error #:" . $err;
+								} else {
+								//$response;
+								}	
+								
+								$Notifications=$this->Registrations->Notifications->newEntity();
+								$Notifications->title='Assignment';
+								$Notifications->message='New Assignment Submitted';
+								$Notifications->notify_date=date("Y-m-d");
+								$Notifications->notify_time=date("h:i A"); 
+								$Notifications->created_by=0; 
+								$Notifications->registration_id=$reg_id; 
+								$Notifications->notify_link='mkjain://Assignment?id='.$Assignments->id.'&student_id='.$reg_id.'&class_id='.$Assignments->master_class_id.'&section_id='.$Assignments->master_section_id; 
+								$this->Registrations->Notifications->save($Notifications);
+							}
+						  //End Notification Code	
+							
+								
+							
 						}
 					}	
 				    
@@ -914,7 +1003,7 @@ public function fecthAttendenceView(){
 					 $success = true;
 					 $message = 'Data Save Successfully';
 					
-				}else{
+				}else{ 
 					$success = false;
 					$message = 'No data save';
 				}
