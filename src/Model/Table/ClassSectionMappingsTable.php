@@ -52,9 +52,9 @@ class ClassSectionMappingsTable extends Table
             'foreignKey' => 'master_subject_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('MasterMediums', [
-            'foreignKey' => 'master_medium_id',
-            'joinType' => 'INNER'
+        $this->belongsTo('Registrations', [
+            'foreignKey' => 'teacher_id',
+            
         ]);
     }
 

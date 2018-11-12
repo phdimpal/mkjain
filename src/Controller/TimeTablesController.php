@@ -24,6 +24,29 @@ class TimeTablesController extends AppController
      * @return \Cake\Http\Response|void
      */
 	 
+	 public function getTimeTable($class_id=null,$section_id=null){
+		 $this->viewBuilder()->layout('');
+		  $ClassSectionMappings=$this->TimeTables->ClassSectionMappings->find()->where(['ClassSectionMappings.master_class_id'=>$class_id,'ClassSectionMappings.master_section_id'=>$section_id])->contain(['MasterSubjects'])->toArray();
+		  
+		  $ClassSectionMappingTeacher=$this->TimeTables->ClassSectionMappings->find()->where(['ClassSectionMappings.master_class_id'=>$class_id,'ClassSectionMappings.master_section_id'=>$section_id])->contain(['Registrations'])->toArray();
+		  
+		  //pr($ClassSectionMappingTeacher);exit;
+		  
+		  $optionsSubject=[];
+		  foreach($ClassSectionMappings as $classections){
+			  $optionsSubject[]=['text'=>$classections->master_subject->subject_name,'value'=>$classections->master_subject->id];
+		  }
+		  
+		  $optionsTeacher=[];
+		  foreach($ClassSectionMappingTeacher as $teacherMapping){
+			  if(!empty($teacherMapping->registration)){
+				 $optionsTeacher[]=['text'=>$teacherMapping->registration->name,'value'=>$teacherMapping->registration->id]; 
+			  }
+			  
+		  }
+		 // pr($optionsTeacher);exit;
+		 $this->set(compact('optionsSubject','optionsTeacher')); 
+	 }
 	 public function classsubject($class_id=null,$section_id=null){
 		 
 		$this->viewBuilder()->layout('');
