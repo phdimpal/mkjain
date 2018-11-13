@@ -52,7 +52,7 @@ class SyllabusesController extends AppController
 			if ($this->Syllabuses->save($syllabus)) {
 				
 				// Notifications Code Start	
-						$Registrationsnews=$this->Syllabuses->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$master_class_id,'Registrations.master_section_id'=>$master_section_id,'Registrations.device_token !='=>0]);
+						$Registrationsnews=$this->Syllabuses->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$master_class_id,'Registrations.master_section_id'=>$master_section_id,'Registrations.device_token !='=>'']);
 						date_default_timezone_set("Asia/Calcutta");
 						foreach($Registrationsnews as $Registrationsnew){
 							
