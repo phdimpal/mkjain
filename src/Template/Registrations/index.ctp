@@ -13,7 +13,55 @@
 			<h3 class="box-title">Student List</h3>
 		</div>
 		<div class="box-body">
-		
+			<?php echo $this->Form->create($Registrations, ['type' => 'GET']); ?>
+					<div class="row no-print">
+						<div class="col-md-12 table-responsive">
+								<div class="col-md-2">
+										
+										<div class="form-group">
+											<label class="control-label">Enrollment no </label>
+												<?php echo $this->Form->input('roll_no', ['label' => false,'placeholder'=>'Enrollment No.','class'=>'form-control']); ?>
+										</div>
+								
+								</div>
+								   <div class="col-md-2">
+										
+										<div class="form-group">
+											<label class="control-label">Name </label>
+												<?php echo $this->Form->input('name', ['label' => false,'placeholder'=>'Name','class'=>'form-control']); ?>
+										</div>
+								
+								</div>
+								   
+									<div class="col-md-3">
+										<div class="form-group">
+											<label class="control-label">Class </label>
+												<?php
+													echo $this->Form->input('master_class_id', ['empty'=> '--Select--','data-placeholder'=>'Select class','label' => false,'class'=>'form-control select2 class_change','options'=>$masterClasses,'style'=>'width:100%;']);
+												?>
+										</div>
+									</div>
+									 <div class="col-md-3" id="section">
+										<div class="form-group">
+											 <label class="">Section</label>
+											<?php 
+											$options=[];
+											
+											echo $this->Form->input('master_section_id', ['empty'=> '--Select--','data-placeholder'=>'Select a section ','label' => false,'class'=>'form-control select2','options'=>$options,'style'=>'width:100%;']); ?>
+										</div>
+									</div>
+									
+									<div class="col-md-2">
+										<div class="form-group">
+											<label class="control-label"> </label>
+												<?= $this->Form->button(__(' Filter') ,['class'=>'btn btn-danger','type'=>'Submit','id'=>'submit_member','name'=>'attendance_submit','style'=>'margin-top: 25px;','value'=>'attendance']) ?>
+										</div>
+									</div>
+								 
+							</div>
+						
+						</div>
+					</form>
 			<div class="col-sm-12 no-print">
 				<div class="table-responsive no-padding">
 		
@@ -100,5 +148,38 @@
 </div>
 </section>
 
-
-
+<?php echo $this->Html->script('/plugins/jquery.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
+<?php echo $this->Html->css('/plugins/datatables/dataTables.bootstrap.css', ['block' => 'PAGE_LEVEL_PLUGINS_CSS']); ?> 
+<?php echo $this->Html->script('/plugins/datatables/jquery.dataTables.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
+	<?php echo $this->Html->script('/plugins/datatables/dataTables.bootstrap.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
+	 
+		<?php echo $this->Html->script('/plugins/jquery.validate.min.js', ['block' => 'PAGE_LEVEL_PLUGINS_JSS']); ?> 
+		
+		<?php  $js=" 
+			
+			$(document).ready(function(){ 
+			$('#aattendanceview').DataTable();	
+				$(document).on('change', '.class_change', function(){   
+					 var state_id= $(this).val();
+					var url='".$this->Url->build(['controller'=>'Registrations','action'=>'classsection'])."';
+					url=url+'/'+state_id;
+					$.ajax({ 
+						url:url,
+						type:'GET',
+						}).done(function(response){  
+						$('#section').html(response);
+						
+					}); 
+				});
+				
+				$('#registratiomForm').validate({
+					rules:{
+						
+					},
+					messages:{
+						
+					}
+				});
+			});
+		";
+		echo $this->Html->scriptBlock($js, ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>
