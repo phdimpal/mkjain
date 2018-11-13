@@ -118,7 +118,7 @@ class AttendancesTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['master_role_id'], 'MasterRoles'));
-        $rules->add($rules->existsIn(['registration_id'], 'Registrations'));
+       // $rules->add($rules->existsIn(['registration_id'], 'Registrations'));
         $rules->add($rules->existsIn(['master_class_id'], 'MasterClasses'));
         $rules->add($rules->existsIn(['master_section_id'], 'MasterSections'));
 
