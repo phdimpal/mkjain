@@ -11,6 +11,7 @@
 	 
 		<div class="row">
 		
+			<div class="col-md-2"></div>
 			<div class="col-md-6">
 				<div class="box box-danger">
 					<div class="box-header ui-sortable-handle" style="cursor: move;">
@@ -23,7 +24,7 @@
 					<?= $this->Form->create($studentFees,['id'=>'classForm','type'=>'file']) ?>
 					<input type="hidden" class="form-control" name="id" id="id" placeholder="Class Name" required value="<?php echo @$studentFees->id?>"> 
 						<div class="box-body">
-								<div class="form-group">
+								<div class="form-group text-center">
 								 <?php echo $this->Html->link('Download Sample','/img/fee_sample.csv',['escape'=>false, 'class'=>'btn  btn-purple','id'=>'download_sample']); ?> 
 								</div>
 								<div class="form-group">
@@ -38,39 +39,7 @@
 					<?= $this->Form->end() ?>
 				</div>
 			</div>
-			<div class="col-md-6">
-				<div class="box box-danger">
-					<div class="box-header">
-					  <h3 class="box-title">Student Fees</h3>
-					  <div class="pull-right box-tools">
-							<a href="<?php echo $this->url->build(['action'=>'index']) ?>"><button class="btn btn-sm bg-red"><i class="fa fa-plus"></i> Add</button></a>
-						</div>
-					</div>
-					 <div class="box-body">
-						<table id="classdata" class="table table-bordered table-striped">
-							<thead>
-								<tr>
-									<th>S.No</th>
-									<th class="text-center">Section Name</th>
-									<th class="text-center">Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php $i=1;foreach($masterSections as $masterSection){ ?>
-									<tr>
-										<td><?php echo $i++; ?></td>
-										<td class="text-center"><?php echo $masterSection->section_name; ?></td>
-										<td class="text-center">
-											<a href="<?php echo $this->url->build(['action'=>'index',$masterSection->id]); ?>"><button class="btn btn-sm bg-olive"><i class="fa fa-pencil"></i></button> </a><a data-original-title="Delete" onclick="return confirm('Are you sure you want to delete?')" href="<?php echo $this->url->build(['action'=>'delete',$masterSection->id]); ?>"><button class="btn btn-sm bg-red "><i class="fa fa-trash"></i></button> </a>
-										</td>
-									</tr>
-								<?php } ?>
-								
-							</tbody>
-						</table>	
-				</div>	
-			</div>
-		</div>
+			
 	</div>	
 </section>
  	<input type="hidden" class="classValidate" value="<?php echo $this->Url->build(['controller'=>'MasterSections','action'=>'checkSectionNames']); ?>">
