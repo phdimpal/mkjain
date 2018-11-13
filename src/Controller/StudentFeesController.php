@@ -44,7 +44,8 @@ class StudentFeesController extends AppController
 									$studentFee = $this->StudentFees->newEntity();
 									$studentFee->student_id = $rollExistDatas->id;
 									$studentFee->due_fee = $data[2];
-									$studentfee = $this->StudentFees->save($studentFee);
+									$this->StudentFees->save($studentFee);
+									 $this->Flash->success(__('The fees has been saved.'));
 								}
 							}
 						}
@@ -52,17 +53,18 @@ class StudentFeesController extends AppController
 					fclose($f);
 					$records;
 				}
+				
 			}
 			
 			// Notifications Code Start	
-			
-			
-						$Registrationsnews=$this->StudentFees->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$master_class_id,'Registrations.master_section_id'=>$master_section_id,'Registrations.device_token !='=>0]);
+			$studentfeesdata = $this->StudentFees->find()->order(['StudentFees.id'=>'DESC'])->first();
+			if(sizeof($studentfeesdata) > 0){
+						$Registrationsnews=$this->StudentFees->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.id'=>$studentfeesdata->student_id,'Registrations.device_token !='=>''])->first();
 						date_default_timezone_set("Asia/Calcutta");
-						foreach($Registrationsnews as $Registrationsnew){
+						
 							
-							$reg_id=$Registrationsnew->id;
-							$device_token=$Registrationsnew->device_token;
+							$reg_id=$Registrationsnews->id;
+							$device_token=$Registrationsnews->device_token;
 							
 							$tokens = array($device_token);
 							$random=(string)mt_rand(1000,9999);
@@ -75,7 +77,7 @@ class StudentFeesController extends AppController
 							'title'=> 'Student Fees',
 							'message' => 'Student Fees added',
 							'image' => '',
-							'link' => 'mkjain://fees?id='.$studentfee->id,
+							'link' => 'mkjain://fees?id='.$reg_id,
 							'notification_id'    => $random,
 							];
 							
@@ -110,16 +112,17 @@ class StudentFeesController extends AppController
 								$Notifications->notify_time=date("h:i A"); 
 								$Notifications->created_by=0; 
 								$Notifications->registration_id=$reg_id; 
-								$Notifications->notify_link='mkjain://fees?id='.$studentfee->id; 
+								$Notifications->notify_link='mkjain://fees?id='.$reg_id; 
 								$this->StudentFees->Registrations->Notifications->save($Notifications);
 							}	
-						}
+						
 					//End Notification Code	
 			
-			
+			}
 			
 		}
-        //$studentFees = $this->paginate($this->StudentFees);
+		$this->Flash->error(__('The fees has been not saved.'));
+        $studentFees = $this->paginate($this->StudentFees);
 
         $this->set(compact('studentFees'));
     }

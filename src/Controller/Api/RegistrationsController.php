@@ -580,6 +580,22 @@ public function fecthAttendenceView(){
 		
 	}	
 	
+	public function getFess(){
+		$this->loadModel('StudentFees');
+		$registration_id = $this->request->data('registration_id');
+	$StudentFeesDatas = $this->StudentFees->find()->select('due_fee')->where(['StudentFees.student_id'=>$registration_id])->first();
+		 if($StudentFeesDatas){
+	    	$success = true;
+	    	$message = 'Data Found';
+        }else{
+           	$success = false;
+			$message = 'No data Found'; 
+            $StudentFeesDatas=[];
+        }
+		 $this->set(['success' => $success,'message'=>$message,'StudentFeesDatas'=>$StudentFeesDatas,'_serialize' => ['success','message','StudentFeesDatas']]);
+	}
+	
+	
   public function gallery(){
 		
 		  $page_no = @$this->request->query['page_no'];

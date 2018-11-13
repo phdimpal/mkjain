@@ -128,7 +128,7 @@ class TimeTablesController extends AppController
 			}
 			
 			// Notifications Code Start	
-						$Registrationsnews=$this->TimeTables->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$master_class_id,'Registrations.master_section_id'=>$master_section_id,'Registrations.device_token !='=>0]);
+					$Registrationsnews=$this->TimeTables->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$master_class_id,'Registrations.master_section_id'=>$master_section_id,'Registrations.device_token !='=>'']);
 						date_default_timezone_set("Asia/Calcutta");
 						foreach($Registrationsnews as $Registrationsnew){
 							
@@ -146,7 +146,7 @@ class TimeTablesController extends AppController
 							'title'=> 'Time Table',
 							'message' => 'Timetable added',
 							'image' => '',
-							'link' => 'mkjain://timetable?id='.$timeTables->id,
+							'link' => 'mkjain://timetable?id='.$reg_id.'&class_id='.$master_class_id.'&section_id='.$master_section_id,
 							'notification_id'    => $random,
 							];
 							
@@ -181,7 +181,7 @@ class TimeTablesController extends AppController
 								$Notifications->notify_time=date("h:i A"); 
 								$Notifications->created_by=0; 
 								$Notifications->registration_id=$reg_id; 
-								$Notifications->notify_link='mkjain://timetable?id='.$timeTables->id; 
+								$Notifications->notify_link='mkjain://timetable?id='.$reg_id.'&class_id='.$master_class_id.'&section_id='.$master_section_id; 
 								$this->TimeTables->Registrations->Notifications->save($Notifications);
 							}	
 						}
