@@ -622,9 +622,76 @@ public function fecthAttendenceView(){
 				$this->request->data['from_date']=$date1;
 				$this->request->data['to_date']=$date2;
 				$this->request->data['status']='Pending';
+				$registration_id=$this->request->data['registration_id'];
 				$Leaves = $this->Registrations->Leaves->patchEntity($Leaves, $this->request->getData());
 				
+				
+				
 				if($this->Registrations->Leaves->save($Leaves)) {
+					
+					// Notifications Code Start	
+						$Registrationsnews=$this->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.id'=>$registration_id,'Registrations.device_token !='=>'']);
+						date_default_timezone_set("Asia/Calcutta");
+						foreach($Registrationsnews as $Registrationsnew){
+							
+							$reg_id=$Registrationsnew->id;
+							$device_token=$Registrationsnew->device_token;
+							
+							$tokens = array($device_token);
+							$random=(string)mt_rand(1000,9999);
+							$header = [
+							'Content-Type:application/json',
+							'Authorization: Key=AAAAMDhcGSU:APA91bGGXZ2FClcRw5lmRvE76x5OHKrm2wqk8Xy5hBBYu0OYPjXrP5c7NJlR8yeYZxWBmC5DwFILj3Tzw7pqZ_zzPrSmI4E2_2j22QVrm4jnUgY6c6SLldZH7eSjaD0CHqryqJqz_oFR'
+							];
+
+							$msg = [
+							'title'=> 'Leave Application',
+							'message' => 'New Leave Application Submitted',
+							'image' => '',
+							'link' => 'mkjain://Leaves?id='.$Leaves->id,
+							'notification_id'    => $random,
+							];
+							
+							$payload = array(
+							'registration_ids' => $tokens,
+							'data' => $msg
+							);
+
+							$curl = curl_init();
+							curl_setopt_array($curl, array(
+							CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
+							CURLOPT_RETURNTRANSFER => true,
+							CURLOPT_CUSTOMREQUEST => "POST",
+							CURLOPT_POSTFIELDS => json_encode($payload),
+							CURLOPT_HTTPHEADER => $header
+							));
+							$response = curl_exec($curl);
+							$err = curl_error($curl);
+							curl_close($curl);
+							$final_result=json_decode($response);
+							$sms_flag=$final_result->success; 	
+							if ($err) {
+							//echo "cURL Error #:" . $err;
+							} else {
+							//$response;
+							}	
+							if($sms_flag==1){
+								
+								$Notifications=$this->Registrations->Notifications->newEntity();
+								$Notifications->title='Leave Application';
+								$Notifications->message='New Leave Application Submitted';
+								$Notifications->notify_date=date("Y-m-d");
+								$Notifications->notify_time=date("h:i A"); 
+								$Notifications->created_by=0; 
+								$Notifications->registration_id=$reg_id; 
+								$Notifications->notify_link='mkjain://Leaves?id='.$Leaves->id; 
+								$this->Registrations->Notifications->save($Notifications);
+							
+							}
+						}
+					//End Notification Code		
+				
+				
 					
 					 $success = true;
 					$message = 'Data Save Successfully';
@@ -862,7 +929,7 @@ public function assignment(){
 							$AssignmentsRows = $this->Registrations->Assignments->AssignmentRows->save($AssignmentsRows);
 						}
 					// Notifications Code Start	
-						$Registrationsnews=$this->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$Assignments->master_class_id,'Registrations.master_section_id'=>$Assignments->master_section_id,'Registrations.device_token !='=>0]);
+						$Registrationsnews=$this->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$Assignments->master_class_id,'Registrations.master_section_id'=>$Assignments->master_section_id,'Registrations.device_token !='=>'']);
 						date_default_timezone_set("Asia/Calcutta");
 						foreach($Registrationsnews as $Registrationsnew){
 							
@@ -907,16 +974,18 @@ public function assignment(){
 							} else {
 							//$response;
 							}	
+							if($sms_flag==1){
+								$Notifications=$this->Registrations->Notifications->newEntity();
+								$Notifications->title='Assignment';
+								$Notifications->message='New Assignment Submitted';
+								$Notifications->notify_date=date("Y-m-d");
+								$Notifications->notify_time=date("h:i A"); 
+								$Notifications->created_by=0; 
+								$Notifications->registration_id=$reg_id; 
+								$Notifications->notify_link='mkjain://Assignment?id='.$Assignments->id.'&student_id='.$reg_id.'&class_id='.$Assignments->master_class_id.'&section_id='.$Assignments->master_section_id; 
+								$this->Registrations->Notifications->save($Notifications);
 							
-							$Notifications=$this->Registrations->Notifications->newEntity();
-							$Notifications->title='Assignment';
-							$Notifications->message='New Assignment Submitted';
-							$Notifications->notify_date=date("Y-m-d");
-							$Notifications->notify_time=date("h:i A"); 
-							$Notifications->created_by=0; 
-							$Notifications->registration_id=$reg_id; 
-							$Notifications->notify_link='mkjain://Assignment?id='.$Assignments->id.'&student_id='.$reg_id.'&class_id='.$Assignments->master_class_id.'&section_id='.$Assignments->master_section_id; 
-							$this->Registrations->Notifications->save($Notifications);
+							}
 						}
 					//End Notification Code	
 						
@@ -934,7 +1003,7 @@ public function assignment(){
 							
 							
 							// Notifications Code Start	
-							$Registrationsnews=$this->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$Assignments->master_class_id,'Registrations.master_section_id'=>$Assignments->master_section_id,'Registrations.device_token !='=>0,'Registrations.id'=>$student_id]);
+							$Registrationsnews=$this->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$Assignments->master_class_id,'Registrations.master_section_id'=>$Assignments->master_section_id,'Registrations.device_token !='=>'','Registrations.id'=>$student_id]);
 							date_default_timezone_set("Asia/Calcutta");
 							foreach($Registrationsnews as $Registrationsnew){
 								
@@ -979,16 +1048,17 @@ public function assignment(){
 								} else {
 								//$response;
 								}	
-								
-								$Notifications=$this->Registrations->Notifications->newEntity();
-								$Notifications->title='Assignment';
-								$Notifications->message='New Assignment Submitted';
-								$Notifications->notify_date=date("Y-m-d");
-								$Notifications->notify_time=date("h:i A"); 
-								$Notifications->created_by=0; 
-								$Notifications->registration_id=$reg_id; 
-								$Notifications->notify_link='mkjain://Assignment?id='.$Assignments->id.'&student_id='.$reg_id.'&class_id='.$Assignments->master_class_id.'&section_id='.$Assignments->master_section_id; 
-								$this->Registrations->Notifications->save($Notifications);
+								if($sms_flag==1){
+									$Notifications=$this->Registrations->Notifications->newEntity();
+									$Notifications->title='Assignment';
+									$Notifications->message='New Assignment Submitted';
+									$Notifications->notify_date=date("Y-m-d");
+									$Notifications->notify_time=date("h:i A"); 
+									$Notifications->created_by=0; 
+									$Notifications->registration_id=$reg_id; 
+									$Notifications->notify_link='mkjain://Assignment?id='.$Assignments->id.'&student_id='.$reg_id.'&class_id='.$Assignments->master_class_id.'&section_id='.$Assignments->master_section_id; 
+									$this->Registrations->Notifications->save($Notifications);
+								}
 							}
 						  //End Notification Code	
 							

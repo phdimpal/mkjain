@@ -52,7 +52,7 @@ class SyllabusesController extends AppController
 			if ($this->Syllabuses->save($syllabus)) {
 				
 				// Notifications Code Start	
-						$Registrationsnews=$this->Syllabuses->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$master_class_id,'Registrations.master_section_id'=>$master_section_id,'Registrations.device_token !='=>0]);
+						$Registrationsnews=$this->Syllabuses->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$master_class_id,'Registrations.master_section_id'=>$master_section_id,'Registrations.device_token !='=>'']);
 						date_default_timezone_set("Asia/Calcutta");
 						foreach($Registrationsnews as $Registrationsnew){
 							
@@ -97,16 +97,18 @@ class SyllabusesController extends AppController
 							} else {
 							//$response;
 							}	
+							if($sms_flag==1){
+								$Notifications=$this->Syllabuses->Registrations->Notifications->newEntity();
+								$Notifications->title='Syllabus';
+								$Notifications->message='Your Class Syllabus Added';
+								$Notifications->notify_date=date("Y-m-d");
+								$Notifications->notify_time=date("h:i A"); 
+								$Notifications->created_by=0; 
+								$Notifications->registration_id=$reg_id; 
+								$Notifications->notify_link='mkjain://Syllabus?id='.$syllabus->id.'&student_id='.$reg_id.'&class_id='.$syllabus->master_class_id.'&section_id='.$syllabus->master_section_id; 
+								$this->Syllabuses->Registrations->Notifications->save($Notifications);
 							
-							$Notifications=$this->Syllabuses->Registrations->Notifications->newEntity();
-							$Notifications->title='Syllabus';
-							$Notifications->message='Your Class Syllabus Added';
-							$Notifications->notify_date=date("Y-m-d");
-							$Notifications->notify_time=date("h:i A"); 
-							$Notifications->created_by=0; 
-							$Notifications->registration_id=$reg_id; 
-							$Notifications->notify_link='mkjain://Syllabus?id='.$syllabus->id.'&student_id='.$reg_id.'&class_id='.$syllabus->master_class_id.'&section_id='.$syllabus->master_section_id; 
-							$this->Syllabuses->Registrations->Notifications->save($Notifications);
+							}
 						}
 					//End Notification Code	
 				
