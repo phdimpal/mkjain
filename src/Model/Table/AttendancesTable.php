@@ -59,7 +59,8 @@ class AttendancesTable extends Table
         ]);
         $this->hasMany('AttendanceRows', [
             'foreignKey' => 'attendance_id',
-			'saveStrategy'=>'replace'
+			'saveStrategy'=>'replace',
+			'dependent' => true
         ]);
     }
 

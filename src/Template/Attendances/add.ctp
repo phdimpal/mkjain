@@ -65,9 +65,9 @@
 							<div class="table-responsive no-padding">
 					<?php echo $this->Form->create($attendance, ['type' => 'post']); 
 					if(!empty($attendancess)){ ?>
-					<input type="text" class="master_class_id" name="master_class_id" value="<?php echo $master_class_id;?>">
-					<input type="text" class="master_section_id" name="master_section_id" value="<?php echo $master_section_id;?>">
-					<input type="text" class="attendance_date" name="attendance_date" value="<?php echo 
+					<input type="hidden" class="master_class_id" name="master_class_id" value="<?php echo $master_class_id;?>">
+					<input type="hidden" class="master_section_id" name="master_section_id" value="<?php echo $master_section_id;?>">
+					<input type="hidden" class="attendance_date" name="attendance_date" value="<?php echo 
 					date('Y-m-d',strtotime($date));?>">
 								<table class="table table-bordered table-striped" id="main_tb">
 									<thead >
@@ -96,7 +96,7 @@
 										?>
 										<tr class="tr1">
 											<td><?php echo ++$sr_no; ?></td>
-											<td><?= $attendance->name ?><input type="text" class="student_id" name="q" value="<?php echo $attendance->id;?>"></td>
+											<td><?= $attendance->name ?><input type="hidden" class="student_id" name="q" value="<?php echo $attendance->id;?>"></td>
 											<td><input type="radio" class="radio_pres" name="q"  value="1"></td>
 											<td><input type="radio" class="radio_abs"name="q" value="2"></td>
 											<td><input type="radio" class="radio_leave" name="q" value="3"></td>

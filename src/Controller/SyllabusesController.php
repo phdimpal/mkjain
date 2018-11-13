@@ -70,7 +70,7 @@ class SyllabusesController extends AppController
 							'title'=> 'Syllabus',
 							'message' => 'Your Class Syllabus Added',
 							'image' => '',
-							'link' => 'mkjain://Syllabus?id='.$syllabus->id.'&student_id='.$reg_id.'&class_id='.$syllabus->master_class_id.'&section_id='.$syllabus->master_section_id,
+							'link' => 'mkjain://Syllabus?class_id='.$syllabus->master_class_id.'&section_id='.$syllabus->master_section_id,
 							'notification_id'    => $random,
 							];
 							
