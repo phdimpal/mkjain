@@ -120,6 +120,22 @@
             <i class="fa fa-dashboard"></i> <span>Achievements</span>
           </a>
         </li>
+		
+		<li class="treeview">
+          <a href="#">
+            <i class="fa fa-users"></i>
+            <span>Assignment</span>
+            <span class="pull-right-container">
+              <span class="fa fa-angle-left pull-right"></span>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="<?php echo $this->url->build(['controller'=>'assignments','action'=>'add'])?>"><i class="fa fa-circle-o"></i>Add</a></li> 
+			<li><a href="<?php echo $this->url->build(['controller'=>'assignments','action'=>'index'])?>"><i class="fa fa-circle-o"></i>View</a></li>
+           
+          </ul>
+        </li>
+		
 		<li class="active treeview">
           <a href="<?= $this->Url->build(['controller'=>'Registrations','action'=>'logout']) ?>">
             <i class="fa fa-lock"></i> <span>Logout</span>
