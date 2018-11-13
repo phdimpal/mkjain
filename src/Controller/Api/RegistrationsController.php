@@ -805,7 +805,7 @@ public function fecthAttendenceView(){
 			if($this->request->is('post')) {
 				
 			 $Complains = $this->Registrations->Complains->patchEntity($Complains, $this->request->getData());
-				
+				//pr($Complains);exit;
 				if($this->Registrations->Complains->save($Complains)) {
 					
 					 $success = true;

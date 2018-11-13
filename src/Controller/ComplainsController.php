@@ -22,7 +22,7 @@ class ComplainsController extends AppController
     {
 		$this->viewBuilder()->layout('index_layout');
         $this->paginate = [
-            'contain' => ['ComplainTypes', 'MasterClasses', 'MasterSections', 'MasterRoles', 'Registrations']
+            'contain' => ['ComplainTypes', 'MasterRoles']
         ];
         $complains = $this->paginate($this->Complains);
 

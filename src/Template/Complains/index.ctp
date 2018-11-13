@@ -27,9 +27,7 @@
 								<th>Name</th>
 								<th>Email</th>
 								<th>Mobile No</th>
-								<th>Class</th>
-								<th>Section</th>
-								<th>Complain By</th>
+								
 								<th>Description</th>
 								
 							</tr>
@@ -52,9 +50,6 @@
 								<td><?= h($complain->name) ?></td>
 								<td><?= h($complain->email_id) ?></td>
 								<td><?= h($complain->mobile_no) ?></td>
-								<td><?= $complain->master_class->class_name ?></td>
-								<td><?= $complain->master_section->section_name ?></td>
-								<td><?= $complain->registration->name ?></td>
 								<td><?= h($complain->query_reason) ?></td>
 							</tr>
 							<?php }  ?>

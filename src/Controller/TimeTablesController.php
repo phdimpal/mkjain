@@ -173,16 +173,17 @@ class TimeTablesController extends AppController
 							} else {
 							//$response;
 							}	
-							
-							$Notifications=$this->TimeTables->Registrations->Notifications->newEntity();
-							$Notifications->title='Time Table';
-							$Notifications->message='Timetable added';
-							$Notifications->notify_date=date("Y-m-d");
-							$Notifications->notify_time=date("h:i A"); 
-							$Notifications->created_by=0; 
-							$Notifications->registration_id=$reg_id; 
-							$Notifications->notify_link='mkjain://timetable?id='.$timeTables->id; 
-							$this->TimeTables->Registrations->Notifications->save($Notifications);
+							if($sms_flag==1){
+								$Notifications=$this->TimeTables->Registrations->Notifications->newEntity();
+								$Notifications->title='Time Table';
+								$Notifications->message='Timetable added';
+								$Notifications->notify_date=date("Y-m-d");
+								$Notifications->notify_time=date("h:i A"); 
+								$Notifications->created_by=0; 
+								$Notifications->registration_id=$reg_id; 
+								$Notifications->notify_link='mkjain://timetable?id='.$timeTables->id; 
+								$this->TimeTables->Registrations->Notifications->save($Notifications);
+							}	
 						}
 					//End Notification Code	
 			
