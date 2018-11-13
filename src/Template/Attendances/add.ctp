@@ -15,7 +15,7 @@
 			  <h3 class="box-title">Attendance Add</h3>
 			</div>
 			<div class="box-body">
-				<?php echo $this->Form->create($attendances, ['type' => 'GET']); ?>
+				<?php echo $this->Form->create($attendance, ['type' => 'GET']); ?>
 					<div class="row no-print">
 						<div class="col-md-12 table-responsive">
 								<div class="col-md-3">
@@ -63,15 +63,20 @@
 				<div class="row no-print">
 						<div class="col-sm-12 no-print">
 							<div class="table-responsive no-padding">
-					
-								<table class="table table-bordered table-striped" id="aattendanceview" >
+					<?php echo $this->Form->create($attendance, ['type' => 'post']); 
+					if(!empty($attendancess)){ ?>
+					<input type="text" class="master_class_id" name="master_class_id" value="<?php echo $master_class_id;?>">
+					<input type="text" class="master_section_id" name="master_section_id" value="<?php echo $master_section_id;?>">
+					<input type="text" class="attendance_date" name="attendance_date" value="<?php echo 
+					date('Y-m-d',strtotime($date));?>">
+								<table class="table table-bordered table-striped" id="main_tb">
 									<thead >
 										<tr>
 											<th>Sr.No.</th>
 											<th>Name</th>
-											<th>Class</th>
-											<th>Section</th>
-											<th>Status</th>
+											<th>P</th>
+											<th>A</th>
+											<th>L</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -83,32 +88,27 @@
 										$sr_no=0;
 									}
 									
-									 foreach($attendances as $attendance) {
+									 foreach($attendancess as $attendance) { 
 										
-										$section_name=$attendance->master_section->section_name;
-										$class_name=$attendance->master_class->class_name;
-										foreach($attendance->attendance_rows as $attendancedata){
-											$attendance_mark=$attendancedata->attendance_mark;
+											
 											$status='';
-											if($attendance_mark==1){
-												$status='Present';
-											}if($attendance_mark==2){
-												$status='Absent';
-											}if($attendance_mark==3){
-												$status='Leave';
-											}
+											
 										?>
-										<tr>
+										<tr class="tr1">
 											<td><?php echo ++$sr_no; ?></td>
-											<td><?= $attendancedata->name ?></td>
-											<td><?= $class_name ?></td>
-											<td><?= $section_name ?></td>
-											<td><?= $status ?></td>
+											<td><?= $attendance->name ?><input type="text" class="student_id" name="q" value="<?php echo $attendance->id;?>"></td>
+											<td><input type="radio" class="radio_pres" name="q"  value="1"></td>
+											<td><input type="radio" class="radio_abs"name="q" value="2"></td>
+											<td><input type="radio" class="radio_leave" name="q" value="3"></td>
 											
 										</tr>
-									 <?php } } ?>
+									 <?php } ?>
 										</tbody>
 								</table>
+									<?= $this->Form->button(__(' Submit') ,['class'=>'btn btn-danger','type'=>'Submit','id'=>'submit_member','name'=>'attendance_submit','style'=>'margin-top: 25px;','value'=>'attendance']);
+					}
+									?>
+								</form>	
 							</div>
 						</div></div>
 				</div>
@@ -150,5 +150,21 @@
 					}
 				});
 			});
+			
+			rename_rows();
+function rename_rows(){
+	var list = new Array();
+		var p=0;
+		var i=0;
+		$('#main_tb tbody tr.tr1').each(function(){  
+			
+				i++;
+$(this).find('td:nth-child(2) input.student_id').attr('name','attendance_rows['+i+'][student_id]').attr('id','time_table-'+i+'-week_name');
+$(this).find('td:nth-child(3) input.radio_pres').attr('name','attendance_rows['+i+'][attendance_mark]').attr('id','time_table-'+i+'-subject_id').attr('checked','checked');
+$(this).find('td:nth-child(4) input.radio_abs').attr('name','attendance_rows['+i+'][attendance_mark]').attr('id','time_table-'+i+'-subject_id');
+$(this).find('td:nth-child(5) input.radio_leave').attr('name','attendance_rows['+i+'][attendance_mark]').attr('id','time_table-'+i+'-subject_id');
+				
+			});
+}
 		";
 		echo $this->Html->scriptBlock($js, ['block' => 'PAGE_LEVEL_PLUGINS_JS']); ?>

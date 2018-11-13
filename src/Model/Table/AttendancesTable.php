@@ -58,7 +58,8 @@ class AttendancesTable extends Table
             'joinType' => 'INNER'
         ]);
         $this->hasMany('AttendanceRows', [
-            'foreignKey' => 'attendance_id'
+            'foreignKey' => 'attendance_id',
+			'saveStrategy'=>'replace'
         ]);
     }
 

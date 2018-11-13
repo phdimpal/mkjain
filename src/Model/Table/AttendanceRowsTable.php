@@ -60,11 +60,11 @@ class AttendanceRowsTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
-        $validator
+       /*  $validator
             ->scalar('attendance_mark')
             ->maxLength('attendance_mark', 20)
             ->requirePresence('attendance_mark', 'create')
-            ->notEmpty('attendance_mark');
+            ->notEmpty('attendance_mark'); */
 
         return $validator;
     }
@@ -79,7 +79,7 @@ class AttendanceRowsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['attendance_id'], 'Attendances'));
-        $rules->add($rules->existsIn(['student_id'], 'Students'));
+        //$rules->add($rules->existsIn(['student_id'], 'Students'));
 
         return $rules;
     }
