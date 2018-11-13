@@ -562,12 +562,28 @@ public function fecthAttendenceView(){
 			$editable=true;
 		}
 		$fetchAttendancesDatas=[];
-	$AttendancesDatas = $this->Attendances->find()->where(['master_class_id'=>$master_class_id,'master_section_id'=>$master_section_id])->contain(['AttendanceRows'=>['Registrations']]);	foreach($AttendancesDatas as $attendancesdata){
+		
+		
+		$dataExists = $this->Attendances->exists(['master_class_id'=>$master_class_id,'master_section_id'=>$master_section_id,'attendance_date'=>$attendance_date]);
+		
+		if($dataExists){
+		   $AttendancesDatas = $this->Attendances->find()->where(['master_class_id'=>$master_class_id,'master_section_id'=>$master_section_id])->contain(['AttendanceRows'=>['Registrations']]);
+		   foreach($AttendancesDatas as $attendancesdata){
 			foreach($attendancesdata->attendance_rows as $attendance_row){
 				$fetchAttendancesDatas[]=['student_id'=>$attendance_row->student_id,'marks'=>(int)$attendance_row->attendance_mark,'editable'=>$editable,'student_name'=>$attendance_row->registration->name];
 			}
 		}
 		
+		}else{
+		      $AttendancesDatas = $this->Attendances->Registrations->find()->where(['master_class_id'=>$master_class_id,'master_section_id'=>$master_section_id,'is_deleted'=>0]);
+		   foreach($AttendancesDatas as $attendancesdata){
+			
+				$fetchAttendancesDatas[]=['student_id'=>$attendancesdata->id,'marks'=>0,'editable'=>$editable,'student_name'=>$attendancesdata->name];
+		
+		}
+		}
+		
+
 		 if($fetchAttendancesDatas){
 	    	$success = true;
 	    	$message = 'Data Found';
