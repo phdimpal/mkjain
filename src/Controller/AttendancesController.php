@@ -27,7 +27,7 @@ class AttendancesController extends AppController
     {
 		$this->viewBuilder()->layout('index_layout');
         $this->paginate = [
-            'contain' => ['MasterRoles', 'Registrations', 'MasterClasses', 'MasterSections','AttendanceRows'=>['Registrations']]
+            'contain' => ['MasterRoles', 'MasterClasses', 'MasterSections','AttendanceRows'=>['Registrations']]
         ];
 		$attendances = $this->Attendances->newEntity();
 		
@@ -67,7 +67,9 @@ class AttendancesController extends AppController
         $this->paginate = [
             'contain' => ['MasterRoles', 'MasterClasses', 'MasterSections','AttendanceRows']
         ];
-	
+		$user_id=$this->Auth->User('id');
+		$master_role_id=$this->Auth->User('master_role_id');
+		
 		$attendancess=[];$Attendances=[];
 		if($this->request->query) {
 			
@@ -91,25 +93,33 @@ class AttendancesController extends AppController
 		$attendancess = $Attendances;
 		$attendance = $this->Attendances->newEntity();
 		if ($this->request->is(['post'])) {
-			 $attendance = $this->Attendances->patchEntity($attendance, $this->request->getData());
-			 pr($this->request->getData());exit;
-			 $attendance->master_role_id = 4;
-			 $attendance->created_by = 4;
-			 $attendance->attendance_date = $attendance->attendance_date;
-			 
 			
-			 if($this->Attendances->save($attendance)){//pr($attendance->attendance_rows);
-			 $i=1;
-				 foreach($attendance->attendance_rows as $attendance_row){ echo $i.'<br/>';
-					 $attendancerowss = $this->Attendances->AttendanceRows->newEntity();
-					 $attendancerowss->attendance_id = $attendance->id;
-					 $attendancerowss->student_id = $attendance_row->student_id;
-					 $attendancerowss->attendance_mark = $attendance_row->attendance_mark;
-					 $this->Attendances->AttendanceRows->save($attendancerowss);
-				 $i++;}exit;
+			$attendance_date=$this->request->getData('attendance_date');
+			$master_class_id=$this->request->getData('master_class_id');
+			$master_section_id=$this->request->getData('master_section_id');
+			$Attendances_count=$this->Attendances->find()->where(['attendance_date'=>$attendance_date,'master_class_id'=>$master_class_id,'master_section_id'=>$master_section_id])->count();
+			if($Attendances_count>0){
+				$Attendancesdata=$this->Attendances->find()
+				->where(['attendance_date'=>$attendance_date,'master_class_id'=>$master_class_id,'master_section_id'=>$master_section_id])->contain(['AttendanceRows'])
+				->toArray();
+				foreach($Attendancesdata as $data){
+					$Attendancesdelete=$this->Attendances->get($data->id);
+					$this->Attendances->delete($Attendancesdelete);
+				}
+			}
+			
+			 $attendance = $this->Attendances->patchEntity($attendance, $this->request->getData());
+			 $attendance->master_role_id = $master_role_id;
+			 $attendance->created_by = $user_id;
+			 $attendance->attendance_date = $attendance->attendance_date;
+			 			
+			 if($this->Attendances->save($attendance)){
+				$this->Flash->success(__('The attendance has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
 			 }	 
 		}
-		//exit;
+		
 		$masterClasses = $this->Attendances->MasterClasses->find('list', ['limit' => 200]);
         $masterSections = $this->Attendances->MasterSections->find('list', ['limit' => 200]);
         
