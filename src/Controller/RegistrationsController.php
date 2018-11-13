@@ -71,14 +71,47 @@ class RegistrationsController extends AppController
 	
     public function index()
     {
+		$Registrations = $this->Registrations->newEntity();
 		
 		$this->viewBuilder()->layout('index_layout');
         $this->paginate = [
             'contain' => ['MasterClasses', 'MasterSections']
         ];
-        $registrations = $this->paginate($this->Registrations->find()->where(['is_deleted'=>0,'master_role_id NOT IN'=>['4'],'master_role_id'=>'3']));
-
-        $this->set(compact('registrations'));
+		
+		$Registrations=$this->Registrations->find()->where(['is_deleted'=>0,'master_role_id NOT IN'=>['4'],'master_role_id'=>'3']);
+		
+		if($this->request->query) {
+			
+			$roll_no=$this->request->query['roll_no'];
+			$master_class_id=$this->request->query['master_class_id'];
+			$master_section_id=$this->request->query['master_section_id'];
+			$name=$this->request->query['name'];
+			
+			if(!empty($roll_no)){
+				
+				$Registrations->where(['Registrations.roll_no'=>$roll_no]);
+			}
+			if(!empty($master_class_id)){
+				
+				$Registrations->where(['Registrations.master_class_id'=>$master_class_id]);
+			}
+			if(!empty($master_section_id)){
+				
+				$Registrations->where(['Registrations.master_section_id'=>$master_section_id]);
+			}
+			if(!empty($name)){
+				
+				$Registrations->where(['Registrations.name LIKE '=>'%'.$name.'%']);
+			}
+		
+		}
+		
+        $registrations = $this->paginate($Registrations);
+		
+		$masterClasses = $this->Registrations->MasterClasses->find('list', ['limit' => 200]);
+        $masterSections = $this->Registrations->MasterSections->find('list', ['limit' => 200]);
+        
+        $this->set(compact('registrations','masterClasses','masterSections','Registrations'));
     }
 	
 	public function indexTeacher(){
