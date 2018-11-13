@@ -97,16 +97,18 @@ class SyllabusesController extends AppController
 							} else {
 							//$response;
 							}	
+							if($sms_flag==1){
+								$Notifications=$this->Syllabuses->Registrations->Notifications->newEntity();
+								$Notifications->title='Syllabus';
+								$Notifications->message='Your Class Syllabus Added';
+								$Notifications->notify_date=date("Y-m-d");
+								$Notifications->notify_time=date("h:i A"); 
+								$Notifications->created_by=0; 
+								$Notifications->registration_id=$reg_id; 
+								$Notifications->notify_link='mkjain://Syllabus?id='.$syllabus->id.'&student_id='.$reg_id.'&class_id='.$syllabus->master_class_id.'&section_id='.$syllabus->master_section_id; 
+								$this->Syllabuses->Registrations->Notifications->save($Notifications);
 							
-							$Notifications=$this->Syllabuses->Registrations->Notifications->newEntity();
-							$Notifications->title='Syllabus';
-							$Notifications->message='Your Class Syllabus Added';
-							$Notifications->notify_date=date("Y-m-d");
-							$Notifications->notify_time=date("h:i A"); 
-							$Notifications->created_by=0; 
-							$Notifications->registration_id=$reg_id; 
-							$Notifications->notify_link='mkjain://Syllabus?id='.$syllabus->id.'&student_id='.$reg_id.'&class_id='.$syllabus->master_class_id.'&section_id='.$syllabus->master_section_id; 
-							$this->Syllabuses->Registrations->Notifications->save($Notifications);
+							}
 						}
 					//End Notification Code	
 				

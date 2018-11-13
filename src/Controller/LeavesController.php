@@ -106,7 +106,9 @@ class LeavesController extends AppController
 		$leave->status='Approved';
 		$registration_id=$leave->registration_id;
 		
-		// Notifications Code Start	
+        if ($this->Leaves->save($leave)) {
+			
+			// Notifications Code Start	
 						$Registrationsnews=$this->Leaves->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.id'=>$registration_id,'Registrations.device_token !='=>0]);
 						date_default_timezone_set("Asia/Calcutta");
 						foreach($Registrationsnews as $Registrationsnew){
@@ -152,28 +154,21 @@ class LeavesController extends AppController
 							} else {
 							//$response;
 							}	
+							if($sms_flag==1){
+								
+								$Notifications=$this->Leaves->Registrations->Notifications->newEntity();
+								$Notifications->title='Leave Application';
+								$Notifications->message='Your Leave Application Approved';
+								$Notifications->notify_date=date("Y-m-d");
+								$Notifications->notify_time=date("h:i A"); 
+								$Notifications->created_by=0; 
+								$Notifications->registration_id=$reg_id; 
+								$Notifications->notify_link='mkjain://Leaves?id='.$id; 
+								$this->Leaves->Registrations->Notifications->save($Notifications);
 							
-							$Notifications=$this->Syllabuses->Registrations->Notifications->newEntity();
-							$Notifications->title='Leave Application';
-							$Notifications->message='Your Leave Application Approved';
-							$Notifications->notify_date=date("Y-m-d");
-							$Notifications->notify_time=date("h:i A"); 
-							$Notifications->created_by=0; 
-							$Notifications->registration_id=$reg_id; 
-							$Notifications->notify_link='mkjain://Leaves?id='.$id; 
-							$this->Syllabuses->Registrations->Notifications->save($Notifications);
+							}
 						}
-					//End Notification Code	
-				
-		
-		
-		
-		
-		
-        if ($this->Leaves->save($leave)) {
-			
-			
-			
+					//End Notification Code		
 			
             $this->Flash->success(__('The leave has been approved.'));
         } else {
