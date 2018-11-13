@@ -109,7 +109,7 @@ class LeavesController extends AppController
         if ($this->Leaves->save($leave)) {
 			
 			// Notifications Code Start	
-						$Registrationsnews=$this->Leaves->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.id'=>$registration_id,'Registrations.device_token !='=>0]);
+						$Registrationsnews=$this->Leaves->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.id'=>$registration_id,'Registrations.device_token !='=>'']);
 						date_default_timezone_set("Asia/Calcutta");
 						foreach($Registrationsnews as $Registrationsnew){
 							

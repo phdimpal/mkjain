@@ -630,7 +630,7 @@ public function fecthAttendenceView(){
 				if($this->Registrations->Leaves->save($Leaves)) {
 					
 					// Notifications Code Start	
-						$Registrationsnews=$this->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.id'=>$registration_id,'Registrations.device_token !='=>0]);
+						$Registrationsnews=$this->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.id'=>$registration_id,'Registrations.device_token !='=>'']);
 						date_default_timezone_set("Asia/Calcutta");
 						foreach($Registrationsnews as $Registrationsnew){
 							
@@ -929,7 +929,7 @@ public function assignment(){
 							$AssignmentsRows = $this->Registrations->Assignments->AssignmentRows->save($AssignmentsRows);
 						}
 					// Notifications Code Start	
-						$Registrationsnews=$this->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$Assignments->master_class_id,'Registrations.master_section_id'=>$Assignments->master_section_id,'Registrations.device_token !='=>0]);
+						$Registrationsnews=$this->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$Assignments->master_class_id,'Registrations.master_section_id'=>$Assignments->master_section_id,'Registrations.device_token !='=>'']);
 						date_default_timezone_set("Asia/Calcutta");
 						foreach($Registrationsnews as $Registrationsnew){
 							
@@ -974,16 +974,18 @@ public function assignment(){
 							} else {
 							//$response;
 							}	
+							if($sms_flag==1){
+								$Notifications=$this->Registrations->Notifications->newEntity();
+								$Notifications->title='Assignment';
+								$Notifications->message='New Assignment Submitted';
+								$Notifications->notify_date=date("Y-m-d");
+								$Notifications->notify_time=date("h:i A"); 
+								$Notifications->created_by=0; 
+								$Notifications->registration_id=$reg_id; 
+								$Notifications->notify_link='mkjain://Assignment?id='.$Assignments->id.'&student_id='.$reg_id.'&class_id='.$Assignments->master_class_id.'&section_id='.$Assignments->master_section_id; 
+								$this->Registrations->Notifications->save($Notifications);
 							
-							$Notifications=$this->Registrations->Notifications->newEntity();
-							$Notifications->title='Assignment';
-							$Notifications->message='New Assignment Submitted';
-							$Notifications->notify_date=date("Y-m-d");
-							$Notifications->notify_time=date("h:i A"); 
-							$Notifications->created_by=0; 
-							$Notifications->registration_id=$reg_id; 
-							$Notifications->notify_link='mkjain://Assignment?id='.$Assignments->id.'&student_id='.$reg_id.'&class_id='.$Assignments->master_class_id.'&section_id='.$Assignments->master_section_id; 
-							$this->Registrations->Notifications->save($Notifications);
+							}
 						}
 					//End Notification Code	
 						
@@ -1001,7 +1003,7 @@ public function assignment(){
 							
 							
 							// Notifications Code Start	
-							$Registrationsnews=$this->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$Assignments->master_class_id,'Registrations.master_section_id'=>$Assignments->master_section_id,'Registrations.device_token !='=>0,'Registrations.id'=>$student_id]);
+							$Registrationsnews=$this->Registrations->find()->where(['Registrations.is_deleted'=>0,'Registrations.master_class_id'=>$Assignments->master_class_id,'Registrations.master_section_id'=>$Assignments->master_section_id,'Registrations.device_token !='=>'','Registrations.id'=>$student_id]);
 							date_default_timezone_set("Asia/Calcutta");
 							foreach($Registrationsnews as $Registrationsnew){
 								
@@ -1046,16 +1048,17 @@ public function assignment(){
 								} else {
 								//$response;
 								}	
-								
-								$Notifications=$this->Registrations->Notifications->newEntity();
-								$Notifications->title='Assignment';
-								$Notifications->message='New Assignment Submitted';
-								$Notifications->notify_date=date("Y-m-d");
-								$Notifications->notify_time=date("h:i A"); 
-								$Notifications->created_by=0; 
-								$Notifications->registration_id=$reg_id; 
-								$Notifications->notify_link='mkjain://Assignment?id='.$Assignments->id.'&student_id='.$reg_id.'&class_id='.$Assignments->master_class_id.'&section_id='.$Assignments->master_section_id; 
-								$this->Registrations->Notifications->save($Notifications);
+								if($sms_flag==1){
+									$Notifications=$this->Registrations->Notifications->newEntity();
+									$Notifications->title='Assignment';
+									$Notifications->message='New Assignment Submitted';
+									$Notifications->notify_date=date("Y-m-d");
+									$Notifications->notify_time=date("h:i A"); 
+									$Notifications->created_by=0; 
+									$Notifications->registration_id=$reg_id; 
+									$Notifications->notify_link='mkjain://Assignment?id='.$Assignments->id.'&student_id='.$reg_id.'&class_id='.$Assignments->master_class_id.'&section_id='.$Assignments->master_section_id; 
+									$this->Registrations->Notifications->save($Notifications);
+								}
 							}
 						  //End Notification Code	
 							
