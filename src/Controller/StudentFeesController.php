@@ -10,42 +10,50 @@ class StudentFeesController extends AppController
     {
 		$this->viewBuilder()->layout('index_layout');
 		$master_role_id=$this->Auth->User('master_role_id');
-		$studentFee = $this->StudentFees->newEntity();
+		
         $this->paginate = [
             'contain' => ['Registrations']
         ];
 		if ($this->request->is(['post','put','patch'])) {
-			 $studentFee = $this->StudentFees->patchEntity($studentFee, $this->request->getData());
+			 //$studentFee = $this->StudentFees->patchEntity($studentFee, $this->request->getData());
 			 
 			if(isset($this->request->data['excel_url']))
 			{
-				$file = $this->request->data['excel_url']['tmp_name'];
-				$f = fopen($file, 'r') or die("ERROR OPENING DATA");
-				
-				$batchcount=0;
-				$records=0;
-				while (($line = fgetcsv($f, 4096, ';')) !== false) {
-					$numcols = count($line);
-					
-					foreach($line as $data)
-					{
-						$seperated_data=str_getcsv($data, ",", '"');
+				$ext = substr(strtolower(strrchr($this->request->data['excel_url']['name'], '.')), 1);
+				$arr_ext = array('csv'); 
+				if (in_array($ext, $arr_ext)) 
+				{
+					$f = fopen($this->request->data['excel_url']['tmp_name'], 'r') or die("ERROR OPENING DATA");
+					$records=0;
+					while (($line = fgetcsv($f, 4096)) !== false) {
+						$test[]=$line;
+						++$records;
 					}
-					$seperated_data=array_filter($seperated_data);
-					
-					$studentFees[]=$seperated_data[0];
+					foreach($test as $key => $data)
+					{ 
+						if($key!=0)
+						{
+							
+							$rollExist = $this->StudentFees->Registrations->exists(['Registrations.roll_no' => $data[0]]);
+							
+							if($rollExist){
+								$rollExistDatas = $this->StudentFees->Registrations->find()->where(['roll_no'=>$data[0]])->first();
+								if(!empty($rollExistDatas)){
+									$this->StudentFees->deleteAll(['StudentFees.student_id' => $rollExistDatas->id]);
+			
+									$studentFee = $this->StudentFees->newEntity();
+									$studentFee->student_id = $rollExistDatas->id;
+									$studentFee->due_fee = $data[2];
+									$this->StudentFees->save($studentFee);
+								}
+							}
+						}
+					}
+					fclose($f);
+					$records;
 				}
-					 
-				++$records;
-				fclose($f);	
 			}
-			 pr($studentFees);exit;
-			  if ($this->StudentFees->save($studentFee)) {
-                $this->Flash->success(__('The student fee has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The student fee could not be saved. Please, try again.'));
+			
 		}
         $studentFees = $this->paginate($this->StudentFees);
 

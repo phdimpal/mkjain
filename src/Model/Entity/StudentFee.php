@@ -27,7 +27,7 @@ class StudentFee extends Entity
      */
     protected $_accessible = [
         'student_id' => true,
-        'total_fee' => true,
+       
         'due_fee' => true,
         'student' => true
     ];
