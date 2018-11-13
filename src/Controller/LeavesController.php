@@ -24,10 +24,19 @@ class LeavesController extends AppController
         $this->paginate = [
             'contain' => ['Registrations']
         ];
-        $leaves = $this->paginate($this->Leaves);
+		$leave = $this->Leaves->newEntity();
+		$Leavesdata=$this->Leaves->find();
+		$status='Pending';
+		if($this->request->query) {
+			$status=$this->request->query['leave'];
+		}
+		
+		$Leaves=$Leavesdata->where(['status'=>$status]);
+		
+        $leaves = $this->paginate($Leaves);
 		
 
-        $this->set(compact('leaves'));
+        $this->set(compact('leaves','leave'));
     }
 
     /**

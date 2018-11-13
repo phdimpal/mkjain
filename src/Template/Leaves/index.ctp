@@ -13,6 +13,10 @@
 	<div class="box box-danger">
 		<div class="box-header with-border no-print">
 			<h3 class="box-title">Leaves</h3>
+			<?php echo $this->Form->create($leave, ['type' => 'GET']); ?>
+				<?= $this->Form->button(__(' Approved') ,['class'=>'btn btn-sm bg-olive','type'=>'Submit','id'=>'submit_member','name'=>'leave','style'=>'margin-top: -22px;float:right;margin-left: 6px;','value'=>'Approved']) ?>
+				<?= $this->Form->button(__(' Pending') ,['class'=>'btn btn-sm ','type'=>'Submit','id'=>'submit_member','name'=>'leave','style'=>'margin-top: -22px;float:right;','value'=>'Pending']) ?>
+			</form>
 		</div>
 		<div class="box-body">
 		
@@ -52,7 +56,12 @@
 								<td><?= h($leave->reason) ?></td>
 								<td><?= h($leave->status) ?></td>
 								<td>
-								<?= $this->Form->postLink(__('Approve'), ['action' => 'approve', $leave->id], ['class' => 'btn btn-sm btn-primary','confirm' => __('Are you sure you want to approve leave ?', $leave->id)]) ?> 
+								<?php 
+								if($leave->status!='Approved'){
+								
+								echo $this->Form->postLink(__('Approve'), ['action' => 'approve', $leave->id], ['class' => 'btn btn-sm btn-primary','confirm' => __('Are you sure you want to approve leave ?', $leave->id)]); 
+								
+								} ?>
 								<?= $this->Form->postLink(__('Reject'), ['action' => 'reject', $leave->id], ['class' => 'btn btn-sm btn-danger','confirm' => __('Are you sure you want to reject leave ?', $leave->id)]) ?> 
 								</td>
 								
