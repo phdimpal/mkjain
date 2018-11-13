@@ -91,20 +91,7 @@
             <li><a href="<?php echo $this->url->build(['controller'=>'Videoes','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Video</a></li>
           </ul>
         </li>
-		<li class="treeview">
-          <a href="#">
-            <i class="fa fa-users"></i>
-            <span>Others Lists</span>
-            <span class="pull-right-container">
-              <span class="fa fa-angle-left pull-right"></span>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="<?php echo $this->url->build(['controller'=>'Complains','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Complains / Feedback</a></li>
-            <li><a href="<?php echo $this->url->build(['controller'=>'Leaves','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Leaves</a></li>
-			 <li><a href="<?php echo $this->url->build(['controller'=>'Attendances','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Attendance</a></li>
-          </ul>
-        </li>
+		
 		<li class="active treeview">
           <a href="<?= $this->Url->build(['controller'=>'TimeTables','action'=>'add']) ?>">
             <i class="fa fa-dashboard"></i> <span>Time Tables</span>
@@ -144,8 +131,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="<?php echo $this->url->build(['controller'=>'assignments','action'=>'add'])?>"><i class="fa fa-circle-o"></i>Add</a></li> 
-			<li><a href="<?php echo $this->url->build(['controller'=>'assignments','action'=>'index'])?>"><i class="fa fa-circle-o"></i>View</a></li>
+            <li><a href="<?php echo $this->url->build(['controller'=>'Attendances','action'=>'add'])?>"><i class="fa fa-circle-o"></i>Add</a></li> 
+			<li><a href="<?php echo $this->url->build(['controller'=>'Attendances','action'=>'index'])?>"><i class="fa fa-circle-o"></i>View</a></li>
            
           </ul>
         </li>
@@ -159,6 +146,20 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="<?php echo $this->url->build(['controller'=>'StudentFees','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Student Fees</a></li> 
+			
+          </ul>
+        </li>
+		<li class="treeview">
+          <a href="#">
+            <i class="fa fa-users"></i>
+            <span>Others Lists</span>
+            <span class="pull-right-container">
+              <span class="fa fa-angle-left pull-right"></span>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="<?php echo $this->url->build(['controller'=>'Complains','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Complains / Feedback</a></li>
+            <li><a href="<?php echo $this->url->build(['controller'=>'Leaves','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Leaves</a></li>
 			
           </ul>
         </li>
