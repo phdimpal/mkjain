@@ -100,7 +100,7 @@
 										?>
 										<tr>
 											<td><?php echo ++$sr_no; ?></td>
-											<td><?= $attendancedata->registration->name ?></td>
+											<td><?= $attendancedata->name ?></td>
 											<td><?= $class_name ?></td>
 											<td><?= $section_name ?></td>
 											<td><?= $status ?></td>
