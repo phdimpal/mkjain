@@ -135,7 +135,19 @@
            
           </ul>
         </li>
-		
+		<li class="treeview">
+          <a href="#">
+            <i class="fa fa-users"></i>
+            <span>Fees</span>
+            <span class="pull-right-container">
+              <span class="fa fa-angle-left pull-right"></span>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="<?php echo $this->url->build(['controller'=>'StudentFees','action'=>'index'])?>"><i class="fa fa-circle-o"></i>Student Fees</a></li> 
+			
+          </ul>
+        </li>
 		<li class="active treeview">
           <a href="<?= $this->Url->build(['controller'=>'Registrations','action'=>'logout']) ?>">
             <i class="fa fa-lock"></i> <span>Logout</span>
