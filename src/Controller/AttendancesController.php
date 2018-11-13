@@ -60,6 +60,41 @@ class AttendancesController extends AppController
 
         $this->set(compact('attendances','masterClasses'));
     }
+	
+	 public function add()
+    {
+		$this->viewBuilder()->layout('index_layout');
+        $this->paginate = [
+            'contain' => ['MasterRoles', 'MasterClasses', 'MasterSections','AttendanceRows']
+        ];
+	
+		
+		if($this->request->query) {
+			
+			$date=$this->request->query['date'];
+			$master_class_id=$this->request->query['master_class_id'];
+			$master_section_id=$this->request->query['master_section_id'];
+			$Attendances=$this->Attendances->Registrations->find();
+			
+			if(!empty($master_class_id)){
+				
+				$Attendances->where(['Registrations.master_class_id'=>$master_class_id]);
+			}
+			if(!empty($master_section_id)){
+				
+				$Attendances->where(['Registrations.master_section_id'=>$master_section_id]);
+			}
+			
+			$attendances = $Attendances;
+			
+		}
+		
+		$masterClasses = $this->Attendances->MasterClasses->find('list', ['limit' => 200]);
+        $masterSections = $this->Attendances->MasterSections->find('list', ['limit' => 200]);
+        
+
+        $this->set(compact('attendances','masterClasses'));
+    }
 
     /**
      * View method
@@ -82,24 +117,7 @@ class AttendancesController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
-    {
-        $attendance = $this->Attendances->newEntity();
-        if ($this->request->is('post')) {
-            $attendance = $this->Attendances->patchEntity($attendance, $this->request->getData());
-            if ($this->Attendances->save($attendance)) {
-                $this->Flash->success(__('The attendance has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The attendance could not be saved. Please, try again.'));
-        }
-        $masterRoles = $this->Attendances->MasterRoles->find('list', ['limit' => 200]);
-        $registrations = $this->Attendances->Registrations->find('list', ['limit' => 200]);
-        $masterClasses = $this->Attendances->MasterClasses->find('list', ['limit' => 200]);
-        $masterSections = $this->Attendances->MasterSections->find('list', ['limit' => 200]);
-        $this->set(compact('attendance', 'masterRoles', 'registrations', 'masterClasses', 'masterSections'));
-    }
+    
 
     /**
      * Edit method

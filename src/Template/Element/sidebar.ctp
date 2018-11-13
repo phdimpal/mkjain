@@ -138,6 +138,20 @@
 		<li class="treeview">
           <a href="#">
             <i class="fa fa-users"></i>
+            <span>Attendence</span>
+            <span class="pull-right-container">
+              <span class="fa fa-angle-left pull-right"></span>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="<?php echo $this->url->build(['controller'=>'assignments','action'=>'add'])?>"><i class="fa fa-circle-o"></i>Add</a></li> 
+			<li><a href="<?php echo $this->url->build(['controller'=>'assignments','action'=>'index'])?>"><i class="fa fa-circle-o"></i>View</a></li>
+           
+          </ul>
+        </li>
+		<li class="treeview">
+          <a href="#">
+            <i class="fa fa-users"></i>
             <span>Fees</span>
             <span class="pull-right-container">
               <span class="fa fa-angle-left pull-right"></span>
