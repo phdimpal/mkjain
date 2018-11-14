@@ -872,9 +872,11 @@ public function fecthAttendenceView(){
 					$master_section_id= $data->master_section_id;
 					
 					$ClassSectionMappings=$this->Registrations->ClassSectionMappings->find()->where(['ClassSectionMappings.master_class_id'=>$master_class_id,'ClassSectionMappings.master_section_id'=>$master_section_id])->contain(['MasterSubjects'])->toArray();
-					
+					$master_subject=[];
 					foreach($ClassSectionMappings as $classmap){
+					    if(!empty($classmap->master_subject)){
 						$master_subject[]=$classmap->master_subject;
+					    }
 					}
 					$Registrationsdata=$this->Registrations->find()->where(['Registrations.master_class_id'=>$master_class_id,'Registrations.master_section_id'=>$master_section_id]);
 					$data->master_section->registrations=$Registrationsdata;

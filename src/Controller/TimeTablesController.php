@@ -95,7 +95,7 @@ class TimeTablesController extends AppController
         $timeTable = $this->TimeTables->newEntity();
 		$user_id=$this->Auth->User('id');
 		
-		// Notifications Code Start	
+		/* // Notifications Code Start	
 					
 							date_default_timezone_set("Asia/Calcutta");
 						
@@ -142,7 +142,7 @@ class TimeTablesController extends AppController
 							} else {
 							//$response;
 							}	
-							pr($final_result);
+							//pr($final_result);
 
 							if($sms_flag==1){
 								$Notifications=$this->TimeTables->Registrations->Notifications->newEntity();
@@ -156,9 +156,9 @@ class TimeTablesController extends AppController
 								$this->TimeTables->Registrations->Notifications->save($Notifications);
 							}	
 
-							exit;
+						
 					//End Notification Code	
-		
+		 */
 		
         if ($this->request->is('post')) {
 			
