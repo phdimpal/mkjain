@@ -606,7 +606,7 @@ public function fecthAttendenceView(){
         }else{
            	$success = false;
 			$message = 'No data Found'; 
-            $StudentFeesDatas=[];
+            $StudentFeesDatas=(object)[];
         }
 		 $this->set(['success' => $success,'message'=>$message,'StudentFeesDatas'=>$StudentFeesDatas,'_serialize' => ['success','message','StudentFeesDatas']]);
 	}
