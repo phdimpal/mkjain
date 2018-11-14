@@ -95,11 +95,11 @@ class TimeTablesController extends AppController
         $timeTable = $this->TimeTables->newEntity();
 		$user_id=$this->Auth->User('id');
 		
-		/* // Notifications Code Start	
+			// Notifications Code Start	
 					
-							date_default_timezone_set("Asia/Calcutta");
+						/* 	date_default_timezone_set("Asia/Calcutta");
 						
-							
+							$id=1;
 							$reg_id=5;
 							$device_token='fNR2W2P9lfc:APA91bEzTifKy_Wtd0nz9q8YwPMwgK3W9hdv0w6xnU8AkntJd4iVbMLZK6YLm2xP4fShFx8lx8THnJ7sqY6TuxIpmfwXacQkf8qy9pBpaU_H0te3ZWx4mViGQ3SoShbkZSg2vsJKdy9l';
 							$master_class_id=1;
@@ -110,14 +110,15 @@ class TimeTablesController extends AppController
 							'Content-Type:application/json',
 							'Authorization: Key=AAAAMDhcGSU:APA91bGGXZ2FClcRw5lmRvE76x5OHKrm2wqk8Xy5hBBYu0OYPjXrP5c7NJlR8yeYZxWBmC5DwFILj3Tzw7pqZ_zzPrSmI4E2_2j22QVrm4jnUgY6c6SLldZH7eSjaD0CHqryqJqz_oFR'
 							];
-
-							$msg = [
-							'title'=> 'Time Table',
-							'message' => 'New time table upload',
+								
+								$msg = [
+							'title'=> 'Leave Application',
+							'message' => 'Your Leave Application Approved',
 							'image' => '',
-							'link' => 'mkjain://timetable?id='.$reg_id.'&class_id='.$master_class_id.'&section_id='.$master_section_id,
+							'link' => 'mkjain://Leaves?id='.$id,
 							'notification_id'    => $random,
 							];
+							
 							
 							$payload = array(
 							'registration_ids' => $tokens,
@@ -142,9 +143,30 @@ class TimeTablesController extends AppController
 							} else {
 							//$response;
 							}	
+							 */
+							
+						/* 	$msg = [
+							'title'=> 'Time Table',
+							'message' => 'New time table upload',
+							'image' => '',
+							'link' => 'mkjain://timetable?id='.$reg_id.'&class_id='.$master_class_id.'&section_id='.$master_section_id,
+							'notification_id'    => $random,
+							];
+							
+						
+						 $msg = [
+							'title'=> 'Student Fees',
+							'message' => 'Student Fees added',
+							'image' => '',
+							'link' => 'mkjain://fees?id='.$reg_id,
+							'notification_id'    => $random,
+							];
+						 */	
+						 
+							
 							//pr($final_result);
 
-							if($sms_flag==1){
+						/* 	if($sms_flag==1){
 								$Notifications=$this->TimeTables->Registrations->Notifications->newEntity();
 								$Notifications->title='Time Table';
 								$Notifications->message='New time table upload';
@@ -155,10 +177,10 @@ class TimeTablesController extends AppController
 								$Notifications->notify_link='mkjain://timetable?id='.$reg_id.'&class_id='.$master_class_id.'&section_id='.$master_section_id; 
 								$this->TimeTables->Registrations->Notifications->save($Notifications);
 							}	
-
+ */
 						
 					//End Notification Code	
-		 */
+		
 		
         if ($this->request->is('post')) {
 			
