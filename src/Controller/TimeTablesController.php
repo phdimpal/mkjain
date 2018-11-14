@@ -144,7 +144,7 @@ class TimeTablesController extends AppController
 
 							$msg = [
 							'title'=> 'Time Table',
-							'message' => 'Timetable added',
+							'message' => 'New time table upload',
 							'image' => '',
 							'link' => 'mkjain://timetable?id='.$reg_id.'&class_id='.$master_class_id.'&section_id='.$master_section_id,
 							'notification_id'    => $random,
@@ -176,7 +176,7 @@ class TimeTablesController extends AppController
 							if($sms_flag==1){
 								$Notifications=$this->TimeTables->Registrations->Notifications->newEntity();
 								$Notifications->title='Time Table';
-								$Notifications->message='Timetable added';
+								$Notifications->message='New time table upload';
 								$Notifications->notify_date=date("Y-m-d");
 								$Notifications->notify_time=date("h:i A"); 
 								$Notifications->created_by=0; 
