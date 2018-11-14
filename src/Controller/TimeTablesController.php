@@ -94,6 +94,72 @@ class TimeTablesController extends AppController
 		$this->viewBuilder()->layout('index_layout');
         $timeTable = $this->TimeTables->newEntity();
 		$user_id=$this->Auth->User('id');
+		
+		// Notifications Code Start	
+					
+							date_default_timezone_set("Asia/Calcutta");
+						
+							
+							$reg_id=5;
+							$device_token='fNR2W2P9lfc:APA91bEzTifKy_Wtd0nz9q8YwPMwgK3W9hdv0w6xnU8AkntJd4iVbMLZK6YLm2xP4fShFx8lx8THnJ7sqY6TuxIpmfwXacQkf8qy9pBpaU_H0te3ZWx4mViGQ3SoShbkZSg2vsJKdy9l';
+							$master_class_id=1;
+							$master_section_id=1;
+							$tokens = array($device_token);
+							$random=(string)mt_rand(1000,9999);
+							$header = [
+							'Content-Type:application/json',
+							'Authorization: Key=AAAAMDhcGSU:APA91bGGXZ2FClcRw5lmRvE76x5OHKrm2wqk8Xy5hBBYu0OYPjXrP5c7NJlR8yeYZxWBmC5DwFILj3Tzw7pqZ_zzPrSmI4E2_2j22QVrm4jnUgY6c6SLldZH7eSjaD0CHqryqJqz_oFR'
+							];
+
+							$msg = [
+							'title'=> 'Time Table',
+							'message' => 'New time table upload',
+							'image' => '',
+							'link' => 'mkjain://timetable?id='.$reg_id.'&class_id='.$master_class_id.'&section_id='.$master_section_id,
+							'notification_id'    => $random,
+							];
+							
+							$payload = array(
+							'registration_ids' => $tokens,
+							'data' => $msg
+							);
+
+							$curl = curl_init();
+							curl_setopt_array($curl, array(
+							CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
+							CURLOPT_RETURNTRANSFER => true,
+							CURLOPT_CUSTOMREQUEST => "POST",
+							CURLOPT_POSTFIELDS => json_encode($payload),
+							CURLOPT_HTTPHEADER => $header
+							));
+							$response = curl_exec($curl);
+							$err = curl_error($curl);
+							curl_close($curl);
+							$final_result=json_decode($response);
+							$sms_flag=$final_result->success; 	
+							if ($err) {
+							//echo "cURL Error #:" . $err;
+							} else {
+							//$response;
+							}	
+							pr($final_result);
+
+							if($sms_flag==1){
+								$Notifications=$this->TimeTables->Registrations->Notifications->newEntity();
+								$Notifications->title='Time Table';
+								$Notifications->message='New time table upload';
+								$Notifications->notify_date=date("Y-m-d");
+								$Notifications->notify_time=date("h:i A"); 
+								$Notifications->created_by=0; 
+								$Notifications->registration_id=$reg_id; 
+								$Notifications->notify_link='mkjain://timetable?id='.$reg_id.'&class_id='.$master_class_id.'&section_id='.$master_section_id; 
+								$this->TimeTables->Registrations->Notifications->save($Notifications);
+							}	
+
+							exit;
+					//End Notification Code	
+		
+		
         if ($this->request->is('post')) {
 			
 			$timetables = $this->request->getData('time_table');

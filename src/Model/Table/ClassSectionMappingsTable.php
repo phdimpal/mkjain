@@ -50,7 +50,7 @@ class ClassSectionMappingsTable extends Table
         ]);
         $this->belongsTo('MasterSubjects', [
             'foreignKey' => 'master_subject_id',
-            'joinType' => 'INNER'
+            'joinType' => 'LEFT'
         ]);
         $this->belongsTo('Registrations', [
             'foreignKey' => 'teacher_id',
