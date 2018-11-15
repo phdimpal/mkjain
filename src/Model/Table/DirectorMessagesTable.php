@@ -34,6 +34,7 @@ class DirectorMessagesTable extends Table
         $this->setTable('director_messages');
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
+		$this->belongsTo('Registrations');
     }
 
     /**

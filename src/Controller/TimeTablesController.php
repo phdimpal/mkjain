@@ -34,7 +34,9 @@ class TimeTablesController extends AppController
 		  
 		  $optionsSubject=[];
 		  foreach($ClassSectionMappings as $classections){
-			  $optionsSubject[]=['text'=>$classections->master_subject->subject_name,'value'=>$classections->master_subject->id];
+			   if(!empty($classections->master_subject)){
+					$optionsSubject[]=['text'=>$classections->master_subject->subject_name,'value'=>$classections->master_subject->id];
+			   }
 		  }
 		  
 		  $optionsTeacher=[];
