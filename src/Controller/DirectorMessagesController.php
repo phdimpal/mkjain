@@ -85,9 +85,9 @@ class DirectorMessagesController extends AppController
         ]);
 		$old_image=$directorMessage->image;
 		
-				$reg_id=1;
+				/* $reg_id=1;
 				//$device_token=$Registrationsnew->device_token;
-				$device_token='fNR2W2P9lfc:APA91bEzTifKy_Wtd0nz9q8YwPMwgK3W9hdv0w6xnU8AkntJd4iVbMLZK6YLm2xP4fShFx8lx8THnJ7sqY6TuxIpmfwXacQkf8qy9pBpaU_H0te3ZWx4mViGQ3SoShbkZSg2vsJKdy9l';
+				$device_token='daoCM1NEH_I:APA91bHUHAFWL60Wm3muKkkUDWSC8nOUn6uOF7KLeiPvyY7QbZ2MBPPfiE_tINKrgdHm_9VozA6UNfRmn33j-8cZ3qXXUNSMBv58SNwHbAgm-YlSRmKz0v5DRXJDz4sZ33wEKjFjAzM5';
 				$tokens = array($device_token);
 				$random=(string)mt_rand(1000,9999);
 				$header = [
@@ -128,7 +128,7 @@ class DirectorMessagesController extends AppController
 				}
 
 				pr($final_result);
-				exit;
+				exit; */
 	
         if ($this->request->is(['patch', 'post', 'put'])) {
 			
